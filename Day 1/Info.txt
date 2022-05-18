@@ -1,0 +1,5 @@
+- Going to be working in CARLA (open source autonomous vehicle simulation software)
+- Things I could do could be:
+	- A research paper on this
+	- Implement Oshawa maps into CARLA (currently it's only US roads)
+	- Generate data and/or test data and/or generate tests for others to use in CARLA, couls also be integrated into a paper
