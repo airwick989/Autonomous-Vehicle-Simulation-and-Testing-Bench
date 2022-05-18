@@ -1,8 +1,9 @@
 ,Date,Amount,Hours,Hourly Pay,Work
-0,2022-05-09,140,0.42,333.33,"Meeting with supervisor"
-1,2022-05-10,140,0.5,280.0,"Nothing"
-2,2022-05-11,140,0.5,280.0,"Nothing"
-3,2022-05-12,140,0.5,280.0,"Nothing"
+0,2022-05-09,140,0.42,333.33,Meeting with supervisor
+1,2022-05-10,140,0.5,280.0,Nothing
+2,2022-05-11,140,0.5,280.0,Nothing
+3,2022-05-12,140,0.5,280.0,Nothing
 4,2022-05-13,140,4.0,35.0,"Acquired access card, got familiar with hardware, used the CARLA bench in Windows"
-5,2022-05-16,140,0.5,280.0,"Nothing"
+5,2022-05-16,140,0.5,280.0,Nothing
 6,2022/05/17,140,4.0,35.0,"Discussed future goals with supervisor, transferred existing project files from previous capstone groups to Ubuntu, set up development environment in Ubuntu, looked through solutions for COM port error"
+7,2022/05/18,140,7.0,20.0,"Transferred working windows version to ubuntu, solved COM port communication error, it is running and is showing speed/collisions, but is not rendering properly on pygame window (it freezes after running for a bit, may be performance limitation with virtual machine), manual_control.py ran fine on ubuntu so it most likely is not a performance issue, decided to use manual_control.py as a base and connect peripherals one by one, transferred wheel and pedal functionality from client_MODIFIED.py into manual_control.py to create testbed.py, resolved more port communications, improvements made from windows version: (drastically improved performance, drastically improved ui responsiveness, faster render, much more immediate response to peripheral inputs, now has a fully detailed HUD with useful information), suppressedsome runtime errors experienced during manual testing, added offset to mitigate steering angle issue, items left to connect: (shifter, guage cluster, adb?)"
