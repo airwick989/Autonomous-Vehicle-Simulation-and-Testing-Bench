@@ -797,7 +797,7 @@ class HUD(object):
         # Speed Var
         global speed
         speed = (3.6 * math.sqrt(v.x**2 + v.y**2 + v.z**2))
-        print(get_speed())
+        get_speed()
 
         self._info_text = [
             'Server:  % 16.0f FPS' % self.server_fps,
