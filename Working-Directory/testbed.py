@@ -14,6 +14,7 @@
 #THIS FIXED ITSELF? Added offset to straighten steering, ctrl+f : steerCmd = K1
 #Suppressed ctrl+f : subprocess.Popen
 #Suppressed ctrl+f : self._joystick1
+#Obtained speed and printed it to terminal, ctrl+f: get_speed
 #
 """
 Welcome to CARLA manual control.
@@ -169,6 +170,10 @@ except ImportError:
 # -- Global functions ----------------------------------------------------------
 # ==============================================================================
 
+ser = serial.Serial('/dev/ttyACM0', 9600)
+ser2 = serial.Serial('/dev/ttyACM1', 9600)
+
+
 
 def find_weather_presets():
     rgx = re.compile('.+?(?:(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|$)')
@@ -204,6 +209,27 @@ def get_actor_blueprints(world, filter, generation):
     except:
         print("   Warning! Actor Generation is not valid. No actor will be spawned.")
         return []
+
+    
+
+def get_speed():
+    global delay_counter
+    last_indicator = 0
+    last_speed = 0
+    temp = round(speed/10)
+    if(temp != last_speed):
+        last_speed = temp
+        ser.write(struct.pack('>i', temp))
+        #print(temp)
+        
+    if(indicator != 0 and delay_counter > 60):
+        if(last_indicator != indicator):
+            ser2.write(str.encode(str(indicator)))
+            last_indicator = indicator
+        delay_counter = 0
+    #print(delay_counter)
+    delay_counter = delay_counter + 1
+    return speed if not reverse else speed * -1
 
 
 # ==============================================================================
@@ -767,6 +793,12 @@ class HUD(object):
         max_col = max(1.0, max(collision))
         collision = [x / max_col for x in collision]
         vehicles = world.world.get_actors().filter('vehicle.*')
+
+        # Speed Var
+        global speed
+        speed = (3.6 * math.sqrt(v.x**2 + v.y**2 + v.z**2))
+        print(get_speed())
+
         self._info_text = [
             'Server:  % 16.0f FPS' % self.server_fps,
             'Client:  % 16.0f FPS' % clock.get_fps(),
