@@ -84,13 +84,8 @@ def addLog():
             flag = True
         except Exception:
             print("\n\033[1;31mInvalid number of hours! Please enter a float from 0 - 24 (inclusive).\033[0m\n")
-
-    os.system('cls')
-    work = input("\033[1;34mPlease enter what work you did for the day\033[0m: ")
-    if work == "":
-        work = "Nothing"
     
-    df = df.append({'Date':date, 'Amount':PAY, 'Hours':hours, 'Hourly Pay':round(PAY/hours, 2), 'Work':work}, ignore_index=True)
+    df = df.append({'Date':date, 'Amount':PAY, 'Hours':hours, 'Hourly Pay':round(PAY/hours, 2)}, ignore_index=True)
     os.system('cls')
     print("\n\033[1;32mNew Log Added\033[0m\n")
 
