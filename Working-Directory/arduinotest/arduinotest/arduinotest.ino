@@ -35,6 +35,12 @@ void loop() {
 void updateGauges() {
 
   incomingSpeedValue = Serial.read();
+
+  long value2 = map(incomingSpeedValue,0,12,0,155);
+  Serial.println(value2-620);
+  kmh.play(value2-620);
+
+  
      
  
 

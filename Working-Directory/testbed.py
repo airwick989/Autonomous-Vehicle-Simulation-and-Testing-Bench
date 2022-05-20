@@ -171,8 +171,8 @@ except ImportError:
 # -- Global functions ----------------------------------------------------------
 # ==============================================================================
 
-ser = serial.Serial('/dev/ttyACM0', 9600) #rpms
-ser2 = serial.Serial('/dev/ttyACM2', 9600) #speed
+#ser = serial.Serial('/dev/ttyACM0', 9600) #rpms
+ser2 = serial.Serial('/dev/ttyACM1', 9600) #speed
 
 
 
@@ -220,12 +220,12 @@ def get_speed():
     temp = round(speed/10)
     if(temp != last_speed):
         last_speed = temp
-        ser.write(struct.pack('>i', temp))
+        #ser.write(struct.pack('>i', temp))
         #print(temp)
         
     if(indicator != 0 and delay_counter > 60):
         if(last_indicator != indicator):
-            ser2.write(str.encode(str(indicator)))
+            #ser2.write(str.encode(str(indicator)))
             last_indicator = indicator
         delay_counter = 0
     #print(delay_counter)
@@ -233,9 +233,7 @@ def get_speed():
 
     # print(speed)
     # ser2.write(str.encode(str(speed)))
-
-    # data = bytes(int(speed))
-    # ser2.write(str.encode(str(data)))
+    ser2.write(str.encode(str(int(speed))))
 
     return speed if not reverse else speed * -1
 
