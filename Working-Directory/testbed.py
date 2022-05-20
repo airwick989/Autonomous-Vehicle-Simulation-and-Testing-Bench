@@ -15,6 +15,7 @@
 #Suppressed ctrl+f : subprocess.Popen
 #Suppressed ctrl+f : self._joystick1
 #Obtained speed and printed it to terminal, ctrl+f: get_speed
+#point of interest at ctrl+f: print(event.button)
 #
 """
 Welcome to CARLA manual control.
@@ -170,8 +171,8 @@ except ImportError:
 # -- Global functions ----------------------------------------------------------
 # ==============================================================================
 
-ser = serial.Serial('/dev/ttyACM0', 9600)
-ser2 = serial.Serial('/dev/ttyACM1', 9600)
+ser = serial.Serial('/dev/ttyACM0', 9600) #rpms
+ser2 = serial.Serial('/dev/ttyACM2', 9600) #speed
 
 
 
@@ -229,6 +230,13 @@ def get_speed():
         delay_counter = 0
     #print(delay_counter)
     delay_counter = delay_counter + 1
+
+    # print(speed)
+    # ser2.write(str.encode(str(speed)))
+
+    # data = bytes(int(speed))
+    # ser2.write(str.encode(str(data)))
+
     return speed if not reverse else speed * -1
 
 
@@ -482,7 +490,7 @@ class DualControl(object):
             #(REZWANA) pygame recognizes steering wheel kit and gear shifter as "joys or joystick"
             #we are checking if the current event is from a joystick
             elif event.type == pygame.JOYBUTTONDOWN:
-                print(event.button)
+                print(f"event.button = {event.button}\nevent.joy = {event.joy}\n")
                 #(REZWANA) since there are 2 joy sticks, the indices for these are 0 and 1
                 #index 1 = gear shifter
                 #index 2 = steering wheel kit
@@ -514,8 +522,10 @@ class DualControl(object):
                     elif event.button == 0:
                         if(indicator == 2):
                             indicator = 0
+                            print(indicator) #RIDWAN added
                         else:
                             indicator = 2
+                            print(indicator) #RIDWAN added
                     elif event.button == 2:
                         if(indicator == 1):
                             indicator = 0
