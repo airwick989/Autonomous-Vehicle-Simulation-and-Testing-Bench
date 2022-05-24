@@ -13,6 +13,7 @@ int incomingSpeedValue = 1;
 int incomingRPMValue = 0;
 int incomingFuelValue = 0;
 int temp = 0;
+String strSpeed = "";
 
 void setup() {
   
@@ -27,21 +28,24 @@ void setup() {
 
 void loop() {
 
-   updateGauges();
-   delay(20); 
+   updateGauges(); 
 
 }
 
 void updateGauges() {
 
   incomingSpeedValue = Serial.read();
+  int mappedSpeed = map(incomingSpeedValue,0,140,0,155);
+  if(incomingSpeedValue != 0 && incomingSpeedValue != -12 && incomingSpeedValue != -1){
+    temp = mappedSpeed;
+  }
+  Serial.println(temp);
+  kmh.play(temp);
 
-  long value2 = map(incomingSpeedValue,0,12,0,155);
-  Serial.println(value2-620);
-  kmh.play(value2-620);
+//  strSpeed = Serial.readString();
+//  Serial.println(strSpeed);
 
-  
-     
- 
-
+//  if (Serial.available() == 0) {
+//      strSpeed = Serial.readStringUntil('\n');
+//  }
 }

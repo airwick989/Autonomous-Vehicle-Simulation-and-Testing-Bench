@@ -231,9 +231,9 @@ def get_speed():
     #print(delay_counter)
     delay_counter = delay_counter + 1
 
-    # print(speed)
-    # ser2.write(str.encode(str(speed)))
-    ser2.write(str.encode(str(int(speed))))
+    # ser2.write(str.encode(str(speed))
+    print(int(speed))
+    ser2.write(struct.pack('>i', int(speed)))
 
     return speed if not reverse else speed * -1
 
