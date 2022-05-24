@@ -232,8 +232,8 @@ def get_speed():
     delay_counter = delay_counter + 1
 
     # ser2.write(str.encode(str(speed))
-    print(int(speed))
-    ser2.write(struct.pack('>i', int(speed)))
+    #print(int(speed))
+    ser2.write(struct.pack('>i', int(speed)))   #RIDWAN: This is to send the speed to the Arduino board
 
     return speed if not reverse else speed * -1
 
