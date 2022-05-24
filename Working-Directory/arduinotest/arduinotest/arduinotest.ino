@@ -41,11 +41,5 @@ void updateGauges() {
   }
   Serial.println(temp);
   kmh.play(temp);
-
-//  strSpeed = Serial.readString();
-//  Serial.println(strSpeed);
-
-//  if (Serial.available() == 0) {
-//      strSpeed = Serial.readStringUntil('\n');
-//  }
+  
 }
