@@ -212,6 +212,8 @@ def get_actor_blueprints(world, filter, generation):
         return []
 
 
+
+tempThrottle = 0
 def get_speed(world):
     global delay_counter
     last_indicator = 0
@@ -236,7 +238,13 @@ def get_speed(world):
 
     c = world.player.get_control()
     p = world.player.get_physics_control()
-    engine_rpm = p.max_rpm * c.throttle
+    global tempThrottle
+
+    if int(speed) > 0 and c.throttle != 0:
+        tempThrottle = c.throttle
+    elif int(speed) == 0:
+        tempThrottle = c.throttle
+    engine_rpm = p.max_rpm * tempThrottle
     if c.gear > 0:
         try:
             gear = p.forward_gears[c.gear]
