@@ -171,7 +171,7 @@ except ImportError:
 # -- Global functions ----------------------------------------------------------
 # ==============================================================================
 
-#ser = serial.Serial('/dev/ttyACM0', 9600) #rpms
+ser = serial.Serial('/dev/ttyACM0', 9600) #rpms
 ser2 = serial.Serial('/dev/ttyACM1', 9600) #speed
 
 
@@ -211,16 +211,15 @@ def get_actor_blueprints(world, filter, generation):
         print("   Warning! Actor Generation is not valid. No actor will be spawned.")
         return []
 
-    
 
-def get_speed():
+def get_speed(world):
     global delay_counter
     last_indicator = 0
     last_speed = 0
     temp = round(speed/10)
     if(temp != last_speed):
         last_speed = temp
-        #ser.write(struct.pack('>i', temp))
+        ser.write(struct.pack('>i', temp))
         #print(temp)
         
     if(indicator != 0 and delay_counter > 60):
@@ -234,6 +233,16 @@ def get_speed():
     # ser2.write(str.encode(str(speed))
     #print(int(speed))
     ser2.write(struct.pack('>i', int(speed)))   #RIDWAN: This is to send the speed to the Arduino board
+
+    c = world.player.get_control()
+    p = world.player.get_physics_control()
+    engine_rpm = p.max_rpm * c.throttle
+    if c.gear > 0:
+        gear = p.forward_gears[c.gear]
+        engine_rpm *= gear.ratio
+    
+    print(engine_rpm)
+
 
     return speed if not reverse else speed * -1
 
@@ -805,7 +814,7 @@ class HUD(object):
         # Speed Var
         global speed
         speed = (3.6 * math.sqrt(v.x**2 + v.y**2 + v.z**2))
-        get_speed()
+        get_speed(world)
 
         self._info_text = [
             'Server:  % 16.0f FPS' % self.server_fps,

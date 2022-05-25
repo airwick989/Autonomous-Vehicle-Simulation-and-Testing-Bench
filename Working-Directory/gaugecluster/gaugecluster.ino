@@ -27,15 +27,15 @@ void loop() {
 }
 
 void updateGauges() {
-
   incomingSpeedValue = Serial.read();
+  tempSpeed = incomingSpeedValue;
   int mappedSpeed = map(incomingSpeedValue,0,115,0,155);
-  if(incomingSpeedValue != 0){
+  if(incomingSpeedValue > 0){
     temp = mappedSpeed;
   }
-  Serial.println(temp);
+  Serial.println("Speed: " + String(temp) + " Test: " + String(tempSpeed));
   kmh.play(temp);
-
+  //rpm.play(temp);
   
   
 }
