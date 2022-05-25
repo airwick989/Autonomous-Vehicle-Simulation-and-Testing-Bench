@@ -171,8 +171,8 @@ except ImportError:
 # -- Global functions ----------------------------------------------------------
 # ==============================================================================
 
-ser = serial.Serial('/dev/ttyACM0', 9600) #rpms
-ser2 = serial.Serial('/dev/ttyACM1', 9600) #speed
+ser = serial.Serial('/dev/ttyACM0', 38400) #rpms
+ser2 = serial.Serial('/dev/ttyACM1', 38400) #speed
 
 
 
@@ -238,8 +238,11 @@ def get_speed(world):
     p = world.player.get_physics_control()
     engine_rpm = p.max_rpm * c.throttle
     if c.gear > 0:
-        gear = p.forward_gears[c.gear]
-        engine_rpm *= gear.ratio
+        try:
+            gear = p.forward_gears[c.gear]
+            engine_rpm *= gear.ratio
+        except Exception:
+            pass
     
     print(engine_rpm)
 

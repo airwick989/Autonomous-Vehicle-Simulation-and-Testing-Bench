@@ -13,7 +13,7 @@ int tempSpeed = 1;
 
 void setup() {
   
-  Serial.begin(9600);
+  Serial.begin(38400);
  
   kmh.begin(SPEED_PIN);
   rpm.begin(RPM_PIN);
@@ -30,10 +30,10 @@ void updateGauges() {
   incomingSpeedValue = Serial.read();
   tempSpeed = incomingSpeedValue;
   int mappedSpeed = map(incomingSpeedValue,0,115,0,155);
-  if(incomingSpeedValue > 0){
+  if(incomingSpeedValue != 0){
     temp = mappedSpeed;
   }
-  Serial.println("Speed: " + String(temp) + " Test: " + String(tempSpeed));
+  Serial.println("Speed: " + String(temp) + " incomingSpeedValue: " + String(incomingSpeedValue));
   kmh.play(temp);
   //rpm.play(temp);
   
