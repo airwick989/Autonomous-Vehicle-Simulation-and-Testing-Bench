@@ -30,7 +30,7 @@ void updateGauges() {
   incomingSpeedValue = Serial.read();
   tempSpeed = incomingSpeedValue;
   int mappedSpeed = map(incomingSpeedValue,0,115,0,155);
-  if(incomingSpeedValue != 0){
+  if(incomingSpeedValue != 0 && incomingSpeedValue != -1){
     temp = mappedSpeed;
   }
   Serial.println("Speed: " + String(temp) + " incomingSpeedValue: " + String(incomingSpeedValue));

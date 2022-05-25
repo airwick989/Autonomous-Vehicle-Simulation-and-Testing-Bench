@@ -171,8 +171,8 @@ except ImportError:
 # -- Global functions ----------------------------------------------------------
 # ==============================================================================
 
-ser = serial.Serial('/dev/ttyACM0', 115200) #rpms
-ser2 = serial.Serial('/dev/ttyACM1', 115200) #speed
+#ser = serial.Serial('/dev/ttyACM0', 115200) #rpms
+ser2 = serial.Serial('/dev/ttyACM1', 38400) #speed
 
 
 
@@ -221,7 +221,7 @@ def get_speed(world):
     temp = round(speed/10)
     if(temp != last_speed):
         last_speed = temp
-        ser.write(struct.pack('>i', temp))
+        #ser.write(struct.pack('>i', temp))
         #print(temp)
         
     if(indicator != 0 and delay_counter > 60):
@@ -252,7 +252,7 @@ def get_speed(world):
             pass
     
     #print(engine_rpm)
-    #ser2.write(struct.pack('>ii', int(speed), int(engine_rpm)))   #RIDWAN: This is to send the speed to the Arduino board
+    #ser2.write(struct.pack('>ii', int(50), int(engine_rpm)))   #RIDWAN: This is to send the speed to the Arduino board
 
 
     return speed if not reverse else speed * -1

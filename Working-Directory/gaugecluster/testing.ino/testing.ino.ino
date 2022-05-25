@@ -34,6 +34,9 @@ void updateGauges() {
   for(int i = 0; i < 2; i++){
     incoming[i] = Serial.read();
   }
+  if(incoming[0] != 0 && incoming[1] != 0 && incoming[0] != -1 && incoming[1] != -1){
+    Serial.println("incoming[0]: " + String(incoming[0]) + " incoming[1]: " + String(incoming[1]));
+  }
   
   incomingSpeedValue = incoming[0];
   tempSpeed = incomingSpeedValue;
@@ -45,12 +48,13 @@ void updateGauges() {
 
   incomingRPMValue = incoming[1];
   tempRPM = incomingRPMValue;
-  int mappedRPM = map(incomingRPMValue,0,100,0,155);
+  int mappedRPM = map(incomingRPMValue,0,200,0,155);
   if(incomingRPMValue != 0 && incomingRPMValue != -1){
     temp2 = mappedRPM;
   }
-  Serial.println("Speed: " + String(temp) + " RPM: " + String(temp2));
-  rpm.play(temp2);
+  //Serial.println("Speed: " + String(temp) + " RPM: " + String(temp2));
+  //rpm.play(temp2);
+  
   
   
 }
