@@ -247,6 +247,15 @@ def get_speed(world):
     if c.gear > 0:
         try:
             gear = p.forward_gears[c.gear]
+            calcGear = {-1: 'R', 0: 'N'}.get(c.gear, c.gear)
+            #print(calcGear)
+
+            #RPM Calculation
+            mph = int(speed) * 0.62137119223733
+            wheelRPM = mph / ( (60/63360) * math.pi * 25 )  #64 cm is 25 inches
+            print(gear.ratio)
+            ################
+
             engine_rpm *= gear.ratio
         except Exception:
             pass
