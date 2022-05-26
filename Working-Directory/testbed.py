@@ -171,8 +171,8 @@ except ImportError:
 # -- Global functions ----------------------------------------------------------
 # ==============================================================================
 
-ser = serial.Serial('/dev/ttyACM0', 9600) #rpms
-ser2 = serial.Serial('/dev/ttyACM1', 9600) #speed
+#ser = serial.Serial('/dev/ttyACM0', 115200) #rpms
+ser2 = serial.Serial('/dev/ttyACM1', 38400) #speed
 
 
 
@@ -212,6 +212,8 @@ def get_actor_blueprints(world, filter, generation):
         return []
 
 
+
+tempThrottle = 0
 def get_speed(world):
     global delay_counter
     last_indicator = 0
@@ -219,7 +221,7 @@ def get_speed(world):
     temp = round(speed/10)
     if(temp != last_speed):
         last_speed = temp
-        ser.write(struct.pack('>i', temp))
+        #ser.write(struct.pack('>i', temp))
         #print(temp)
         
     if(indicator != 0 and delay_counter > 60):
@@ -230,18 +232,27 @@ def get_speed(world):
     #print(delay_counter)
     delay_counter = delay_counter + 1
 
-    # ser2.write(str.encode(str(speed))
     #print(int(speed))
     ser2.write(struct.pack('>i', int(speed)))   #RIDWAN: This is to send the speed to the Arduino board
 
     c = world.player.get_control()
     p = world.player.get_physics_control()
-    engine_rpm = p.max_rpm * c.throttle
+    global tempThrottle
+
+    if int(speed) > 0 and c.throttle != 0:
+        tempThrottle = c.throttle
+    elif int(speed) == 0:
+        tempThrottle = c.throttle
+    engine_rpm = p.max_rpm * tempThrottle
     if c.gear > 0:
-        gear = p.forward_gears[c.gear]
-        engine_rpm *= gear.ratio
+        try:
+            gear = p.forward_gears[c.gear]
+            engine_rpm *= gear.ratio
+        except Exception:
+            pass
     
-    print(engine_rpm)
+    #print(engine_rpm)
+    #ser2.write(struct.pack('>ii', int(50), int(engine_rpm)))   #RIDWAN: This is to send the speed to the Arduino board
 
 
     return speed if not reverse else speed * -1
