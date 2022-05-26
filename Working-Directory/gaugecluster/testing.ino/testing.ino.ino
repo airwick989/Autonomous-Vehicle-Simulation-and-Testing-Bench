@@ -54,7 +54,7 @@ void updateGauges() {
   kmh.play(temp);
 
   tempRPM = incomingRPMValue;
-  int mappedRPM = map(incomingRPMValue,0,4000,0,155);
+  int mappedRPM = map(incomingRPMValue,0,3400,0,155);
   if(incomingRPMValue != 0 && incomingRPMValue != -1){
     temp2 = mappedRPM;
   }

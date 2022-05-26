@@ -244,10 +244,9 @@ def get_speed(world):
             #print(calcGear)
 
             #RPM Calculation
-            mph = int(speed) * 0.62137119223733
+            mph = int(speed) * 0.62137119223733 #convert speed from kph to mph
             wheelRPM = mph / ( (60/63360) * math.pi * 25 )  #64 cm is 25 inches
             engine_rpm = wheelRPM * gear.ratio * 10
-            print(engine_rpm)
             ################
         except Exception:
             pass
