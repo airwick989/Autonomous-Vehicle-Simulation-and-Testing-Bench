@@ -172,7 +172,7 @@ except ImportError:
 # ==============================================================================
 
 #ser = serial.Serial('/dev/ttyACM0', 115200) #rpms
-ser2 = serial.Serial('/dev/ttyACM1', 38400) #speed
+ser2 = serial.Serial('/dev/ttyACM1', 2000000) #speed
 
 
 
@@ -233,7 +233,7 @@ def get_speed(world):
     delay_counter = delay_counter + 1
 
     #print(int(speed))
-    ser2.write(struct.pack('>i', int(speed)))   #RIDWAN: This is to send the speed to the Arduino board
+    #ser2.write(struct.pack('>i', int(speed)))   #RIDWAN: This is to send the speed to the Arduino board
 
     c = world.player.get_control()
     p = world.player.get_physics_control()
@@ -253,6 +253,8 @@ def get_speed(world):
     
     #print(engine_rpm)
     #ser2.write(struct.pack('>ii', int(50), int(engine_rpm)))   #RIDWAN: This is to send the speed to the Arduino board
+    ser2.write(bytes(f"{str(int(speed))}\n", encoding='utf-8'))
+    ser2.write(bytes(f"{str(int(engine_rpm))}\n", encoding='utf-8'))
 
 
     return speed if not reverse else speed * -1
