@@ -31,18 +31,18 @@ void loop() {
 
 void updateGauges() {
 
-  String strSpeed = Serial.readStringUntil('\n');
   String strRPM = Serial.readStringUntil('\n');
+  String strSpeed = Serial.readStringUntil('\n');
 
   incomingSpeedValue = strSpeed.toInt();
   incomingRPMValue = strRPM.toInt();
 
-  if(incomingSpeedValue >= 1000){
-    placeholder = incomingSpeedValue;
-    incomingSpeedValue = incomingRPMValue;
-    incomingRPMValue = placeholder;
-  }
-  
+//  if(incomingSpeedValue >= 400){
+//    placeholder = incomingSpeedValue;
+//    incomingSpeedValue = incomingRPMValue;
+//    incomingRPMValue = placeholder;
+//  }
+//  
   Serial.println("Speed: " + String(incomingSpeedValue) + " RPM: " + String(incomingRPMValue));
    
   
@@ -54,7 +54,7 @@ void updateGauges() {
   kmh.play(temp);
 
   tempRPM = incomingRPMValue;
-  int mappedRPM = map(incomingRPMValue,0,10000,0,155);
+  int mappedRPM = map(incomingRPMValue,0,4000,0,155);
   if(incomingRPMValue != 0 && incomingRPMValue != -1){
     temp2 = mappedRPM;
   }

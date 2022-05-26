@@ -212,8 +212,6 @@ def get_actor_blueprints(world, filter, generation):
         return []
 
 
-
-tempThrottle = 0
 def get_speed(world):
     global delay_counter
     last_indicator = 0
@@ -233,17 +231,12 @@ def get_speed(world):
     delay_counter = delay_counter + 1
 
     #print(int(speed))
-    #ser2.write(struct.pack('>i', int(speed)))   #RIDWAN: This is to send the speed to the Arduino board
+    #ser2.write(struct.pack('>i', int(speed)))   #RIDWAN: This is for reference
 
     c = world.player.get_control()
     p = world.player.get_physics_control()
-    global tempThrottle
 
-    if int(speed) > 0 and c.throttle != 0:
-        tempThrottle = c.throttle
-    elif int(speed) == 0:
-        tempThrottle = c.throttle
-    engine_rpm = p.max_rpm * tempThrottle
+    engine_rpm = p.max_rpm * c.throttle
     if c.gear > 0:
         try:
             gear = p.forward_gears[c.gear]
@@ -253,15 +246,13 @@ def get_speed(world):
             #RPM Calculation
             mph = int(speed) * 0.62137119223733
             wheelRPM = mph / ( (60/63360) * math.pi * 25 )  #64 cm is 25 inches
-            print(gear.ratio)
+            engine_rpm = wheelRPM * gear.ratio * 10
+            print(engine_rpm)
             ################
-
-            engine_rpm *= gear.ratio
         except Exception:
             pass
     
-    #print(engine_rpm)
-    #ser2.write(struct.pack('>ii', int(50), int(engine_rpm)))   #RIDWAN: This is to send the speed to the Arduino board
+    #RIDWAN: This is to send the speed  and rpm to the Arduino board
     ser2.write(bytes(f"{str(int(speed))}\n", encoding='utf-8'))
     ser2.write(bytes(f"{str(int(engine_rpm))}\n", encoding='utf-8'))
 
