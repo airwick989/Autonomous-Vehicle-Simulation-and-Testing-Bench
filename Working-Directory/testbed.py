@@ -477,8 +477,8 @@ class DualControl(object):
         pygame.joystick.init()
 
         joystick_count = pygame.joystick.get_count()
-        if joystick_count > 1:
-            raise ValueError("Please Connect Just One Joystick")
+        # if joystick_count > 1:
+        #     raise ValueError("Please Connect Just One Joystick")
 
         self._joystick = pygame.joystick.Joystick(0)
         self._joystick.init()
@@ -490,8 +490,8 @@ class DualControl(object):
         self._brake_idx = 1
         self._reverse_idx = 5
         self._handbrake_idx = 4
-        #self._joystick1 = pygame.joystick.Joystick(1)
-        #self._joystick1.init()
+        self._joystick1 = pygame.joystick.Joystick(1)
+        self._joystick1.init()
 
     def parse_events(self, world, clock, testingFlag):
         global auto
@@ -541,10 +541,8 @@ class DualControl(object):
                     elif event.button == 0:
                         if(indicator == 2):
                             indicator = 0
-                            print(indicator) #RIDWAN added
                         else:
                             indicator = 2
-                            print(indicator) #RIDWAN added
                     elif event.button == 2:
                         if(indicator == 1):
                             indicator = 0
