@@ -37,12 +37,11 @@ void updateGauges() {
   incomingSpeedValue = strSpeed.toInt();
   incomingRPMValue = strRPM.toInt();
 
-//  if(incomingSpeedValue >= 400){
-//    placeholder = incomingSpeedValue;
-//    incomingSpeedValue = incomingRPMValue;
-//    incomingRPMValue = placeholder;
-//  }
-//  
+  if(incomingSpeedValue > incomingRPMValue){
+    placeholder = incomingSpeedValue;
+    incomingSpeedValue = incomingRPMValue;
+    incomingRPMValue = placeholder;
+  }
   Serial.println("Speed: " + String(incomingSpeedValue) + " RPM: " + String(incomingRPMValue));
    
   
