@@ -173,6 +173,7 @@ except ImportError:
 
 #ser = serial.Serial('/dev/ttyACM0', 115200) #rpms
 ser2 = serial.Serial('/dev/ttyACM1', 2000000) #speed
+globalManualFlag = 0    #RIDWAN added
 
 
 
@@ -498,6 +499,7 @@ class DualControl(object):
         global bkup_cam
         global park
         global reverse
+        global globalManualFlag
         #(REZWANA) CODE FOR TEST CASES, SENDS A CLICK MOUSE EVENT SO THAT THE CLIENT IS IN FOCUS
         if testingFlag >= 1:
             post_event = pygame.event.Event(pygame.MOUSEBUTTONDOWN, button = 2, pos = (5, 5))
@@ -516,21 +518,35 @@ class DualControl(object):
 
                 #(REZWANA) this if statement checks, if the input is from the gear shifter
                 if event.joy == 1:
-                    #if its a 0 input, put in park, if 1 put in drive etc.
-                    if event.button == 0:
-                        print(park)
-                        park = 1
-                    elif event.button == 1:
-                        park=0
-                        if (reverse==1):
-                            reverse=0
-                            self._control.gear = 1
-                    elif event.button==2:
-                        hideturtle
-                    elif event.button==7:
-                        reverse = 1
-                        self._control.gear = -1
-                        park = 0
+                    
+                    #RIDWAN everything up to the END comment is added
+                    if globalManualFlag:
+                        reverse = 0
+                        if event.button != 7:
+                            try:
+                                self._control.gear = event.button + 1
+                            except Exception:
+                                pass
+                        else:
+                            reverse = not reverse
+                            self._control.gear = -1
+                    #END
+                    else:
+                        #if its a 0 input, put in park, if 1 put in drive etc.
+                        if event.button == 0:
+                            print(park)
+                            park = 1
+                        elif event.button == 1:
+                            park=0
+                            if (reverse==1):
+                                reverse=0
+                                self._control.gear = 1
+                        elif event.button==2:
+                            hideturtle
+                        elif event.button==7:
+                            reverse = 1
+                            self._control.gear = -1
+                            park = 0
                 #(REZWANA) if the input is a joystick, but it is NOT from the gear shifter, it is from the steering wheel kit
                 #the rest of these if statemenst are parsing inputs from the steering wheel kit
                 #all the different buttons etc.
@@ -624,6 +640,7 @@ class DualControl(object):
                         self._control.gear = world.player.get_control().gear
                         world.hud.notification('%s Transmission' %
                                                ('Manual' if self._control.manual_gear_shift else 'Automatic'))
+                        globalManualFlag = not globalManualFlag #RIDWAN added
                     elif self._control.manual_gear_shift and event.key == K_COMMA:
                         self._control.gear = max(-1, self._control.gear - 1)
                     elif self._control.manual_gear_shift and event.key == K_PERIOD:
