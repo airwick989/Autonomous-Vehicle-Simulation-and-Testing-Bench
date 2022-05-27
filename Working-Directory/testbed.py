@@ -1368,7 +1368,7 @@ def game_loop(args):
         client = carla.Client(args.host, args.port)
         client.set_timeout(20.0)
 
-        sim_world = client.get_world()
+        sim_world = client.get_world()  #RIDWAN changed this for map selection. Original was client.get_world(), specific was client.load_world('Town06')
         if args.sync:
             original_settings = sim_world.get_settings()
             settings = sim_world.get_settings()
