@@ -458,6 +458,7 @@ class World(object):
 # -- DualControl -----------------------------------------------------------
 # ==============================================================================
 
+handbrake_counter = 0
 
 class DualControl(object):
     def __init__(self, world, start_in_autopilot):
@@ -481,7 +482,7 @@ class DualControl(object):
         # if joystick_count > 1:
         #     raise ValueError("Please Connect Just One Joystick")
 
-        self._joystick = pygame.joystick.Joystick(0)
+        self._joystick = pygame.joystick.Joystick(1)    #index out of range
         self._joystick.init()
 
         self._parser = ConfigParser()
@@ -490,8 +491,8 @@ class DualControl(object):
         self._throttle_idx = 2
         self._brake_idx = 1
         self._reverse_idx = 5
-        self._handbrake_idx = 4
-        self._joystick1 = pygame.joystick.Joystick(1)
+        self._handbrake_idx = 0
+        self._joystick1 = pygame.joystick.Joystick(0)   #index out of range
         self._joystick1.init()
 
     def parse_events(self, world, clock, testingFlag):
@@ -517,7 +518,7 @@ class DualControl(object):
                 #index 2 = steering wheel kit
 
                 #(REZWANA) this if statement checks, if the input is from the gear shifter
-                if event.joy == 1:
+                if event.joy == 0:  #index out of range
                     
                     #RIDWAN everything up to the END comment is added
                     if globalManualFlag:
@@ -552,13 +553,18 @@ class DualControl(object):
                 #all the different buttons etc.
                 else:
                     global indicator
-                    if event.button == 4:
-                        world.camera_manager.toggle_camera()
-                    elif event.button == 0:
+                    if event.button == 0:
                         if(indicator == 2):
                             indicator = 0
                         else:
                             indicator = 2
+                        
+                        global handbrake_counter
+                        handbrake_counter += 1
+                        if handbrake_counter % 2 == 1:
+                            self._control.hand_brake = True
+                        else:
+                            self._control.hand_brake = False
                     elif event.button == 2:
                         if(indicator == 1):
                             indicator = 0
@@ -576,16 +582,7 @@ class DualControl(object):
                             attentionFlag = 0
                             #subprocess.Popen(['python','capture.py'])
                     elif event.button == 5:
-                        if event.joy == 0:
-                            
-                            if(reverse == 0):
-                                #subprocess.call("adb shell am start -n com.microntek.avin/.MainActivity",shell=True)
-                                reverse = 1
-                                self._control.gear = -1
-                            else:
-                                #subprocess.call("adb shell am start -n com.microntek.navisettings/.MainActivity",shell=True)
-                                reverse = 0
-                                self._control.gear = 1
+                            pass
                     elif event.button == 6:
                         world.camera_manager.toggle_camera()
                     elif event.button == 12:
@@ -605,6 +602,8 @@ class DualControl(object):
                             indicator = 0
                         else:
                             indicator = 3
+
+                        world.camera_manager.toggle_camera()
                     elif event.button == 1:
                         if bkup_cam == 0:
                             bkup_cam = 1
@@ -690,7 +689,7 @@ class DualControl(object):
         self._steer_cache = min(0.7, max(-0.7, self._steer_cache))
         self._control.steer = round(self._steer_cache, 1)
         self._control.brake = 1.0 if keys[K_DOWN] or keys[K_s] else 0.0
-        self._control.hand_brake = keys[K_SPACE]
+        #self._control.hand_brake = keys[K_SPACE]
 
     def _parse_vehicle_wheel(self, testingFlag):
         global locationPath
@@ -709,8 +708,10 @@ class DualControl(object):
         #print(f"Axis?: {jsInputs[self._steer_idx] - 0.33331298828125}")
 
         K2 = 1.4  # 1.6
-        throttleCmd = K2 + (2.05 * math.log10(
-            -0.7 * jsInputs[self._throttle_idx] + 1.4) - 1.2) / 0.92
+        try: #index out of range
+            throttleCmd = K2 + (2.05 * math.log10(-0.7 * jsInputs[self._throttle_idx] + 1.4) - 1.2) / 0.92
+        except Exception:
+            throttleCmd = 0
         #print(f"throttleCmd: {throttleCmd}")
         if throttleCmd <= 0:
             throttleCmd = 0
@@ -767,7 +768,8 @@ class DualControl(object):
         self._control.brake = brakeCmd
         self._control.throttle = throttleCmd
 
-        self._control.hand_brake = bool(jsButtons[self._handbrake_idx])
+        
+        #self._control.hand_brake = bool(jsButtons[self._handbrake_idx])
 
     def _parse_walker_keys(self, keys, milliseconds):
         self._control.speed = 0.0
