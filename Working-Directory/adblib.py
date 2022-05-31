@@ -17,24 +17,30 @@ def connect():
 
     return device, client
 
-def volume_up(device):
+def volume_up():
+    global device
     device.shell('input keyevent 24')
 
-def volume_down(device):
+def volume_down():
+    global device
     device.shell('input keyevent 25')
 
 def launch_app(package_name):
     command = f'monkey -p {package_name} 1'
     device.shell(command)
 
+def home():
+    global device
+    device.shell('input keyevent 3')
+
 
 ########################################################################################################################################################################################
 
 
 device, client = connect()
+#launch_app(package_name='com.soundcloud.android')   #package:com.android.chrome
 
 #print(device.shell('adb shell pm list packages'))
-launch_app(package_name='com.android.chrome')   #package:com.android.chrome
 
 # for i in range(0,6):    #Turn the volum up 5 ticks, 1 is to trigger the volume controls
 #     volume_up(device)

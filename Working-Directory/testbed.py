@@ -108,6 +108,9 @@ import time
 import serial
 import struct
 
+#RIDWAN import ADB functions
+import adblib
+
 if sys.version_info >= (3, 0):
 
     from configparser import ConfigParser
@@ -570,24 +573,8 @@ class DualControl(object):
                             indicator = 0
                         else:
                             indicator = 1
-                    elif event.button == 10:
-                        global attentionFlag
-                        if (attentionFlag == 0):
-                            file1 = open("myfile.txt","r")
-                            pid = int(file1.read())
-                            file1.close()
-                            os.kill(pid, signal.SIGTERM)
-                            attentionFlag = 1
-                        else:
-                            attentionFlag = 0
-                            #subprocess.Popen(['python','capture.py'])
                     elif event.button == 5:
-                            pass
-                    elif event.button == 6:
-                        world.camera_manager.toggle_camera()
-                    elif event.button == 12:
-                        world.destroy()
-                        pygame.quit()
+                        adblib.launch_app(package_name='com.soundcloud.android')    #RIDWAN Launch spotify app using right paddle
                     elif event.button == 7:
                         if(auto == 1):
                             print("Disable Lane Assist")
@@ -610,6 +597,8 @@ class DualControl(object):
                         else:
                             bkup_cam = 0
                         world.restart()
+                    elif event.button == 12:
+                        adblib.home()
 
             elif event.type == pygame.KEYUP:
                 if self._is_quit_shortcut(event.key):
