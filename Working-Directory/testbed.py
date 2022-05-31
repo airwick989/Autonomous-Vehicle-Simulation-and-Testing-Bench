@@ -569,19 +569,9 @@ class DualControl(object):
                         else:
                             self._control.hand_brake = False
                     elif event.button == 2:
-                        if(indicator == 1):
-                            indicator = 0
-                        else:
-                            indicator = 1
+                        adblib.play_pause()
                     elif event.button == 5:
                         adblib.launch_app(package_name='com.soundcloud.android')    #RIDWAN Launch spotify app using right paddle
-                    elif event.button == 7:
-                        if(auto == 1):
-                            print("Disable Lane Assist")
-                            auto = 0
-                        else:
-                            print("Enable Lane Assist")
-                            auto = 1
                     elif event.button == self._reverse_idx:
                         self._control.gear = 1 if self._control.reverse else -1
                     elif event.button == 3:
@@ -599,8 +589,21 @@ class DualControl(object):
                         world.restart()
                     elif event.button == 12:
                         adblib.home()
-
-            elif event.type == pygame.KEYUP:
+                    elif event.button == 7:
+                        adblib.volume_up()
+                    elif event.button == 11:
+                        adblib.volume_down()
+                    elif event.button == 6:
+                        adblib.next()
+                    elif event.button == 10:
+                        adblib.previous()
+                    elif event.button == 8:
+                        adblib.back()
+                    elif event.button == 9:
+                        adblib.recent_apps()
+                    elif event.button == 4:
+                        adblib.launch_app('com.google.android.apps.maps')
+            elif event.type == pygame.KEYUP:    #RIDWAN Keyboard controls
                 if self._is_quit_shortcut(event.key):
                     return True
                 elif event.key == K_BACKSPACE:

@@ -25,6 +25,26 @@ def volume_down():
     global device
     device.shell('input keyevent 25')
 
+def play_pause():
+    global device
+    device.shell('input keyevent 85')
+
+def next():
+    global device
+    device.shell('input keyevent 87')
+
+def previous():
+    global device
+    device.shell('input keyevent 88')
+
+def back():
+    global device
+    device.shell('input keyevent 4')
+
+def recent_apps():
+    global device
+    device.shell('input keyevent KEYCODE_APP_SWITCH')
+
 def launch_app(package_name):
     command = f'monkey -p {package_name} 1'
     device.shell(command)
@@ -40,7 +60,7 @@ def home():
 device, client = connect()
 #launch_app(package_name='com.soundcloud.android')   #package:com.android.chrome
 
-#print(device.shell('adb shell pm list packages'))
+#adb shell pm list packages
 
 # for i in range(0,6):    #Turn the volum up 5 ticks, 1 is to trigger the volume controls
 #     volume_up(device)
