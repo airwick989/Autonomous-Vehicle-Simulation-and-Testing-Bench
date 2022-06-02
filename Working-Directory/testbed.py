@@ -102,6 +102,8 @@ import math
 import random
 import re
 import weakref
+import cantools
+import can
 
 # Cluster Imports
 import time
@@ -261,6 +263,54 @@ def get_speed(world):
 
 
     return speed if not reverse else speed * -1
+
+
+
+# ==============================================================================
+# -- CAN -----------------------------------------------------------------------
+# ==============================================================================
+
+
+class CAN(object):
+    def __init__(self):
+        self.db = cantools.database.load_file('./honda.dbc')
+        self.can_bus = can.interface.Bus('vcan0', bustype='socketcan')
+        self.speed_message = self.db.get_message_by_name('WHEEL_SPEEDS')
+        self.steer_message = self.db.get_message_by_name('STEERING_SENSORS')
+        self.gear_message = self.db.get_message_by_name('GEARBOX')
+
+    def send_car_speed(self, speed):
+        data = self.speed_message.encode({'WHEEL_SPEED_FL': speed, 'WHEEL_SPEED_FR': speed, 'WHEEL_SPEED_RL': speed, 'WHEEL_SPEED_RR': speed})
+        message = can.Message(arbitration_id=self.speed_message.frame_id, data=data)
+        self.can_bus.send(message)
+
+    def send_steering(self, steer):
+        data = self.steer_message.encode({'STEER_ANGLE': steer * 500})
+        message = can.Message(arbitration_id=self.steer_message.frame_id, data=data)
+        self.can_bus.send(message)
+
+    def send_gear(self, gear):
+        if (gear == -1):
+            data = self.gear_message.encode({'GEAR_SHIFTER': 'R', 'GEAR': 'R'})
+        elif (gear == 1):
+            data = self.gear_message.encode({'GEAR_SHIFTER': 1, 'GEAR': 1})
+        elif (gear == 2):
+            data = self.gear_message.encode({'GEAR_SHIFTER': 2, 'GEAR': 2})
+        elif (gear == 3):
+            data = self.gear_message.encode({'GEAR_SHIFTER': 3, 'GEAR': 3})
+        elif (gear == 4):
+            data = self.gear_message.encode({'GEAR_SHIFTER': 4, 'GEAR': 4})
+        elif (gear == 5):
+            data = self.gear_message.encode({'GEAR_SHIFTER': 5, 'GEAR': 5})
+        elif (gear == 6):
+            data = self.gear_message.encode({'GEAR_SHIFTER': 6, 'GEAR': 6})
+        elif (gear == 7):
+            data = self.gear_message.encode({'GEAR_SHIFTER': 7, 'GEAR': 7})
+        else:
+            data = self.gear_message.encode({'GEAR_SHIFTER': int(gear), 'GEAR': int(gear)})
+        
+        message = can.Message(arbitration_id=self.gear_message.frame_id, data=data)
+        self.can_bus.send(message)
 
 
 # ==============================================================================
@@ -801,6 +851,7 @@ class HUD(object):
         self._font_mono = pygame.font.Font(mono, 12 if os.name == 'nt' else 14)
         self._notifications = FadingText(font, (width, 40), (0, height - 40))
         self.help = HelpText(pygame.font.Font(mono, 16), width, height)
+        self.can = CAN()    #RIDWAN added CAN
         self.server_fps = 0
         self.frame = 0
         self.simulation_time = 0
@@ -836,6 +887,7 @@ class HUD(object):
         global speed
         speed = (3.6 * math.sqrt(v.x**2 + v.y**2 + v.z**2))
         get_speed(world)
+        self.can.send_car_speed(speed)  #RIDWAN added CAN
 
         self._info_text = [
             'Server:  % 16.0f FPS' % self.server_fps,
@@ -854,6 +906,8 @@ class HUD(object):
             'Height:  % 18.0f m' % t.location.z,
             '']
         if isinstance(c, carla.VehicleControl):
+            self.can.send_gear(c.gear)
+            self.can.send_steering(c.steer)
             self._info_text += [
                 ('Throttle:', c.throttle, 0.0, 1.0),
                 ('Steer:', c.steer, -1.0, 1.0),
