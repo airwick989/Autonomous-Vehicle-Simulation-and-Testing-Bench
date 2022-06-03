@@ -331,8 +331,8 @@ array3 = None
 attentionFlag = 0
 park = 0
 
-with open('location.csv', newline='') as loclist:
-    loc = list(csv.reader(loclist))
+# with open('location.csv', newline='') as loclist:
+#     loc = list(csv.reader(loclist))
 
 class World(object):
     def __init__(self, carla_world, hud, args):
@@ -885,7 +885,7 @@ class HUD(object):
         # Speed Var
         global speed
         speed = (3.6 * math.sqrt(v.x**2 + v.y**2 + v.z**2))
-        get_speed(world)
+        print(get_speed(world))
         self.can.send_car_speed(speed)  #RIDWAN added CAN
 
         self._info_text = [
@@ -1403,9 +1403,9 @@ class CameraManager(object):
 # ==============================================================================
 # -- game_loop() ---------------------------------------------------------------
 # ==============================================================================
+global_world = None
 
-
-def game_loop(args):
+def game_loop(args, testingFlag):
     pygame.init()
     pygame.font.init()
     world = None
@@ -1439,6 +1439,8 @@ def game_loop(args):
 
         hud = HUD(args.width, args.height)
         world = World(sim_world, hud, args)
+        global global_world
+        global_world = world
         controller = DualControl(world, args.autopilot)
 
         if args.sync:
@@ -1447,43 +1449,48 @@ def game_loop(args):
             sim_world.wait_for_tick()
 
         clock = pygame.time.Clock()
-        while True:
-            if args.sync:
-                sim_world.tick()
-            clock.tick_busy_loop(60)
-            if controller.parse_events(world, clock, args.sync):
-                return
+        global steer
+        global auto
+        if testingFlag >=1:
+            for i in range(60):
+                clock.tick_busy_loop(60)
+                if controller.parse_events(world, clock, testingFlag):
+                    return
+                world.tick(clock)
+                world.render(display)
+                
+                if(auto == 1):
+                    world.player.apply_control(carla.VehicleControl(throttle=.25, steer=steer))
+                pygame.display.flip()
+        else:
 
-            msg = hud.can.can_bus.recv(0)
+            while True:
+                clock.tick_busy_loop(60)
+                if controller.parse_events(world, clock, 0):
+                    return
+                world.tick(clock)
+                world.render(display)
+                get_speed(world)
+                if(auto == 1):
+                    world.player.apply_control(carla.VehicleControl(throttle=.25, steer=steer))
+                pygame.display.flip()
 
-            world.tick(clock)
-            world.render(display)
-            pygame.display.flip()
-
-            global attackFlag
-            if msg is not None:
-                attackFlag=1
-                msg_data = msg.data
-                if (msg_data == bytearray(b'\x13\x88\x00\x00\x00\x00\x00\x00')):
-                    world.player.apply_control(carla.VehicleControl(steer=0.99))
-                if (msg_data == bytearray(b'\xf2\x54\x00\x00\x00\x00\x00\x00')):
-                    world.player.apply_control(carla.VehicleControl(steer=0.99))
-                if (msg_data == bytearray(b'\x20\x4E\x40\x9c\x81\x39\x02\x70')):
-                    world.player.apply_control(carla.VehicleControl(throttle=1.0, brake=0.0, hand_brake=False, gear=2))
-                    #world.player.set_velocity(carla.Vector3D(x=0.023124, y=3.754279, z=0.001853))
-            else:
-                attackFlag = 0
+                msg = hud.can.can_bus.recv(0)
+                global attackFlag
+                if msg is not None:
+                    attackFlag=1
+                    msg_data = msg.data
+                    if (msg_data == bytearray(b'\x13\x88\x00\x00\x00\x00\x00\x00')):
+                        world.player.apply_control(carla.VehicleControl(steer=0.99))
+                    if (msg_data == bytearray(b'\xf2\x54\x00\x00\x00\x00\x00\x00')):
+                        world.player.apply_control(carla.VehicleControl(steer=0.99))
+                    if (msg_data == bytearray(b'\x20\x4E\x40\x9c\x81\x39\x02\x70')):
+                        world.player.apply_control(carla.VehicleControl(throttle=1.0, brake=0.0, hand_brake=False, gear=2))
+                        #world.player.set_velocity(carla.Vector3D(x=0.023124, y=3.754279, z=0.001853))
+                else:
+                    attackFlag = 0
 
     finally:
-
-        if original_settings:
-            sim_world.apply_settings(original_settings)
-
-        if (world and world.recording_enabled):
-            client.stop_recorder()
-
-        if world is not None:
-            world.destroy()
 
         pygame.quit()
 
@@ -1493,7 +1500,7 @@ def game_loop(args):
 # ==============================================================================
 
 
-def main():
+def main(testingFlag):
     argparser = argparse.ArgumentParser(
         description='CARLA Manual Control Client')
     argparser.add_argument(
@@ -1558,7 +1565,7 @@ def main():
 
     try:
 
-        game_loop(args)
+        game_loop(args, testingFlag)
 
     except KeyboardInterrupt:
         print('\nCancelled by user. Bye!')
@@ -1566,4 +1573,4 @@ def main():
 
 if __name__ == '__main__':
 
-    main()
+    main(0)
