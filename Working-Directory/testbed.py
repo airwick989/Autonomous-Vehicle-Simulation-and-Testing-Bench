@@ -218,7 +218,7 @@ def get_actor_blueprints(world, filter, generation):
         return []
 
 
-def get_speed(world):
+def get_speed(world, arduinotestFlag):
     global delay_counter
     last_indicator = 0
     last_speed = 0
@@ -236,32 +236,52 @@ def get_speed(world):
     #print(delay_counter)
     delay_counter = delay_counter + 1
 
-    global attackFlag
-    if(attackFlag == 0):
-        c = world.player.get_control()
-        p = world.player.get_physics_control()
 
-        engine_rpm = p.max_rpm * c.throttle
-        if c.gear > 0:
-            try:
-                gear = p.forward_gears[c.gear]
-                calcGear = {-1: 'R', 0: 'N'}.get(c.gear, c.gear)
-                #print(calcGear)
+    if arduinotestFlag == 0:
 
-                #RPM Calculation
-                mph = int(speed) * 0.62137119223733 #convert speed from kph to mph
-                wheelRPM = mph / ( (60/63360) * math.pi * 25 )  #64 cm is 25 inches
-                engine_rpm = wheelRPM * gear.ratio * 10
-                ################
-            except Exception:
-                pass
+        global attackFlag
+        if(attackFlag == 0):
+            c = world.player.get_control()
+            p = world.player.get_physics_control()
+
+            engine_rpm = p.max_rpm * c.throttle
+            if c.gear > 0:
+                try:
+                    gear = p.forward_gears[c.gear]
+                    calcGear = {-1: 'R', 0: 'N'}.get(c.gear, c.gear)
+                    #print(calcGear)
+
+                    #RPM Calculation
+                    mph = int(speed) * 0.62137119223733 #convert speed from kph to mph
+                    wheelRPM = mph / ( (60/63360) * math.pi * 25 )  #64 cm is 25 inches
+                    engine_rpm = wheelRPM * gear.ratio * 10
+                    ################
+                except Exception:
+                    pass
+            
+            #RIDWAN: This is to send the speed  and rpm to the Arduino board
+            ser2.write(bytes(f"{str(int(speed))}\n", encoding='utf-8'))
+            ser2.write(bytes(f"{str(int(engine_rpm))}\n", encoding='utf-8'))
+
+
+            return speed if not reverse else speed * -1
+    else:
+        ser2.write(bytes(f"{str(-94616)}\n", encoding='utf-8'))
+        ser2.write(bytes(f"{str(-94616)}\n", encoding='utf-8'))
+
+        #Try to recieve the acknoledgment from the Arduino board, until a timeout
+        timeout = time.time() + 2   #Loops for up to 2 seconds
+        while True:
+            if time.time() > timeout:
+                break
+            else:
+                try:
+                    data = ser2.readline()
+                    return True
+                except Exception:
+                    pass
         
-        #RIDWAN: This is to send the speed  and rpm to the Arduino board
-        ser2.write(bytes(f"{str(int(speed))}\n", encoding='utf-8'))
-        ser2.write(bytes(f"{str(int(engine_rpm))}\n", encoding='utf-8'))
-
-
-        return speed if not reverse else speed * -1
+        return False
 
 
 
@@ -511,6 +531,7 @@ class World(object):
 # ==============================================================================
 
 handbrake_counter = 0
+globalArduinoTestFlag = 0
 
 class DualControl(object):
     def __init__(self, world, start_in_autopilot):
@@ -715,6 +736,11 @@ class DualControl(object):
             self._control.gear=1
             park=1
 
+        #RIDWAN added
+        if testingFlag==21:  #Test sending data on arduino
+            global globalArduinoTestFlag
+            globalArduinoTestFlag = 1
+
     #(REZWANA) These next 2 functions are calculating the wheel axis turn and the throttle/brake
     #we do not exactly know how these functions are working, but we do know this is where it calculates
     #the throttle/brake and wheel turning
@@ -801,9 +827,9 @@ class DualControl(object):
             brakeCmd=0
             park=0
         elif testingFlag==4:
+            park=1
             throttleCmd = 1 if not park else 0
             brakeCmd=0
-            park=1
 
         self._control.steer = steerCmd
         self._control.brake = brakeCmd
@@ -836,7 +862,7 @@ class DualControl(object):
 # ==============================================================================
 # -- HUD -----------------------------------------------------------------------
 # ==============================================================================
-
+globalArduinoTestCounter = 0
 
 class HUD(object):
     def __init__(self, width, height):
@@ -885,7 +911,14 @@ class HUD(object):
         # Speed Var
         global speed
         speed = (3.6 * math.sqrt(v.x**2 + v.y**2 + v.z**2))
-        print(get_speed(world))
+        global globalArduinoTestFlag
+        global globalArduinoTestCounter
+        if globalArduinoTestFlag:
+            if globalArduinoTestCounter == 0:
+                get_speed(world, globalArduinoTestFlag)
+                globalArduinoTestCounter += 1
+        else:
+            get_speed(world, globalArduinoTestFlag)
         self.can.send_car_speed(speed)  #RIDWAN added CAN
 
         self._info_text = [
@@ -1404,8 +1437,11 @@ class CameraManager(object):
 # -- game_loop() ---------------------------------------------------------------
 # ==============================================================================
 global_world = None
+global_sim_world = None
+global_client = None
 
 def game_loop(args, testingFlag):
+    global global_client
     pygame.init()
     pygame.font.init()
     world = None
@@ -1413,6 +1449,7 @@ def game_loop(args, testingFlag):
 
     try:
         client = carla.Client(args.host, args.port)
+        global_client = client 
         client.set_timeout(20.0)
 
         sim_world = client.get_world()  #RIDWAN changed this for map selection. Original was client.get_world(), specific was client.load_world('Town06')
@@ -1470,7 +1507,8 @@ def game_loop(args, testingFlag):
                     return
                 world.tick(clock)
                 world.render(display)
-                get_speed(world)
+                # global globalArduinoTestFlag
+                # get_speed(world, globalArduinoTestFlag)
                 if(auto == 1):
                     world.player.apply_control(carla.VehicleControl(throttle=.25, steer=steer))
                 pygame.display.flip()
@@ -1491,6 +1529,17 @@ def game_loop(args, testingFlag):
                     attackFlag = 0
 
     finally:
+        global global_sim_world 
+        world = global_world
+        global_sim_world = sim_world
+        global_client = client
+
+        if testingFlag == 0:
+            if (world and world.recording_enabled):
+                client.stop_recorder()
+
+            if world is not None:
+                world.destroy()
 
         pygame.quit()
 
