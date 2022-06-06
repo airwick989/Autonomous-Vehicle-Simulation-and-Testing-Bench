@@ -37,38 +37,45 @@ void updateGauges() {
   incomingSpeedValue = strSpeed.toInt();
   incomingRPMValue = strRPM.toInt();
 
-  if(incomingSpeedValue > 400){
-    placeholder = incomingSpeedValue;
-    incomingSpeedValue = incomingRPMValue;
-    incomingRPMValue = placeholder;
-  }
-  Serial.println("Speed: " + String(incomingSpeedValue) + " RPM: " + String(incomingRPMValue));
- 
+  if(incomingSpeedValue != -29080 && incomingRPMValue != -29080){
 
-  if(incomingSpeedValue < 25){
-    mappedSpeed = map(incomingSpeedValue,0,3200,0,155);
-  }
-  else if(incomingSpeedValue > 25 && incomingSpeedValue < 150){
-    mappedSpeed = map(incomingSpeedValue,0,115,0,155);
-  }
-  else if(incomingSpeedValue > 150 && incomingSpeedValue < 220){
-    mappedSpeed = map(incomingSpeedValue,0,120,0,155);
+    if(incomingSpeedValue > 400){
+      placeholder = incomingSpeedValue;
+      incomingSpeedValue = incomingRPMValue;
+      incomingRPMValue = placeholder;
+    }
+    Serial.println("Speed: " + String(incomingSpeedValue) + " RPM: " + String(incomingRPMValue));
+   
+  
+    if(incomingSpeedValue < 25){
+      mappedSpeed = map(incomingSpeedValue,0,3200,0,155);
+    }
+    else if(incomingSpeedValue > 25 && incomingSpeedValue < 150){
+      mappedSpeed = map(incomingSpeedValue,0,115,0,155);
+    }
+    else if(incomingSpeedValue > 150 && incomingSpeedValue < 220){
+      mappedSpeed = map(incomingSpeedValue,0,120,0,155);
+    }
+    else{
+      mappedSpeed = map(incomingSpeedValue,0,123,0,155);
+    }
+    if(incomingSpeedValue != 0 && incomingSpeedValue != -1){
+      tempSpeed = mappedSpeed;
+    }
+    kmh.play(tempSpeed);
+  
+  
+    mappedRPM = map(incomingRPMValue,0,3400,0,155);
+    if(incomingRPMValue != 0 && incomingRPMValue != -1){
+      tempRPM = mappedRPM;
+    }
+    //Serial.println("Speed: " + String(temp) + " RPM: " + String(temp2));
+    rpm.play(tempRPM);
+    
   }
   else{
-    mappedSpeed = map(incomingSpeedValue,0,123,0,155);
-  }
-  if(incomingSpeedValue != 0 && incomingSpeedValue != -1){
-    tempSpeed = mappedSpeed;
-  }
-  kmh.play(tempSpeed);
-
-
-  mappedRPM = map(incomingRPMValue,0,3400,0,155);
-  if(incomingRPMValue != 0 && incomingRPMValue != -1){
-    tempRPM = mappedRPM;
-  }
-  //Serial.println("Speed: " + String(temp) + " RPM: " + String(temp2));
-  rpm.play(tempRPM);
     
+    Serial.write("RECIEVED");
     
+  }  
 } 
