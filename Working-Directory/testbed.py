@@ -568,7 +568,7 @@ class DualControl(object):
         self._joystick1 = pygame.joystick.Joystick(0)   #index out of range
         self._joystick1.init()
 
-    def parse_events(self, world, clock, testingFlag, testGear):
+    def parse_events(self, world, clock, testingFlag, testButton):
         global auto
         global bkup_cam
         global park
@@ -576,7 +576,7 @@ class DualControl(object):
         global globalManualFlag
         #(REZWANA) CODE FOR TEST CASES, SENDS A CLICK MOUSE EVENT SO THAT THE CLIENT IS IN FOCUS
         if testingFlag >= 1:
-            if testingFlag == 23:
+            if testingFlag >= 23 and testingFlag <= 25:
                 pygame.init()
             post_event = pygame.event.Event(pygame.MOUSEBUTTONDOWN, button = 2, pos = (5, 5))
             pygame.event.post(post_event)
@@ -589,10 +589,14 @@ class DualControl(object):
             if(testingFlag == 23):
                 shortcutFlag = True
                 event.joy = 0
-                event.button = testGear
+                event.button = testButton
                 self._control.manual_gear_shift = True
                 self._control.gear = world.player.get_control().gear
                 globalManualFlag = 1
+            if testingFlag == 24 or testingFlag == 25: 
+                shortcutFlag = True
+                event.joy = 1
+                event.button = testButton
 
             if event.type == pygame.QUIT:
                 return True
@@ -640,6 +644,7 @@ class DualControl(object):
                 #all the different buttons etc.
                 else:
                     global indicator
+                    ADB_command_success = False #RIDWAN added: for testing adb commands
                     if event.button == 0:
                         if(indicator == 2):
                             indicator = 0
@@ -653,7 +658,7 @@ class DualControl(object):
                         else:
                             self._control.hand_brake = False
                     elif event.button == 2:
-                        adblib.play_pause()
+                        ADB_command_success = adblib.play_pause()
                     elif event.button == 5:
                         adblib.launch_app(package_name='com.soundcloud.android')    #RIDWAN Launch spotify app using right paddle
                     elif event.button == self._reverse_idx:
@@ -672,21 +677,25 @@ class DualControl(object):
                             bkup_cam = 0
                         world.restart()
                     elif event.button == 12:
-                        adblib.home()
+                        ADB_command_success = adblib.home()
                     elif event.button == 7:
-                        adblib.volume_up()
+                        ADB_command_success = adblib.volume_up()
                     elif event.button == 11:
-                        adblib.volume_down()
+                        ADB_command_success = adblib.volume_down()
                     elif event.button == 6:
-                        adblib.next()
+                        ADB_command_success = adblib.next()
                     elif event.button == 10:
-                        adblib.previous()
+                        ADB_command_success = adblib.previous()
                     elif event.button == 8:
-                        adblib.back()
+                        ADB_command_success = adblib.back()
                     elif event.button == 9:
-                        adblib.recent_apps()
+                        ADB_command_success = adblib.recent_apps()
                     elif event.button == 4:
                         adblib.launch_app('com.google.android.apps.maps')
+
+                    #RIDWAN added
+                    if testingFlag == 24:   #For testing ADB commands   
+                        return ADB_command_success
             elif event.type == pygame.KEYUP:    #RIDWAN Keyboard controls
                 if self._is_quit_shortcut(event.key):
                     return True
@@ -728,7 +737,7 @@ class DualControl(object):
                             print("Enable Lane Assist")
                             auto = 1
         
-        if testingFlag != 23:
+        if testingFlag < 23 and testingFlag > 25:
             if not self._autopilot_enabled:
                 if isinstance(self._control, carla.VehicleControl):
                     self._parse_vehicle_keys(pygame.key.get_pressed(), clock.get_time())
@@ -1502,7 +1511,7 @@ def game_loop(args, testingFlag):
         global_world = world
         #controller = DualControl(world, args.autopilot)
 
-        if(testingFlag == 23):
+        if(testingFlag >= 23 and testingFlag <= 25):
             global global_controller
             global_controller = DualControl(world, args.autopilot)
         else:
@@ -1522,7 +1531,7 @@ def game_loop(args, testingFlag):
             for i in range(60):
                 clock.tick_busy_loop(60)
                 global_clock = clock
-                if testingFlag == 23:
+                if testingFlag >= 23 and testingFlag <= 25:
                     if global_controller.parse_events(world, clock, testingFlag, 0):
                         return
                 else:
@@ -1559,7 +1568,6 @@ def game_loop(args, testingFlag):
                         world.player.apply_control(carla.VehicleControl(steer=0.99))
                     if (msg_data == bytearray(b'\x20\x4E\x40\x9c\x81\x39\x02\x70')):
                         world.player.apply_control(carla.VehicleControl(throttle=1.0, brake=0.0, hand_brake=False, gear=2))
-                        #world.player.set_velocity(carla.Vector3D(x=0.023124, y=3.754279, z=0.001853))
                 else:
                     attackFlag = 0
 
