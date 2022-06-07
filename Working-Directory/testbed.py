@@ -568,7 +568,7 @@ class DualControl(object):
         self._joystick1 = pygame.joystick.Joystick(0)   #index out of range
         self._joystick1.init()
 
-    def parse_events(self, world, clock, testingFlag):
+    def parse_events(self, world, clock, testingFlag, testGear):
         global auto
         global bkup_cam
         global park
@@ -576,16 +576,30 @@ class DualControl(object):
         global globalManualFlag
         #(REZWANA) CODE FOR TEST CASES, SENDS A CLICK MOUSE EVENT SO THAT THE CLIENT IS IN FOCUS
         if testingFlag >= 1:
+            if testingFlag == 23:
+                pygame.init()
             post_event = pygame.event.Event(pygame.MOUSEBUTTONDOWN, button = 2, pos = (5, 5))
             pygame.event.post(post_event)
             event = pygame.event.poll()
         for event in pygame.event.get():
+
+            #RIDWAN added
+            #Checking if we are doing a shifter test
+            shortcutFlag = False
+            if(testingFlag == 23):
+                shortcutFlag = True
+                event.joy = 0
+                event.button = testGear
+                self._control.manual_gear_shift = True
+                self._control.gear = world.player.get_control().gear
+                globalManualFlag = 1
+
             if event.type == pygame.QUIT:
                 return True
             #(REZWANA) pygame recognizes steering wheel kit and gear shifter as "joys or joystick"
             #we are checking if the current event is from a joystick
-            elif event.type == pygame.JOYBUTTONDOWN:
-                print(f"event.button = {event.button}\nevent.joy = {event.joy}\n")
+            elif event.type == pygame.JOYBUTTONDOWN or shortcutFlag:
+                #print(f"event.button = {event.button}\nevent.joy = {event.joy}\n")
                 #(REZWANA) since there are 2 joy sticks, the indices for these are 0 and 1
                 #index 1 = gear shifter
                 #index 2 = steering wheel kit
@@ -713,14 +727,16 @@ class DualControl(object):
                         else:
                             print("Enable Lane Assist")
                             auto = 1
-        if not self._autopilot_enabled:
-            if isinstance(self._control, carla.VehicleControl):
-                self._parse_vehicle_keys(pygame.key.get_pressed(), clock.get_time())
-                self._parse_vehicle_wheel(testingFlag)
-                self._control.reverse = self._control.gear < 0
-            elif isinstance(self._control, carla.WalkerControl):
-                self._parse_walker_keys(pygame.key.get_pressed(), clock.get_time())
-            world.player.apply_control(self._control)
+        
+        if testingFlag != 23:
+            if not self._autopilot_enabled:
+                if isinstance(self._control, carla.VehicleControl):
+                    self._parse_vehicle_keys(pygame.key.get_pressed(), clock.get_time())
+                    self._parse_vehicle_wheel(testingFlag)
+                    self._control.reverse = self._control.gear < 0
+                elif isinstance(self._control, carla.WalkerControl):
+                    self._parse_walker_keys(pygame.key.get_pressed(), clock.get_time())
+                world.player.apply_control(self._control)
         
         #(REZWANA) These if statements are for specific test cases
         #when this client is run through our test cases, we pass a testing flag variable
@@ -740,6 +756,10 @@ class DualControl(object):
         if testingFlag==21:  #Test sending data on arduino
             global globalArduinoTestFlag
             globalArduinoTestFlag = 1
+        if testingFlag==22:  #Test handbrake
+            self._control.hand_brake = True
+        if testingFlag==23:  #Test shifter
+            return self._control.gear
 
     #(REZWANA) These next 2 functions are calculating the wheel axis turn and the throttle/brake
     #we do not exactly know how these functions are working, but we do know this is where it calculates
@@ -814,7 +834,7 @@ class DualControl(object):
         #(REZWANA) These if statements are again for our test cases
         #based on what testing flag is passed in, different things are happening within carla
         #for example testing flag 1 will set the car to accelerate, turn off the brakes and take the car out of park
-        if testingFlag == 1:
+        if testingFlag == 1 or testingFlag == 22:   #RIDWAN added 'or testingFlag == 22'
             throttleCmd = 1
             brakeCmd=0
             park = 0
@@ -1439,6 +1459,8 @@ class CameraManager(object):
 global_world = None
 global_sim_world = None
 global_client = None
+global_clock = None
+global_controller = None
 
 def game_loop(args, testingFlag):
     global global_client
@@ -1478,7 +1500,14 @@ def game_loop(args, testingFlag):
         world = World(sim_world, hud, args)
         global global_world
         global_world = world
-        controller = DualControl(world, args.autopilot)
+        #controller = DualControl(world, args.autopilot)
+
+        if(testingFlag == 23):
+            global global_controller
+            global_controller = DualControl(world, args.autopilot)
+        else:
+            controller = DualControl(world, args.autopilot)
+            
 
         if args.sync:
             sim_world.tick()
@@ -1488,11 +1517,17 @@ def game_loop(args, testingFlag):
         clock = pygame.time.Clock()
         global steer
         global auto
+        global global_clock
         if testingFlag >=1:
             for i in range(60):
                 clock.tick_busy_loop(60)
-                if controller.parse_events(world, clock, testingFlag):
-                    return
+                global_clock = clock
+                if testingFlag == 23:
+                    if global_controller.parse_events(world, clock, testingFlag, 0):
+                        return
+                else:
+                    if controller.parse_events(world, clock, testingFlag, 0):
+                        return
                 world.tick(clock)
                 world.render(display)
                 
@@ -1503,7 +1538,7 @@ def game_loop(args, testingFlag):
 
             while True:
                 clock.tick_busy_loop(60)
-                if controller.parse_events(world, clock, 0):
+                if controller.parse_events(world, clock, 0, 0):
                     return
                 world.tick(clock)
                 world.render(display)
