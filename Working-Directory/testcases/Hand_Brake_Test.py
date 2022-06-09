@@ -5,8 +5,6 @@ sys.path.insert(1,'/home/rtemsoft/Desktop/CARLA-Simulation-Bench/Working-Directo
 
 import testbed as client
 class TestHandBrake(unittest.TestCase):
-    def setUp(self):
-        self.longMessage=False
     def test_handbrake(self):
         client.main(22)
         self.assertLess(client.get_speed(client.global_world, 0),1,msg="FAILURE! The hand brake is not working as intended!")
