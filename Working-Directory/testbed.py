@@ -543,7 +543,8 @@ def create_df():
         'Timestamp': [],
         'Server_fps': [],
         'Client_fps': [],
-        'Speed': []
+        'Speed': [],
+        'Heading': []
     }
     df = pd.DataFrame(data)
 
@@ -937,6 +938,7 @@ class DualControl(object):
 # -- HUD -----------------------------------------------------------------------
 # ==============================================================================
 globalArduinoTestCounter = 0
+global_compass = None
 
 class HUD(object):
     def __init__(self, width, height):
@@ -994,6 +996,9 @@ class HUD(object):
         else:
             get_speed(world, globalArduinoTestFlag)
         self.can.send_car_speed(speed)  #RIDWAN added CAN
+
+        global global_compass
+        global_compass = ('% 17.0f\N{DEGREE SIGN} % 2s' % (compass, heading)).strip()
 
         self._info_text = [
             'Server:  % 16.0f FPS' % self.server_fps,
@@ -1611,10 +1616,11 @@ def game_loop(args, testingFlag):
                         global recording_start_time
                         global speed
                         global df
+                        global global_compass
 
                         elapsed_time = time.time() - recording_start_time
 
-                        df = df.append({'Timestamp': elapsed_time, 'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps(), 'Speed': speed}, ignore_index= True)
+                        df = df.append({'Timestamp': elapsed_time, 'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps(), 'Speed': speed, 'Heading': global_compass}, ignore_index= True)
 
                 #RIDWAN added CAN messages
                 msg = hud.can.can_bus.recv(0)
