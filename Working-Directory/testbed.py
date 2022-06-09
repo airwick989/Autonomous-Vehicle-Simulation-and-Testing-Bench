@@ -71,6 +71,7 @@ from __future__ import print_function
 
 import glob
 import os
+from tracemalloc import start
 from turtle import hideturtle
 import cv2
 import sys
@@ -534,12 +535,15 @@ class World(object):
 # ==============================================================================
 
 df = None
+recording_start_time = None
 
 def create_df():
     global df
     data = {
+        'Timestamp': [],
         'Server_fps': [],
-        'Client_fps': []
+        'Client_fps': [],
+        'Speed': []
     }
     df = pd.DataFrame(data)
 
@@ -739,6 +743,7 @@ class DualControl(object):
                     world.camera_manager.toggle_recording()
                 elif event.key == K_r and (pygame.key.get_mods() & KMOD_CTRL):  #Ridwan added data recording
                     global global_recording
+                    global recording_start_time
                     if (world.recording_enabled):
                         world.recording_enabled = False
                         global_recording = False
@@ -751,6 +756,7 @@ class DualControl(object):
                         df.to_csv(f'./datasets/{filename}')
                     else:
                         create_df()
+                        recording_start_time = time.time()
                         world.recording_enabled = True
                         global_recording = True
                         world.hud.notification("Recorder is ON")
@@ -1602,8 +1608,13 @@ def game_loop(args, testingFlag):
                 if(global_recording == True):
                     if time.time() > run_time + 0.5:
                         run_time = time.time() 
+                        global recording_start_time
+                        global speed
                         global df
-                        df = df.append({'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps()}, ignore_index= True)
+
+                        elapsed_time = time.time() - recording_start_time
+
+                        df = df.append({'Timestamp': elapsed_time, 'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps(), 'Speed': speed}, ignore_index= True)
 
                 #RIDWAN added CAN messages
                 msg = hud.can.can_bus.recv(0)
