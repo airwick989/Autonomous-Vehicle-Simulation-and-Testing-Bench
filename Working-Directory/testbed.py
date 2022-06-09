@@ -545,7 +545,9 @@ def create_df():
         'Client_fps': [],
         'Speed': [],
         'Heading': [],
-        'Accelerometer': []
+        'Accelerometer': [],
+        'Gyroscope': [],
+        'Location': []
     }
     df = pd.DataFrame(data)
 
@@ -1609,12 +1611,12 @@ def game_loop(args, testingFlag):
                     world.player.apply_control(carla.VehicleControl(throttle=.25, steer=steer))
                 pygame.display.flip()
 
-
+                
 
                 #RIDWAN added data logging
                 global global_recording
                 if(global_recording == True):
-                    if time.time() > run_time + 0.5:
+                    if time.time() > run_time + 0.5:    #0.5 is 120 samples per minute
                         run_time = time.time() 
                         global recording_start_time
                         global speed
@@ -1623,8 +1625,11 @@ def game_loop(args, testingFlag):
 
                         elapsed_time = time.time() - recording_start_time
                         accelerometer = '(%5.1f,%5.1f,%5.1f)' % (world.imu_sensor.accelerometer)
+                        gyroscope = '(%5.1f,%5.1f,%5.1f)' % (world.imu_sensor.gyroscope)
+                        location = ('% 20s' % ('(% 5.1f, % 5.1f)' % (world.player.get_transform().location.x, world.player.get_transform().location.y))).strip()
 
-                        df = df.append({'Timestamp': elapsed_time, 'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps(), 'Speed': speed, 'Heading': global_compass, 'Accelerometer': accelerometer}, ignore_index= True)
+                        df = df.append({'Timestamp': elapsed_time, 'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps(), 'Speed': speed, 'Heading': global_compass, 
+                        'Accelerometer': accelerometer, 'Gyroscope': gyroscope, 'Location': location}, ignore_index= True)
 
                 #RIDWAN added CAN messages
                 msg = hud.can.can_bus.recv(0)
