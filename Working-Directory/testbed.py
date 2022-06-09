@@ -715,6 +715,15 @@ class DualControl(object):
                     world.camera_manager.next_sensor()
                 elif event.key > K_0 and event.key <= K_9:
                     world.camera_manager.set_sensor(event.key - 1 - K_0)
+                elif event.key == K_r and not (pygame.key.get_mods() & KMOD_CTRL):
+                    world.camera_manager.toggle_recording()
+                elif event.key == K_r and (pygame.key.get_mods() & KMOD_CTRL):
+                    if (world.recording_enabled):
+                        world.recording_enabled = False
+                        world.hud.notification("Recorder is OFF")
+                    else:
+                        world.recording_enabled = True
+                        world.hud.notification("Recorder is ON")
 
                 if isinstance(self._control, carla.VehicleControl):
                     if event.key == K_q:
