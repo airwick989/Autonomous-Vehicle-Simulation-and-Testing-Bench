@@ -104,6 +104,9 @@ import re
 import weakref
 import cantools
 import can
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+import pandas as pd
 
 # Cluster Imports
 import time
@@ -527,6 +530,23 @@ class World(object):
 
 
 # ==============================================================================
+# -- Data Logging -----------------------------------------------------------
+# ==============================================================================
+
+df = None
+
+def create_df():
+    global df
+    data = {
+        'Server_fps': [],
+        'Client_fps': []
+    }
+    df = pd.DataFrame(data)
+
+
+
+
+# ==============================================================================
 # -- DualControl -----------------------------------------------------------
 # ==============================================================================
 
@@ -723,7 +743,9 @@ class DualControl(object):
                         world.recording_enabled = False
                         global_recording = False
                         world.hud.notification("Recorder is OFF")
+                        print(df)
                     else:
+                        create_df()
                         world.recording_enabled = True
                         global_recording = True
                         world.hud.notification("Recorder is ON")
@@ -1480,9 +1502,7 @@ class CameraManager(object):
 global_world = None
 global_sim_world = None
 global_client = None
-global_clock = None
 global_controller = None
-global_hud = None
 global_recording = False
 
 def game_loop(args, testingFlag):
@@ -1542,11 +1562,9 @@ def game_loop(args, testingFlag):
         clock = pygame.time.Clock()
         global steer
         global auto
-        global global_clock
         if testingFlag >=1:
             for i in range(60):
                 clock.tick_busy_loop(60)
-                global_clock = clock
                 if testingFlag >= 23 and testingFlag <= 25:
                     if global_controller.parse_events(world, clock, testingFlag, 0):
                         return
@@ -1560,7 +1578,8 @@ def game_loop(args, testingFlag):
                     world.player.apply_control(carla.VehicleControl(throttle=.25, steer=steer))
                 pygame.display.flip()
         else:
-            global_clock = clock
+
+            run_time = time.time()
             while True:
                 clock.tick_busy_loop(60)
                 if controller.parse_events(world, clock, 0, 0):
@@ -1573,12 +1592,15 @@ def game_loop(args, testingFlag):
                     world.player.apply_control(carla.VehicleControl(throttle=.25, steer=steer))
                 pygame.display.flip()
 
-
+                #RIDWAN added data logging
                 global global_recording
                 if(global_recording == True):
-                    pass
+                    if time.time() > run_time + 0.5:
+                        run_time = time.time() 
+                        global df
+                        df = df.append({'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps()}, ignore_index= True)
 
-
+                #RIDWAN added CAN messages
                 msg = hud.can.can_bus.recv(0)
                 global attackFlag
                 if msg is not None:
