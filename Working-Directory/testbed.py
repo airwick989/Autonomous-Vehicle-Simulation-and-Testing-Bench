@@ -717,12 +717,15 @@ class DualControl(object):
                     world.camera_manager.set_sensor(event.key - 1 - K_0)
                 elif event.key == K_r and not (pygame.key.get_mods() & KMOD_CTRL):
                     world.camera_manager.toggle_recording()
-                elif event.key == K_r and (pygame.key.get_mods() & KMOD_CTRL):
+                elif event.key == K_r and (pygame.key.get_mods() & KMOD_CTRL):  #Ridwan added data recording
+                    global global_recording
                     if (world.recording_enabled):
                         world.recording_enabled = False
+                        global_recording = False
                         world.hud.notification("Recorder is OFF")
                     else:
                         world.recording_enabled = True
+                        global_recording = True
                         world.hud.notification("Recorder is ON")
 
                 if isinstance(self._control, carla.VehicleControl):
@@ -1479,6 +1482,8 @@ global_sim_world = None
 global_client = None
 global_clock = None
 global_controller = None
+global_hud = None
+global_recording = False
 
 def game_loop(args, testingFlag):
     global global_client
@@ -1515,6 +1520,8 @@ def game_loop(args, testingFlag):
         pygame.display.flip()
 
         hud = HUD(args.width, args.height)
+        global global_hud
+        global_hud = hud
         world = World(sim_world, hud, args)
         global global_world
         global_world = world
@@ -1553,7 +1560,7 @@ def game_loop(args, testingFlag):
                     world.player.apply_control(carla.VehicleControl(throttle=.25, steer=steer))
                 pygame.display.flip()
         else:
-
+            global_clock = clock
             while True:
                 clock.tick_busy_loop(60)
                 if controller.parse_events(world, clock, 0, 0):
@@ -1565,6 +1572,12 @@ def game_loop(args, testingFlag):
                 if(auto == 1):
                     world.player.apply_control(carla.VehicleControl(throttle=.25, steer=steer))
                 pygame.display.flip()
+
+
+                global global_recording
+                if(global_recording == True):
+                    pass
+
 
                 msg = hud.can.can_bus.recv(0)
                 global attackFlag
