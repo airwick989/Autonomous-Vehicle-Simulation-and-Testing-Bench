@@ -544,7 +544,8 @@ def create_df():
         'Server_fps': [],
         'Client_fps': [],
         'Speed': [],
-        'Heading': []
+        'Heading': [],
+        'Accelerometer': []
     }
     df = pd.DataFrame(data)
 
@@ -1608,6 +1609,8 @@ def game_loop(args, testingFlag):
                     world.player.apply_control(carla.VehicleControl(throttle=.25, steer=steer))
                 pygame.display.flip()
 
+
+
                 #RIDWAN added data logging
                 global global_recording
                 if(global_recording == True):
@@ -1619,8 +1622,9 @@ def game_loop(args, testingFlag):
                         global global_compass
 
                         elapsed_time = time.time() - recording_start_time
+                        accelerometer = '(%5.1f,%5.1f,%5.1f)' % (world.imu_sensor.accelerometer)
 
-                        df = df.append({'Timestamp': elapsed_time, 'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps(), 'Speed': speed, 'Heading': global_compass}, ignore_index= True)
+                        df = df.append({'Timestamp': elapsed_time, 'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps(), 'Speed': speed, 'Heading': global_compass, 'Accelerometer': accelerometer}, ignore_index= True)
 
                 #RIDWAN added CAN messages
                 msg = hud.can.can_bus.recv(0)
