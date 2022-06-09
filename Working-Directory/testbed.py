@@ -743,7 +743,12 @@ class DualControl(object):
                         world.recording_enabled = False
                         global_recording = False
                         world.hud.notification("Recorder is OFF")
-                        print(df)
+                        filename = 'datalog1.csv'
+                        file_index = 1
+                        while os.path.exists(f'./datasets/{filename}'):
+                            file_index += 1
+                            filename = f'datalog{file_index}.csv'
+                        df.to_csv(f'./datasets/{filename}')
                     else:
                         create_df()
                         world.recording_enabled = True
