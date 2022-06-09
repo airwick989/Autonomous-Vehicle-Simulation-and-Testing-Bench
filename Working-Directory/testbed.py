@@ -737,7 +737,7 @@ class DualControl(object):
                             print("Enable Lane Assist")
                             auto = 1
         
-        if testingFlag < 23 and testingFlag > 25:
+        if not(testingFlag >= 23 and testingFlag <= 25):
             if not self._autopilot_enabled:
                 if isinstance(self._control, carla.VehicleControl):
                     self._parse_vehicle_keys(pygame.key.get_pressed(), clock.get_time())
