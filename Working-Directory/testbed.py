@@ -754,20 +754,24 @@ class DualControl(object):
                 elif event.key == K_r and (pygame.key.get_mods() & KMOD_CTRL):  #Ridwan added data recording
                     global global_recording
                     global recording_start_time
+                    global global_map
                     if (global_recording):
                         global_recording = False
-                        world.hud.notification("Recorder is OFF")
+                        foldername = global_map
                         filename = 'datalog1.csv'
                         file_index = 1
-                        while os.path.exists(f'./datasets/{filename}'):
+                        if not os.path.exists(f'./datasets/{foldername}'):
+                            os.mkdir(f'./datasets/{foldername}')
+                        while os.path.exists(f'./datasets/{foldername}/{filename}'):
                             file_index += 1
                             filename = f'datalog{file_index}.csv'
-                        df.to_csv(f'./datasets/{filename}')
+                        df.to_csv(f'./datasets/{foldername}/{filename}')
+                        world.hud.notification("Recording was SAVED")
                     else:
                         create_df()
                         recording_start_time = time.time()
                         global_recording = True
-                        world.hud.notification("Recorder is ON")
+                        world.hud.notification("Recording has STARTED")
 
                 if isinstance(self._control, carla.VehicleControl):
                     if event.key == K_q:
@@ -949,6 +953,7 @@ class DualControl(object):
 globalArduinoTestCounter = 0
 global_compass = None
 global_sim_time = None
+global_map = None
 
 class HUD(object):
     def __init__(self, width, height):
@@ -1011,6 +1016,8 @@ class HUD(object):
         global_compass = ('% 17.0f\N{DEGREE SIGN} % 2s' % (compass, heading)).strip()
         global global_sim_time
         global_sim_time = ('% 12s' % datetime.timedelta(seconds=self.simulation_time)).strip()
+        global global_map
+        global_map = ('% 20s' % world.map.name.split('/')[-1]).strip()
 
         self._info_text = [
             'Server:  % 16.0f FPS' % self.server_fps,
