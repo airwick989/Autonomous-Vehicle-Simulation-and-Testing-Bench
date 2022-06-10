@@ -536,6 +536,7 @@ class World(object):
 
 dfvehic = None
 dfcoll = None
+dflane = None
 recording_start_time = None
 
 def create_dfs():
@@ -568,6 +569,14 @@ def create_dfs():
         'Intensity': []
     }
     dfcoll = pd.DataFrame(colldata)
+
+    global dflane
+    lanedata = {
+        'Sim_time': [],
+        'Rec_time': [],
+        'Event': []
+    }
+    dflane = pd.DataFrame(lanedata)
 
 
 
@@ -763,7 +772,7 @@ class DualControl(object):
                     world.camera_manager.set_sensor(event.key - 1 - K_0)
                 elif event.key == K_r and not (pygame.key.get_mods() & KMOD_CTRL):
                     world.camera_manager.toggle_recording()
-                elif event.key == K_r and (pygame.key.get_mods() & KMOD_CTRL):  #Ridwan added data recording
+                elif event.key == K_r and (pygame.key.get_mods() & KMOD_CTRL):  #Ridwan added data logging
                     global global_recording
                     global recording_start_time
                     global global_map
@@ -780,6 +789,7 @@ class DualControl(object):
                         os.mkdir(f'./datasets/{foldername}/{dataset}')
                         dfvehic.to_csv(f'./datasets/{foldername}/{dataset}/vehicle_telemetry.csv')
                         dfcoll.to_csv(f'./datasets/{foldername}/{dataset}/collision_data.csv')
+                        dflane.to_csv(f'./datasets/{foldername}/{dataset}/lane_invasion_data.csv')
                         world.hud.notification("Recording was SAVED")
                     else:
                         create_dfs()
@@ -1226,11 +1236,12 @@ class CollisionSensor(object):
             self.history.pop(0)
 
         #RIDWAN added data logging
-        global global_sim_time
-        global dfcoll
-        global global_elapsed_time
-        event = 'Collision with %r' % actor_type
-        dfcoll = dfcoll.append({'Sim_time': global_sim_time, 'Rec_time': global_elapsed_time, 'Event': event, 'Intensity': intensity}, ignore_index= True)
+        if(global_recording):
+            global global_sim_time
+            global dfcoll
+            global global_elapsed_time
+            event = 'Collision with %r' % actor_type
+            dfcoll = dfcoll.append({'Sim_time': global_sim_time, 'Rec_time': global_elapsed_time, 'Event': event, 'Intensity': intensity}, ignore_index= True)
 
 
 
@@ -1263,6 +1274,14 @@ class LaneInvasionSensor(object):
         lane_types = set(x.type for x in event.crossed_lane_markings)
         text = ['%r' % str(x).split()[-1] for x in lane_types]
         self.hud.notification('Crossed line %s' % ' and '.join(text))
+
+        #RIDWAN added data logging
+        if(global_recording):
+            global global_sim_time
+            global dflane
+            global global_elapsed_time
+            lane_event = 'Crossed line %s' % ' and '.join(text)
+            dflane = dflane.append({'Sim_time': global_sim_time, 'Rec_time': global_elapsed_time, 'Event': lane_event}, ignore_index= True)
 
 
 # ==============================================================================
