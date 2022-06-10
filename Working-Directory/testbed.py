@@ -540,7 +540,8 @@ recording_start_time = None
 def create_df():
     global df
     data = {
-        'Timestamp': [],
+        'Sim_time': [],
+        'Rec_time': [],
         'Server_fps': [],
         'Client_fps': [],
         'Speed': [],
@@ -946,6 +947,7 @@ class DualControl(object):
 # ==============================================================================
 globalArduinoTestCounter = 0
 global_compass = None
+global_sim_time = None
 
 class HUD(object):
     def __init__(self, width, height):
@@ -1006,6 +1008,8 @@ class HUD(object):
 
         global global_compass
         global_compass = ('% 17.0f\N{DEGREE SIGN} % 2s' % (compass, heading)).strip()
+        global global_sim_time
+        global_sim_time = ('% 12s' % datetime.timedelta(seconds=self.simulation_time)).strip()
 
         self._info_text = [
             'Server:  % 16.0f FPS' % self.server_fps,
@@ -1013,7 +1017,7 @@ class HUD(object):
             '',
             'Vehicle: % 20s' % get_actor_display_name(world.player, truncate=20),
             'Map:     % 20s' % world.map.name.split('/')[-1],
-            'Simulation time: % 12s' % datetime.timedelta(seconds=int(self.simulation_time)),
+            'Sim time: % 12s' % datetime.timedelta(seconds=(self.simulation_time)),
             '',
             'Speed:   % 15.0f km/h' % (3.6 * math.sqrt(v.x**2 + v.y**2 + v.z**2)),
             u'Compass:% 17.0f\N{DEGREE SIGN} % 2s' % (compass, heading),
@@ -1626,6 +1630,7 @@ def game_loop(args, testingFlag):
                         global speed
                         global df
                         global global_compass
+                        global global_sim_time
 
                         elapsed_time = time.time() - recording_start_time
                         accelerometer = '(%5.1f,%5.1f,%5.1f)' % (world.imu_sensor.accelerometer)
@@ -1637,9 +1642,11 @@ def game_loop(args, testingFlag):
                             height = '0 m'
                         throttle = f"{int((world.player.get_control().throttle)*100)}%"
                         brake = f"{int((world.player.get_control().brake)*100)}%"
+                        gear = '%s' % {-1: 'R', 0: 'N'}.get(world.player.get_control().gear, world.player.get_control().gear)
 
-                        df = df.append({'Timestamp': elapsed_time, 'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps(), 'Speed': speed, 'Heading': global_compass, 
-                        'Accelerometer': accelerometer, 'Gyroscope': gyroscope, 'Location': location, 'GNSS': gnss, 'Height': height, 'Throttle': throttle, 'Brake': brake}, ignore_index= True)
+                        df = df.append({'Sim_time': global_sim_time, 'Rec_time': elapsed_time, 'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps(), 'Speed': speed, 
+                        'Heading': global_compass, 'Accelerometer': accelerometer, 'Gyroscope': gyroscope, 'Location': location, 'GNSS': gnss, 'Height': height, 'Throttle': throttle, 
+                        'Brake': brake, 'Gear': gear}, ignore_index= True)
 
                 #RIDWAN added CAN messages
                 msg = hud.can.can_bus.recv(0)
