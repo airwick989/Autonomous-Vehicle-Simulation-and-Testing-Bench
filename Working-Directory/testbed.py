@@ -534,13 +534,13 @@ class World(object):
 # -- Data Logging -----------------------------------------------------------
 # ==============================================================================
 
-df = None
+dfvehic = None
 dfcoll = None
 recording_start_time = None
 
 def create_dfs():
-    global df
-    data = {
+    global dfvehic
+    vehicdata = {
         'Sim_time': [],
         'Rec_time': [],
         'Server_fps': [],
@@ -558,7 +558,7 @@ def create_dfs():
         'Steering': [],
         'Vehicle': []
     }
-    df = pd.DataFrame(data)
+    dfvehic = pd.DataFrame(vehicdata)
 
     global dfcoll
     colldata = {
@@ -770,20 +770,16 @@ class DualControl(object):
                     if (global_recording):
                         global_recording = False
                         foldername = global_map
-                        filename = 'datalog1.csv'
-                        collfile = 'collisiondata1.csv'
+                        dataset = 'dataset1'
                         file_index = 1
                         if not os.path.exists(f'./datasets/{foldername}'):
                             os.mkdir(f'./datasets/{foldername}')
-                        while os.path.exists(f'./datasets/{foldername}/{filename}'):
+                        while os.path.exists(f'./datasets/{foldername}/{dataset}'):
                             file_index += 1
-                            filename = f'datalog{file_index}.csv'
-                        df.to_csv(f'./datasets/{foldername}/{filename}')
-                        file_index = 1
-                        while os.path.exists(f'./datasets/{foldername}/{collfile}'):
-                            file_index += 1
-                            filename = f'collisiondata{file_index}.csv'
-                        dfcoll.to_csv(f'./datasets/{foldername}/{collfile}')
+                            dataset = f'dataset{file_index}'
+                        os.mkdir(f'./datasets/{foldername}/{dataset}')
+                        dfvehic.to_csv(f'./datasets/{foldername}/{dataset}/vehicle_telemetry.csv')
+                        dfcoll.to_csv(f'./datasets/{foldername}/{dataset}/collision_data.csv')
                         world.hud.notification("Recording was SAVED")
                     else:
                         create_dfs()
@@ -1662,7 +1658,7 @@ def game_loop(args, testingFlag):
                         run_time = time.time() 
                         global recording_start_time
                         global speed
-                        global df
+                        global dfvehic
                         global global_compass
                         global global_sim_time
                         global global_elapsed_time
@@ -1682,7 +1678,7 @@ def game_loop(args, testingFlag):
                         steering = world.player.get_control().steer
                         vehicle = get_actor_display_name(world.player, truncate=20)
 
-                        df = df.append({'Sim_time': global_sim_time, 'Rec_time': elapsed_time, 'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps(), 'Speed': speed, 
+                        dfvehic = dfvehic.append({'Sim_time': global_sim_time, 'Rec_time': elapsed_time, 'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps(), 'Speed': speed, 
                         'Heading': global_compass, 'Accelerometer': accelerometer, 'Gyroscope': gyroscope, 'Location': location, 'GNSS': gnss, 'Height': height, 'Throttle': throttle, 
                         'Brake': brake, 'Gear': gear, 'Steering': steering, 'Vehicle': vehicle}, ignore_index= True)
 
