@@ -553,6 +553,8 @@ def create_df():
         'Height': [],
         'Throttle': [],
         'Brake': [],
+        'Gear': [],
+        'Steering': [],
         'Vehicle': []
     }
     df = pd.DataFrame(data)
@@ -1651,11 +1653,12 @@ def game_loop(args, testingFlag):
                         throttle = f"{int((world.player.get_control().throttle)*100)}%"
                         brake = f"{int((world.player.get_control().brake)*100)}%"
                         gear = '%s' % {-1: 'R', 0: 'N'}.get(world.player.get_control().gear, world.player.get_control().gear)
+                        steering = world.player.get_control().steer
                         vehicle = get_actor_display_name(world.player, truncate=20)
 
                         df = df.append({'Sim_time': global_sim_time, 'Rec_time': elapsed_time, 'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps(), 'Speed': speed, 
                         'Heading': global_compass, 'Accelerometer': accelerometer, 'Gyroscope': gyroscope, 'Location': location, 'GNSS': gnss, 'Height': height, 'Throttle': throttle, 
-                        'Brake': brake, 'Gear': gear, 'Vehicle': vehicle}, ignore_index= True)
+                        'Brake': brake, 'Gear': gear, 'Steering': steering, 'Vehicle': vehicle}, ignore_index= True)
 
                 #RIDWAN added CAN messages
                 msg = hud.can.can_bus.recv(0)
