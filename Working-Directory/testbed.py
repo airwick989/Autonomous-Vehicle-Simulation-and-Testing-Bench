@@ -535,9 +535,10 @@ class World(object):
 # ==============================================================================
 
 df = None
+dfcoll = None
 recording_start_time = None
 
-def create_df():
+def create_dfs():
     global df
     data = {
         'Sim_time': [],
@@ -558,6 +559,15 @@ def create_df():
         'Vehicle': []
     }
     df = pd.DataFrame(data)
+
+    global dfcoll
+    colldata = {
+        'Sim_time': [],
+        'Rec_time': [],
+        'Event': [],
+        'Intensity': []
+    }
+    dfcoll = pd.DataFrame(colldata)
 
 
 
@@ -761,6 +771,7 @@ class DualControl(object):
                         global_recording = False
                         foldername = global_map
                         filename = 'datalog1.csv'
+                        collfile = 'collisiondata1.csv'
                         file_index = 1
                         if not os.path.exists(f'./datasets/{foldername}'):
                             os.mkdir(f'./datasets/{foldername}')
@@ -768,9 +779,14 @@ class DualControl(object):
                             file_index += 1
                             filename = f'datalog{file_index}.csv'
                         df.to_csv(f'./datasets/{foldername}/{filename}')
+                        file_index = 1
+                        while os.path.exists(f'./datasets/{foldername}/{collfile}'):
+                            file_index += 1
+                            filename = f'collisiondata{file_index}.csv'
+                        dfcoll.to_csv(f'./datasets/{foldername}/{collfile}')
                         world.hud.notification("Recording was SAVED")
                     else:
-                        create_df()
+                        create_dfs()
                         recording_start_time = time.time()
                         global_recording = True
                         world.hud.notification("Recording has STARTED")
@@ -1178,7 +1194,7 @@ class HelpText(object):
 # ==============================================================================
 # -- CollisionSensor -----------------------------------------------------------
 # ==============================================================================
-
+global_elapsed_time = None
 
 class CollisionSensor(object):
     def __init__(self, parent_actor, hud):
@@ -1212,6 +1228,14 @@ class CollisionSensor(object):
         self.history.append((event.frame, intensity))
         if len(self.history) > 4000:
             self.history.pop(0)
+
+        #RIDWAN added data logging
+        global global_sim_time
+        global dfcoll
+        global global_elapsed_time
+        event = 'Collision with %r' % actor_type
+        dfcoll = dfcoll.append({'Sim_time': global_sim_time, 'Rec_time': global_elapsed_time, 'Event': event, 'Intensity': intensity}, ignore_index= True)
+
 
 
 # ==============================================================================
@@ -1641,8 +1665,10 @@ def game_loop(args, testingFlag):
                         global df
                         global global_compass
                         global global_sim_time
+                        global global_elapsed_time
 
                         elapsed_time = time.time() - recording_start_time
+                        global_elapsed_time = elapsed_time
                         accelerometer = '(%5.1f,%5.1f,%5.1f)' % (world.imu_sensor.accelerometer)
                         gyroscope = '(%5.1f,%5.1f,%5.1f)' % (world.imu_sensor.gyroscope)
                         location = ('% 20s' % ('(% 5.1f, % 5.1f)' % (world.player.get_transform().location.x, world.player.get_transform().location.y))).strip()
