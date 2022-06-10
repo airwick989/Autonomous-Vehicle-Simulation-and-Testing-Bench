@@ -854,12 +854,14 @@ class DualControl(object):
 
         K2 = 1.4  # 1.6
         try: #index out of range
-            throttleCmd = K2 + (2.05 * math.log10(-0.7 * jsInputs[self._throttle_idx] + 1.4) - 1.2) / 0.92
+            throttleCmd = (K2 + (2.05 * math.log10(-0.7 * jsInputs[self._throttle_idx] + 1.4) - 1.2) / 0.92) + 0.2494802700793417   #RIDWAN added throttle correction factor
         except Exception:
             throttleCmd = 0
         #print(f"throttleCmd: {throttleCmd}")
         if throttleCmd <= 0:
             throttleCmd = 0
+        elif throttleCmd > 1:
+            throttleCmd = 1
         else:
             #global drive
             #global drive_ctr
@@ -879,7 +881,7 @@ class DualControl(object):
                 nav += 1
             #(REZWANA) we have a global variable park that is changed with the gear shifter
             #this will only let the car accelerate if the car is not in park
-            throttleCmd = 1 if not park else 0
+            #throttleCmd = 1 if not park else 0 #This was causing the throttle issue
             
             
             
