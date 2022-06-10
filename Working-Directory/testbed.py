@@ -547,7 +547,8 @@ def create_df():
         'Heading': [],
         'Accelerometer': [],
         'Gyroscope': [],
-        'Location': []
+        'Location': [],
+        'GNSS': []
     }
     df = pd.DataFrame(data)
 
@@ -748,8 +749,7 @@ class DualControl(object):
                 elif event.key == K_r and (pygame.key.get_mods() & KMOD_CTRL):  #Ridwan added data recording
                     global global_recording
                     global recording_start_time
-                    if (world.recording_enabled):
-                        world.recording_enabled = False
+                    if (global_recording):
                         global_recording = False
                         world.hud.notification("Recorder is OFF")
                         filename = 'datalog1.csv'
@@ -761,7 +761,6 @@ class DualControl(object):
                     else:
                         create_df()
                         recording_start_time = time.time()
-                        world.recording_enabled = True
                         global_recording = True
                         world.hud.notification("Recorder is ON")
 
@@ -1627,9 +1626,10 @@ def game_loop(args, testingFlag):
                         accelerometer = '(%5.1f,%5.1f,%5.1f)' % (world.imu_sensor.accelerometer)
                         gyroscope = '(%5.1f,%5.1f,%5.1f)' % (world.imu_sensor.gyroscope)
                         location = ('% 20s' % ('(% 5.1f, % 5.1f)' % (world.player.get_transform().location.x, world.player.get_transform().location.y))).strip()
+                        gnss = ('% 24s' % ('(% 2.6f, % 3.6f)' % (world.gnss_sensor.lat, world.gnss_sensor.lon))).strip()
 
                         df = df.append({'Timestamp': elapsed_time, 'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps(), 'Speed': speed, 'Heading': global_compass, 
-                        'Accelerometer': accelerometer, 'Gyroscope': gyroscope, 'Location': location}, ignore_index= True)
+                        'Accelerometer': accelerometer, 'Gyroscope': gyroscope, 'Location': location, 'GNSS': gnss}, ignore_index= True)
 
                 #RIDWAN added CAN messages
                 msg = hud.can.can_bus.recv(0)
