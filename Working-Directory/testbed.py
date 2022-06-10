@@ -549,7 +549,9 @@ def create_df():
         'Gyroscope': [],
         'Location': [],
         'GNSS': [],
-        'Height': []
+        'Height': [],
+        'Throttle': [],
+        'Brake': []
     }
     df = pd.DataFrame(data)
 
@@ -1633,9 +1635,11 @@ def game_loop(args, testingFlag):
                         height = ('% 18.0f m' % world.player.get_transform().location.z).strip()
                         if(height == '-0 m'):
                             height = '0 m'
+                        throttle = f"{int((world.player.get_control().throttle)*100)}%"
+                        brake = f"{int((world.player.get_control().brake)*100)}%"
 
                         df = df.append({'Timestamp': elapsed_time, 'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps(), 'Speed': speed, 'Heading': global_compass, 
-                        'Accelerometer': accelerometer, 'Gyroscope': gyroscope, 'Location': location, 'GNSS': gnss, 'Height': height}, ignore_index= True)
+                        'Accelerometer': accelerometer, 'Gyroscope': gyroscope, 'Location': location, 'GNSS': gnss, 'Height': height, 'Throttle': throttle, 'Brake': brake}, ignore_index= True)
 
                 #RIDWAN added CAN messages
                 msg = hud.can.can_bus.recv(0)
