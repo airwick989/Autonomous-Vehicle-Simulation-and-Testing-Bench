@@ -540,6 +540,7 @@ class World(object):
 dfvehic = None
 dfcoll = None
 dflane = None
+dfobs = None
 recording_start_time = None
 
 def create_dfs():
@@ -580,6 +581,15 @@ def create_dfs():
         'Event': []
     }
     dflane = pd.DataFrame(lanedata)
+
+    global dfobs
+    obsdata = {
+        'Sim_time': [],
+        'Rec_time': [],
+        'Obstacle_Detected': [],
+        'Distance_from_Obstacle': []
+    }
+    dfobs = pd.DataFrame(obsdata)
 
 
 
@@ -793,6 +803,7 @@ class DualControl(object):
                         dfvehic.to_csv(f'./datasets/{foldername}/{dataset}/vehicle_telemetry.csv')
                         dfcoll.to_csv(f'./datasets/{foldername}/{dataset}/collision_data.csv')
                         dflane.to_csv(f'./datasets/{foldername}/{dataset}/lane_invasion_data.csv')
+                        dfobs.to_csv(f'./datasets/{foldername}/{dataset}/obstacle_detection_data.csv')
                         world.hud.notification("Recording was SAVED")
                     else:
                         create_dfs()
@@ -1330,7 +1341,7 @@ class ObstacleSensor(object):
         self.transform = carla.Transform(self.location, self.rotation)
         world = self._parent.get_world()
         bp = world.get_blueprint_library().find('sensor.other.obstacle')
-        bp.set_attribute('distance','20')
+        bp.set_attribute('distance','30')
         bp.set_attribute('hit_radius','1')
         bp.set_attribute("only_dynamics",str(True))
         self.sensor = world.spawn_actor(bp, self.transform, attach_to=self._parent)
@@ -1345,7 +1356,17 @@ class ObstacleSensor(object):
         if not self:
             return
         self.distance = event.distance
-        print ("Event with %s at distance %u" % (event.other_actor.type_id, event.distance))
+        obstacle = event.other_actor.type_id
+        distance = event.distance
+        #print(f"Obstacle detected [{obstacle}] at distance {distance} m")
+
+
+        #RIDWAN added data logging
+        if(global_recording):
+            global global_sim_time
+            global dfobs
+            global global_elapsed_time
+            dfobs = dfobs.append({'Sim_time': global_sim_time, 'Rec_time': global_elapsed_time, 'Obstacle_Detected': obstacle, 'Distance_from_Obstacle': distance}, ignore_index= True)
 
 
 
