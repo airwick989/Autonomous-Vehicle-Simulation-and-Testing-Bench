@@ -117,6 +117,11 @@ import struct
 #RIDWAN import ADB functions
 import adblib
 
+#RIDWAN import agents for autonomous driving
+from agents.navigation.behavior_agent import BehaviorAgent  # pylint: disable=import-error
+from agents.navigation.basic_agent import BasicAgent  # pylint: disable=import-error
+
+
 if sys.version_info >= (3, 0):
 
     from configparser import ConfigParser
@@ -729,7 +734,10 @@ class DualControl(object):
                         ADB_command_success = adblib.play_pause()
                     elif event.button == 5:
                         #Enable Autonomous Driving
-                        pass
+                        global global_autonomous
+                        global autonomous_counter
+                        global_autonomous = not global_autonomous
+                        autonomous_counter = 0
                     elif event.button == self._reverse_idx:
                         self._control.gear = 1 if self._control.reverse else -1
                     elif event.button == 3:
@@ -1641,6 +1649,9 @@ global_client = None
 global_controller = None
 global_recording = False
 global_clock = None
+global_autonomous = False
+global_autonomous_complete = True
+autonomous_counter = 0
 
 def game_loop(args, testingFlag):
     global global_client
@@ -1689,12 +1700,8 @@ def game_loop(args, testingFlag):
             global_controller = DualControl(world, args.autopilot)
         else:
             controller = DualControl(world, args.autopilot)
-            
 
-        if args.sync:
-            sim_world.tick()
-        else:
-            sim_world.wait_for_tick()
+        agent = BasicAgent(world.player)    #RIDWAN autonomous
 
         clock = pygame.time.Clock()
         global global_clock
@@ -1722,11 +1729,20 @@ def game_loop(args, testingFlag):
             while True:
                 clock.tick_busy_loop(60)
                 if controller.parse_events(world, clock, 0, 0):
-                    return
+                    return  
                 world.tick(clock)
                 world.render(display)
-                # global globalArduinoTestFlag
-                # get_speed(world, globalArduinoTestFlag)
+
+                #RIDWAN autonomous 
+                global global_autonomous
+                global global_autonomous_complete
+                global autonomous_counter
+                if global_autonomous:
+                    world.player.set_autopilot(True)
+                elif autonomous_counter == 0:
+                    world.player.set_autopilot(False)
+                    autonomous_counter += 1
+
                 if(auto == 1):
                     world.player.apply_control(carla.VehicleControl(throttle=.25, steer=steer))
                 pygame.display.flip()
