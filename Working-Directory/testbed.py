@@ -375,6 +375,7 @@ class World(object):
         self.collision_sensor = None
         self.lane_invasion_sensor = None
         self.gnss_sensor = None
+        self.obstacle_sensor = None
         self.imu_sensor = None
         self.radar_sensor = None
         self.camera_manager = None
@@ -451,6 +452,7 @@ class World(object):
         self.collision_sensor = CollisionSensor(self.player, self.hud)
         self.lane_invasion_sensor = LaneInvasionSensor(self.player, self.hud)
         self.gnss_sensor = GnssSensor(self.player)
+        self.obstacle_sensor = ObstacleSensor(self.player)
         self.imu_sensor = IMUSensor(self.player)
         self.camera_manager = CameraManager(self.player, self.hud, self._gamma)
         self.camera_manager.transform_index = cam_pos_index
@@ -521,6 +523,7 @@ class World(object):
             self.collision_sensor.sensor,
             self.lane_invasion_sensor.sensor,
             self.gnss_sensor.sensor,
+            self.obstacle_sensor.sensor,
             self.imu_sensor.sensor]
         for sensor in sensors:
             if sensor is not None:
@@ -1310,6 +1313,41 @@ class GnssSensor(object):
             return
         self.lat = event.latitude
         self.lon = event.longitude
+
+
+
+#RIDWAN added obstacle sensor
+# ==============================================================================
+# -- ObstacleDetection ---------------------------------------------------------
+# ==============================================================================
+
+class ObstacleSensor(object):
+    def __init__(self, parent_actor):
+        self.sensor = None
+        self._parent = parent_actor
+        self.location = carla.Location(0, 0, 0)
+        self.rotation = carla.Rotation(0, 0, 0)
+        self.transform = carla.Transform(self.location, self.rotation)
+        world = self._parent.get_world()
+        bp = world.get_blueprint_library().find('sensor.other.obstacle')
+        bp.set_attribute('distance','20')
+        bp.set_attribute('hit_radius','1')
+        bp.set_attribute("only_dynamics",str(True))
+        self.sensor = world.spawn_actor(bp, self.transform, attach_to=self._parent)
+        # We need to pass the lambda a weak reference to self to avoid circular
+        # reference.
+        weak_self = weakref.ref(self)
+        self.sensor.listen(lambda event: ObstacleSensor._on_obstacle(weak_self, event))
+
+    @staticmethod
+    def _on_obstacle(weak_self, event):
+        self = weak_self()
+        if not self:
+            return
+        self.distance = event.distance
+        print ("Event with %s at distance %u" % (event.other_actor.type_id, event.distance))
+
+
 
 
 # ==============================================================================
