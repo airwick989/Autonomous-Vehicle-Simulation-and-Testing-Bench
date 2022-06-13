@@ -728,7 +728,8 @@ class DualControl(object):
                     elif event.button == 2:
                         ADB_command_success = adblib.play_pause()
                     elif event.button == 5:
-                        adblib.launch_app(package_name='com.soundcloud.android')    #RIDWAN Launch spotify app using right paddle
+                        #Enable Autonomous Driving
+                        pass
                     elif event.button == self._reverse_idx:
                         self._control.gear = 1 if self._control.reverse else -1
                     elif event.button == 3:
@@ -1639,6 +1640,7 @@ global_sim_world = None
 global_client = None
 global_controller = None
 global_recording = False
+global_clock = None
 
 def game_loop(args, testingFlag):
     global global_client
@@ -1695,8 +1697,10 @@ def game_loop(args, testingFlag):
             sim_world.wait_for_tick()
 
         clock = pygame.time.Clock()
+        global global_clock
         global steer
         global auto
+        global_clock = clock
         if testingFlag >=1:
             for i in range(60):
                 clock.tick_busy_loop(60)
