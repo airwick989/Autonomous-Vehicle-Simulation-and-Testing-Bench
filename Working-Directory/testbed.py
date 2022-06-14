@@ -739,6 +739,10 @@ class DualControl(object):
                         global autonomous_counter
                         global_autonomous = not global_autonomous
                         autonomous_counter = 0
+                        if global_autonomous:
+                            world.hud.notification("Autopilot ENABLED")
+                        else:
+                            world.hud.notification("Autopilot DISABLED")
                     elif event.button == self._reverse_idx:
                         self._control.gear = 1 if self._control.reverse else -1
                     elif event.button == 3:
@@ -793,9 +797,7 @@ class DualControl(object):
                     world.camera_manager.next_sensor()
                 elif event.key > K_0 and event.key <= K_9:
                     world.camera_manager.set_sensor(event.key - 1 - K_0)
-                elif event.key == K_r and not (pygame.key.get_mods() & KMOD_CTRL):
-                    world.camera_manager.toggle_recording()
-                elif event.key == K_r and (pygame.key.get_mods() & KMOD_CTRL):  #Ridwan added data logging
+                elif event.key == K_r:  #Ridwan added data logging
                     global global_recording
                     global recording_start_time
                     global global_map
