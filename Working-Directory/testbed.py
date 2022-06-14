@@ -555,6 +555,7 @@ def create_dfs():
         'Rec_time': [],
         'Server_fps': [],
         'Client_fps': [],
+        'Autopilot': [],
         'Speed': [],
         'Heading': [],
         'Accelerometer': [],
@@ -1650,7 +1651,6 @@ global_controller = None
 global_recording = False
 global_clock = None
 global_autonomous = False
-global_autonomous_complete = True
 autonomous_counter = 0
 
 def game_loop(args, testingFlag):
@@ -1735,7 +1735,6 @@ def game_loop(args, testingFlag):
 
                 #RIDWAN autonomous 
                 global global_autonomous
-                global global_autonomous_complete
                 global autonomous_counter
                 if global_autonomous:
                     world.player.set_autopilot(True)
@@ -1776,9 +1775,9 @@ def game_loop(args, testingFlag):
                         steering = world.player.get_control().steer
                         vehicle = get_actor_display_name(world.player, truncate=20)
 
-                        dfvehic = dfvehic.append({'Sim_time': global_sim_time, 'Rec_time': elapsed_time, 'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps(), 'Speed': speed, 
-                        'Heading': global_compass, 'Accelerometer': accelerometer, 'Gyroscope': gyroscope, 'Location': location, 'GNSS': gnss, 'Height': height, 'Throttle': throttle, 
-                        'Brake': brake, 'Gear': gear, 'Steering': steering, 'Vehicle': vehicle}, ignore_index= True)
+                        dfvehic = dfvehic.append({'Sim_time': global_sim_time, 'Rec_time': elapsed_time, 'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps(), 
+                        'Autopilot': str(global_autonomous),'Speed': speed, 'Heading': global_compass, 'Accelerometer': accelerometer, 'Gyroscope': gyroscope, 'Location': location, 
+                        'GNSS': gnss, 'Height': height, 'Throttle': throttle, 'Brake': brake, 'Gear': gear, 'Steering': steering, 'Vehicle': vehicle}, ignore_index= True)
 
                 #RIDWAN added CAN messages
                 msg = hud.can.can_bus.recv(0)
