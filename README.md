@@ -2,7 +2,7 @@
 - Main work being done can be found in the [Working Directory folder](Working-Directory)
 - Logs of work done every day can be found in the [Daily Logs folder](Daily-Logs)
 
-###Set up procedure
+### Set up procedure
 - Run **./CarlaUE4.sh -quality-level=Low** on the lab computer
 - Open the Arduino Serial Monitor
 - Run **./vcan.sh**
