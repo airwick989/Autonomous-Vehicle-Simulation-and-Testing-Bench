@@ -245,7 +245,113 @@ coll_plot = px.bar(
 
 
 
+# ==============================================================================
+# -- Gyroscope ----------------------------------------------------------------
+# ==============================================================================
+gyro_data = vehicle_telemetry['Gyroscope'].to_list()
 
+#Clean the data
+for i in range(0, len(gyro_data)):
+    cleaned = gyro_data[i]
+    cleaned = cleaned.strip()
+    cleaned = cleaned.replace(" ", "")
+    cleaned = cleaned.replace("(", "")
+    cleaned = cleaned.replace(")", "")
+    cleaned = cleaned.split(',')
+    for j in range(0, len(cleaned)):
+        cleaned[j] = float(cleaned[j])
+    gyro_data[i] = cleaned
+
+gyro_x = []
+gyro_y = []
+gyro_z = []
+
+#Separate x, y, and z values
+for reading in gyro_data:
+    gyro_x.append(reading[0])
+    gyro_y.append(reading[1])
+    gyro_z.append(reading[2])
+
+gyro_plot = go.Figure()
+
+gyro_plot = gyro_plot.add_trace(go.Scatter(
+    x = vehicle_telemetry['Rec_time'],
+    y = gyro_x,
+    name='X Axis'
+))
+
+gyro_plot = gyro_plot.add_trace(go.Scatter(
+    x = vehicle_telemetry['Rec_time'],
+    y = gyro_y,
+    name='Y Axis'
+))
+
+gyro_plot = gyro_plot.add_trace(go.Scatter(
+    x = vehicle_telemetry['Rec_time'],
+    y = gyro_z,
+    name='Z Axis'
+))
+
+gyro_plot.update_layout(
+    title = 'Gyroscope Readings',
+    xaxis_title = 'Rec_time (seconds)',
+    yaxis_title = 'Individual Axis Reading (Angular Velocity in radians/second)',
+    hovermode = 'x unified'
+)
+
+# ==============================================================================
+# -- Accelerometer -------------------------------------------------------------
+# ==============================================================================
+accel_data = vehicle_telemetry['Accelerometer'].to_list()
+
+#Clean the data
+for i in range(0, len(accel_data)):
+    cleaned = accel_data[i]
+    cleaned = cleaned.strip()
+    cleaned = cleaned.replace(" ", "")
+    cleaned = cleaned.replace("(", "")
+    cleaned = cleaned.replace(")", "")
+    cleaned = cleaned.split(',')
+    for j in range(0, len(cleaned)):
+        cleaned[j] = float(cleaned[j])
+    accel_data[i] = cleaned
+
+accel_x = []
+accel_y = []
+accel_z = []
+
+#Separate x, y, and z values
+for reading in accel_data:
+    accel_x.append(reading[0])
+    accel_y.append(reading[1])
+    accel_z.append(reading[2])
+
+accel_plot = go.Figure()
+
+accel_plot = accel_plot.add_trace(go.Scatter(
+    x = vehicle_telemetry['Rec_time'],
+    y = accel_x,
+    name='X Axis'
+))
+
+accel_plot = accel_plot.add_trace(go.Scatter(
+    x = vehicle_telemetry['Rec_time'],
+    y = accel_y,
+    name='Y Axis'
+))
+
+accel_plot = accel_plot.add_trace(go.Scatter(
+    x = vehicle_telemetry['Rec_time'],
+    y = accel_z,
+    name='Z Axis'
+))
+
+accel_plot.update_layout(
+    title = 'Accelerometer Readings',
+    xaxis_title = 'Rec_time (seconds)',
+    yaxis_title = 'Individual Axis Reading (Linear Acceleration in meters/second^2)',
+    hovermode = 'x unified'
+)
 
 
 
@@ -256,3 +362,5 @@ brake_plot.show()
 steering_plot.show()
 height_plot.show()
 coll_plot.show()
+gyro_plot.show()
+accel_plot.show()
