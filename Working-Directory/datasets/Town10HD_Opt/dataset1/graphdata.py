@@ -1,6 +1,6 @@
-from turtle import title
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.express as px
 import numpy as np
 
 vehicle_telemetry = pd.read_csv('vehicle_telemetry.csv')
@@ -228,9 +228,31 @@ height_plot.update_layout(
 
 
 
+# ==============================================================================
+# -- Collisions ----------------------------------------------------------------
+# ==============================================================================
+collision_data = pd.read_csv('collision_data.csv')
+collision_data = collision_data.sort_values(by ='Intensity' , ascending=True)
+collision_data = collision_data.drop_duplicates(subset=['Rec_time'], keep='last')
+
+coll_plot = px.bar(
+    collision_data, 
+    x='Rec_time', y='Intensity',
+    hover_data=['Event'], color='Intensity',
+    labels={'Rec_time':'Rec_time (seconds)', 'Intensity': 'Collision Intensity'}, 
+)
+
+
+
+
+
+
+
+
 speed_plot.show()
 frame_plot.show()
 throttle_plot.show()
 brake_plot.show()
 steering_plot.show()
 height_plot.show()
+coll_plot.show()
