@@ -1,8 +1,11 @@
 from turtle import title
 import pandas as pd
 import plotly.graph_objects as go
+import numpy as np
 
 vehicle_telemetry = pd.read_csv('vehicle_telemetry.csv')
+vehicle_telemetry_manual = pd.read_csv('vehicle_telemetry.csv')
+vehicle_telemetry_auto = pd.read_csv('vehicle_telemetry.csv')
 
 
 
@@ -10,12 +13,8 @@ vehicle_telemetry = pd.read_csv('vehicle_telemetry.csv')
 # ==============================================================================
 # -- Speed ---------------------------------------------------------------------
 # ==============================================================================
-
-vehicle_telemetry_manual = vehicle_telemetry[vehicle_telemetry.Autopilot == False]
-vehicle_telemetry_manual = vehicle_telemetry_manual.reset_index(drop=True)
-
-vehicle_telemetry_auto = vehicle_telemetry[vehicle_telemetry.Autopilot == True]
-vehicle_telemetry_auto = vehicle_telemetry_auto.reset_index(drop=True)
+vehicle_telemetry_manual['Speed'] = np.where(vehicle_telemetry_manual.Autopilot == True, 0, vehicle_telemetry_manual['Speed'])
+vehicle_telemetry_auto['Speed'] = np.where(vehicle_telemetry_auto.Autopilot == False, 0, vehicle_telemetry_auto['Speed'])
 
 speed_plot = go.Figure()
 speed_plot = speed_plot.add_trace(go.Scatter(
@@ -66,19 +65,38 @@ frame_plot.update_layout(
 # -- Throttle ------------------------------------------------------------------
 # ==============================================================================
 throttle_plot = go.Figure()
-throttle = vehicle_telemetry['Throttle'].to_list()
+vehicle_telemetry_manual['Throttle'] = np.where(vehicle_telemetry_manual.Autopilot == True, '0%', vehicle_telemetry_manual['Throttle'])
+vehicle_telemetry_auto['Throttle'] = np.where(vehicle_telemetry_auto.Autopilot == False, '0%', vehicle_telemetry_auto['Throttle'])
+
+throttle_manual = vehicle_telemetry_manual['Throttle'].to_list()
+throttle_auto = vehicle_telemetry_auto['Throttle'].to_list()
 
 #Need to clean the data, percentage signs
-for i in range(0, len(throttle)):
-    cleaned = throttle[i].strip()
+for i in range(0, len(throttle_manual)):
+    cleaned = throttle_manual[i].strip()
     cleaned = cleaned[:-1]
     cleaned = int(cleaned)
-    throttle[i] = cleaned
+    throttle_manual[i] = cleaned
 
 throttle_plot = throttle_plot.add_trace(go.Scatter(
     x = vehicle_telemetry['Rec_time'],
-    y = throttle,
+    y = throttle_manual,
+    name='Manual Control'
 ))
+
+#Need to clean the data, percentage signs
+for i in range(0, len(throttle_auto)):
+    cleaned = throttle_auto[i].strip()
+    cleaned = cleaned[:-1]
+    cleaned = int(cleaned)
+    throttle_auto[i] = cleaned
+
+throttle_plot = throttle_plot.add_trace(go.Scatter(
+    x = vehicle_telemetry['Rec_time'],
+    y = throttle_auto,
+    name='Autopilot'
+))
+
 throttle_plot.update_layout(
     title = 'Throttle Application',
     xaxis_title = 'Rec_time (seconds)',
@@ -89,6 +107,83 @@ throttle_plot.update_layout(
 
 
 
+# ==============================================================================
+# -- Brake ---------------------------------------------------------------------
+# ==============================================================================
+brake_plot = go.Figure()
+vehicle_telemetry_manual['Brake'] = np.where(vehicle_telemetry_manual.Autopilot == True, '0%', vehicle_telemetry_manual['Brake'])
+vehicle_telemetry_auto['Brake'] = np.where(vehicle_telemetry_auto.Autopilot == False, '0%', vehicle_telemetry_auto['Brake'])
+
+brake_manual = vehicle_telemetry_manual['Brake'].to_list()
+brake_auto = vehicle_telemetry_auto['Brake'].to_list()
+
+#Need to clean the data, percentage signs
+for i in range(0, len(brake_manual)):
+    cleaned = brake_manual[i].strip()
+    cleaned = cleaned[:-1]
+    cleaned = int(cleaned)
+    brake_manual[i] = cleaned
+
+brake_plot = brake_plot.add_trace(go.Scatter(
+    x = vehicle_telemetry['Rec_time'],
+    y = brake_manual,
+    name='Manual Control'
+))
+
+#Need to clean the data, percentage signs
+for i in range(0, len(brake_auto)):
+    cleaned = brake_auto[i].strip()
+    cleaned = cleaned[:-1]
+    cleaned = int(cleaned)
+    brake_auto[i] = cleaned
+
+brake_plot = brake_plot.add_trace(go.Scatter(
+    x = vehicle_telemetry['Rec_time'],
+    y = brake_auto,
+    name='Autopilot'
+))
+
+brake_plot.update_layout(
+    title = 'Brake Application',
+    xaxis_title = 'Rec_time (seconds)',
+    yaxis_title = 'Brake Position (Percentage)',
+    hovermode = 'x unified'
+)
+
+
+
+
+# ==============================================================================
+# -- Steering ------------------------------------------------------------------
+# ==============================================================================
+steering_plot = go.Figure()
+vehicle_telemetry_manual['Steering'] = np.where(vehicle_telemetry_manual.Autopilot == True, 0, vehicle_telemetry_manual['Steering'])
+vehicle_telemetry_auto['Steering'] = np.where(vehicle_telemetry_auto.Autopilot == False, 0, vehicle_telemetry_auto['Steering'])
+
+steering_plot = steering_plot.add_trace(go.Scatter(
+    x = vehicle_telemetry_manual['Rec_time'],
+    y = vehicle_telemetry_manual['Steering'],
+    name='Manual Control'
+))
+
+steering_plot = steering_plot.add_trace(go.Scatter(
+    x = vehicle_telemetry_auto['Rec_time'],
+    y = vehicle_telemetry_auto['Steering'],
+    name='Autopilot'
+))
+
+steering_plot.update_layout(
+    title = 'Steering Input',
+    xaxis_title = 'Rec_time (seconds)',
+    yaxis_title = 'Steering Position (-1 to 1 = Left lock to Right lock)',
+    hovermode = 'x unified'
+)
+
+
+
+
 speed_plot.show()
 frame_plot.show()
 throttle_plot.show()
+brake_plot.show()
+steering_plot.show()
