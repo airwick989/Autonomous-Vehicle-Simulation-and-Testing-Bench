@@ -20,12 +20,14 @@ speed_plot = go.Figure()
 speed_plot = speed_plot.add_trace(go.Scatter(
     x=vehicle_telemetry_manual['Rec_time'],
     y=vehicle_telemetry_manual['Speed'],
-    name='Manual Control'
+    name='Manual Control',
+    hovertemplate = '%{y} kph'
     ))
 speed_plot = speed_plot.add_trace(go.Scatter(
     x=vehicle_telemetry_auto['Rec_time'],
     y=vehicle_telemetry_auto['Speed'],
-    name='Autopilot'
+    name='Autopilot',
+    hovertemplate = '%{y} kph'
     ))
 speed_plot.update_layout(
     title = 'Speed vs Time',
@@ -40,21 +42,14 @@ speed_plot.update_layout(
 # ==============================================================================
 # -- Performance (Frames) ------------------------------------------------------
 # ==============================================================================
-frame_plot = go.Figure()
-frame_plot = frame_plot.add_trace(go.Scatter(
-    x = vehicle_telemetry['Rec_time'],
-    y = vehicle_telemetry['Server_fps'],
-    name='Server'
-))
-frame_plot = frame_plot.add_trace(go.Scatter(
-    x = vehicle_telemetry['Rec_time'],
-    y = vehicle_telemetry['Client_fps'],
-    name='Client'
-))
+frame_plot = px.line(
+    vehicle_telemetry, 
+    hover_data=['Autopilot'],
+    x='Rec_time', y=['Server_fps', 'Client_fps'],
+    labels={'Rec_time':'Rec_time (seconds)', 'Server_fps': 'Performance (Frames per Second)'}, 
+    title='Server & Client Performance',
+)
 frame_plot.update_layout(
-    title = 'Server & Client Performance',
-    xaxis_title = 'Rec_time (seconds)',
-    yaxis_title = 'Performance (Frames per Second)',
     hovermode = 'x unified'
 )
 
@@ -81,7 +76,8 @@ for i in range(0, len(throttle_manual)):
 throttle_plot = throttle_plot.add_trace(go.Scatter(
     x = vehicle_telemetry['Rec_time'],
     y = throttle_manual,
-    name='Manual Control'
+    name='Manual Control',
+    hovertemplate = '%{y} %'
 ))
 
 #Need to clean the data, percentage signs
@@ -94,7 +90,8 @@ for i in range(0, len(throttle_auto)):
 throttle_plot = throttle_plot.add_trace(go.Scatter(
     x = vehicle_telemetry['Rec_time'],
     y = throttle_auto,
-    name='Autopilot'
+    name='Autopilot',
+    hovertemplate = '%{y} %'
 ))
 
 throttle_plot.update_layout(
@@ -127,7 +124,8 @@ for i in range(0, len(brake_manual)):
 brake_plot = brake_plot.add_trace(go.Scatter(
     x = vehicle_telemetry['Rec_time'],
     y = brake_manual,
-    name='Manual Control'
+    name='Manual Control',
+    hovertemplate = '%{y} %'
 ))
 
 #Need to clean the data, percentage signs
@@ -140,7 +138,8 @@ for i in range(0, len(brake_auto)):
 brake_plot = brake_plot.add_trace(go.Scatter(
     x = vehicle_telemetry['Rec_time'],
     y = brake_auto,
-    name='Autopilot'
+    name='Autopilot',
+    hovertemplate = '%{y} %'
 ))
 
 brake_plot.update_layout(
@@ -202,7 +201,8 @@ height_auto = vehicle_telemetry_auto['Height'].to_list()
 height_plot = height_plot.add_trace(go.Scatter(
     x = vehicle_telemetry['Rec_time'],
     y = height_manual,
-    name='Manual Control'
+    name='Manual Control',
+    hovertemplate = '%{y} m'
 ))
 
 # #Need to clean the data, m
@@ -215,7 +215,8 @@ height_plot = height_plot.add_trace(go.Scatter(
 height_plot = height_plot.add_trace(go.Scatter(
     x = vehicle_telemetry['Rec_time'],
     y = height_auto,
-    name='Autopilot'
+    name='Autopilot',
+    hovertemplate = '%{y} m'
 ))
 
 height_plot.update_layout(
@@ -238,8 +239,9 @@ collision_data = collision_data.drop_duplicates(subset=['Rec_time'], keep='last'
 coll_plot = px.bar(
     collision_data, 
     x='Rec_time', y='Intensity',
-    hover_data=['Event'], color='Intensity',
+    hover_data=['Event', 'Autopilot'], color='Intensity',
     labels={'Rec_time':'Rec_time (seconds)', 'Intensity': 'Collision Intensity'}, 
+    title='Collisions and Collision Intensities'
 )
 
 
