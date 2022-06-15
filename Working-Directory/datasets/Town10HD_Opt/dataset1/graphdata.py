@@ -182,8 +182,55 @@ steering_plot.update_layout(
 
 
 
+# ==============================================================================
+# -- Height --------------------------------------------------------------------
+# ==============================================================================
+height_plot = go.Figure()
+vehicle_telemetry_manual['Height'] = np.where(vehicle_telemetry_manual.Autopilot == True, 0, vehicle_telemetry_manual['Height'])
+vehicle_telemetry_auto['Height'] = np.where(vehicle_telemetry_auto.Autopilot == False, 0, vehicle_telemetry_auto['Height'])
+
+height_manual = vehicle_telemetry_manual['Height'].to_list()
+height_auto = vehicle_telemetry_auto['Height'].to_list()
+
+# #Need to clean the data, m
+# for i in range(0, len(height_manual)):
+#     cleaned = height_manual[i].strip()
+#     cleaned = cleaned[:-2]
+#     cleaned = int(cleaned)
+#     height_manual[i] = cleaned
+
+height_plot = height_plot.add_trace(go.Scatter(
+    x = vehicle_telemetry['Rec_time'],
+    y = height_manual,
+    name='Manual Control'
+))
+
+# #Need to clean the data, m
+# for i in range(0, len(height_auto)):
+#     cleaned = height_auto[i].strip()
+#     cleaned = cleaned[:-2]
+#     cleaned = int(cleaned)
+#     height_auto[i] = cleaned
+
+height_plot = height_plot.add_trace(go.Scatter(
+    x = vehicle_telemetry['Rec_time'],
+    y = height_auto,
+    name='Autopilot'
+))
+
+height_plot.update_layout(
+    title = 'Height vs Time',
+    xaxis_title = 'Rec_time (seconds)',
+    yaxis_title = 'Height Above Ground Level (meters)',
+    hovermode = 'x unified'
+)
+
+
+
+
 speed_plot.show()
 frame_plot.show()
 throttle_plot.show()
 brake_plot.show()
 steering_plot.show()
+height_plot.show()
