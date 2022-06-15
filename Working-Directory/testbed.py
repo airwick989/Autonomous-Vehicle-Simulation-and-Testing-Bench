@@ -575,6 +575,7 @@ def create_dfs():
     colldata = {
         'Sim_time': [],
         'Rec_time': [],
+        'Autopilot': [],
         'Event': [],
         'Intensity': []
     }
@@ -584,6 +585,7 @@ def create_dfs():
     lanedata = {
         'Sim_time': [],
         'Rec_time': [],
+        'Autopilot': [],
         'Event': []
     }
     dflane = pd.DataFrame(lanedata)
@@ -592,6 +594,7 @@ def create_dfs():
     obsdata = {
         'Sim_time': [],
         'Rec_time': [],
+        'Autopilot': [],
         'Obstacle_Detected': [],
         'Distance_from_Obstacle': []
     }
@@ -1266,8 +1269,10 @@ class CollisionSensor(object):
             global global_sim_time
             global dfcoll
             global global_elapsed_time
+            global global_autonomous
             event = 'Collision with %r' % actor_type
-            dfcoll = dfcoll.append({'Sim_time': global_sim_time, 'Rec_time': global_elapsed_time, 'Event': event, 'Intensity': intensity}, ignore_index= True)
+            dfcoll = dfcoll.append({'Sim_time': global_sim_time, 'Rec_time': global_elapsed_time,'Autopilot': str(global_autonomous),
+            'Event': event, 'Intensity': intensity}, ignore_index= True)
 
 
 
@@ -1306,8 +1311,9 @@ class LaneInvasionSensor(object):
             global global_sim_time
             global dflane
             global global_elapsed_time
+            global global_autonomous
             lane_event = 'Crossed line %s' % ' and '.join(text)
-            dflane = dflane.append({'Sim_time': global_sim_time, 'Rec_time': global_elapsed_time, 'Event': lane_event}, ignore_index= True)
+            dflane = dflane.append({'Sim_time': global_sim_time, 'Rec_time': global_elapsed_time, 'Autopilot': str(global_autonomous), 'Event': lane_event}, ignore_index= True)
 
 
 # ==============================================================================
@@ -1378,7 +1384,9 @@ class ObstacleSensor(object):
             global global_sim_time
             global dfobs
             global global_elapsed_time
-            dfobs = dfobs.append({'Sim_time': global_sim_time, 'Rec_time': global_elapsed_time, 'Obstacle_Detected': obstacle, 'Distance_from_Obstacle': distance}, ignore_index= True)
+            global global_autonomous
+            dfobs = dfobs.append({'Sim_time': global_sim_time, 'Rec_time': global_elapsed_time, 'Autopilot': str(global_autonomous), 'Obstacle_Detected': obstacle, 
+            'Distance_from_Obstacle': distance}, ignore_index= True)
 
 
 
