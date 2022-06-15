@@ -357,6 +357,15 @@ accel_plot.update_layout(
 
 
 
+
+# ==============================================================================
+# -- Obstacle Detection --------------------------------------------------------
+# ==============================================================================
+#WORK HERE
+
+
+
+
 speed_plot.show()
 frame_plot.show()
 throttle_plot.show()
@@ -366,3 +375,4 @@ height_plot.show()
 coll_plot.show()
 gyro_plot.show()
 accel_plot.show()
+obs_plot.show()
