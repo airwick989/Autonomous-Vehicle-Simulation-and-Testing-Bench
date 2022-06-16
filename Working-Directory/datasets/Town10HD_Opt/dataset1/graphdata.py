@@ -243,6 +243,9 @@ coll_plot = px.bar(
     labels={'Rec_time':'Rec_time (seconds)', 'Intensity': 'Collision Intensity'}, 
     title='Collisions and Collision Intensities'
 )
+coll_plot.update_layout(
+    hovermode = 'x unified'
+)
 
 
 
@@ -361,7 +364,38 @@ accel_plot.update_layout(
 # ==============================================================================
 # -- Obstacle Detection --------------------------------------------------------
 # ==============================================================================
-#WORK HERE
+obs_data = pd.read_csv('obstacle_detection_data.csv')
+obs_data = obs_data.sort_values(by ='Distance_from_Obstacle' , ascending=False)
+obs_data = obs_data.drop_duplicates(subset=['Rec_time'], keep='last')
+
+obs_plot = px.bar(
+    obs_data, 
+    x='Rec_time', y='Distance_from_Obstacle',
+    hover_data=['Autopilot'], color='Obstacle_Detected',
+    labels={'Rec_time':'Rec_time (seconds)', 'Distance_from_Obstacle': 'Distance from Obstacle (meters)'}, 
+    title='Obstacle Detection Readings'
+)
+obs_plot.update_layout(
+    hovermode = 'x unified'
+)
+
+
+
+
+# ==============================================================================
+# -- Lane Invasion -------------------------------------------------------------
+# ==============================================================================
+lane_data = pd.read_csv('lane_invasion_data.csv')
+
+lane_plot = px.scatter(
+    lane_data, y="Event", x="Rec_time", color="Autopilot", symbol="Event",
+    labels={'Rec_time':'Rec_time (seconds)', 'Event': 'Line Type(s) Broken'}, 
+    title='Lane Invasion Alerts'
+    )
+lane_plot.update_traces(marker_size=10)
+lane_plot.update_layout(
+    hovermode = 'x unified'
+)
 
 
 
@@ -376,3 +410,4 @@ coll_plot.show()
 gyro_plot.show()
 accel_plot.show()
 obs_plot.show()
+lane_plot.show()
