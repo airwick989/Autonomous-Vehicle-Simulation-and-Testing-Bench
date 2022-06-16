@@ -1,2 +1,3 @@
 Dataset_Name,Vehicle_Type,Traffic_Presence
 dataset1,compact,False
+dataset2,compact,TRUE

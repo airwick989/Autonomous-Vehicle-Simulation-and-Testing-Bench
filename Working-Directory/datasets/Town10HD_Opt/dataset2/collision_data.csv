@@ -1,0 +1,4 @@
+,Sim_time,Rec_time,Autopilot,Event,Intensity
+0,0:04:25.120231,152.8508439064026,False,Collision with 'Mercedes Coupe',9922.753195357438
+1,0:04:48.070232,175.8896086215973,False,Collision with 'Building',3674.4715244260415
+2,0:04:48.120232,175.8896086215973,False,Collision with 'Building',14075.336188108144
