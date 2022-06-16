@@ -162,7 +162,7 @@ def main():
     random.seed(args.seed if args.seed is not None else int(time.time()))
 
     try:
-        world = client.get_world()
+        world = client.get_world()  #RIDWAN changed this for map selection. Original was client.get_world(), specific was client.load_world('Town06')
 
         traffic_manager = client.get_trafficmanager(args.tm_port)
         traffic_manager.set_global_distance_to_leading_vehicle(2.5)
