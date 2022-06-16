@@ -2,6 +2,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 import numpy as np
+import os
 
 vehicle_telemetry = pd.read_csv('vehicle_telemetry.csv')
 vehicle_telemetry_manual = pd.read_csv('vehicle_telemetry.csv')
@@ -400,14 +401,17 @@ lane_plot.update_layout(
 
 
 
-speed_plot.show()
-frame_plot.show()
-throttle_plot.show()
-brake_plot.show()
-steering_plot.show()
-height_plot.show()
-coll_plot.show()
-gyro_plot.show()
-accel_plot.show()
-obs_plot.show()
-lane_plot.show()
+if not os.path.exists('./Visualized Data'):
+    os.mkdir('./Visualized Data')
+
+speed_plot.write_html("./Visualized Data/speed_vs_time.html")
+frame_plot.write_html("./Visualized Data/server_and_client_performance.html")
+throttle_plot.write_html("./Visualized Data/throttle_application.html")
+brake_plot.write_html("./Visualized Data/brake_application.html")
+steering_plot.write_html("./Visualized Data/steering_input.html")
+height_plot.write_html("./Visualized Data/height_vs_time.html")
+coll_plot.write_html("./Visualized Data/collision_and_collision_intensities.html")
+gyro_plot.write_html("./Visualized Data/gyroscope_readings.html")
+accel_plot.write_html("./Visualized Data/accelerometer_readings.html")
+obs_plot.write_html("./Visualized Data/obstacle_detection_readings.html")
+lane_plot.write_html("./Visualized Data/lane_invasion_alerts.html")
