@@ -1,0 +1,64 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{blindtext, graphicx}
+
+% *** CITATION PACKAGE ***
+\usepackage{cite}
+
+% *** GRAPHICS RELATED PACKAGES ***
+\ifCLASSINFOpdf
+\else
+\fi
+
+% *** SPECIALIZED LIST PACKAGES ***
+\usepackage{amsmath}
+
+% *** SUBFIGURE PACKAGES ***
+\usepackage[tight,footnotesize]{subfigure}
+
+% *** PDF, URL AND HYPERLINK PACKAGES ***
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage[export]{adjustbox}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{pifont}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+\usepackage{amsthm}
+\usepackage{commath}
+\usepackage{multirow}
+\usepackage{oz, amsfonts}
+\newtheorem{definition}{Definition}[]
+\newtheorem{case-study}{Case-Study}[]
+\newtheorem{exmp}{Example}[]
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\renewcommand{\thesection}{\arabic{section}}
+\def\thesectiondis{\thesection.} \def\thesubsectiondis{\thesectiondis\arabic{subsection}.} \def\thesubsubsectiondis{\thesubsectiondis\arabic{subsubsection}.} \def\theparagraphdis{\thesubsubsectiondis\arabic{paragraph}.}
+
+\title{The Design and Development of a Widely Accessible Autonomous Vehicle Simulation System}
+\author{\IEEEauthorblockN{Ridwan Hossain}
+\IEEEauthorblockA{Department of Electrical, Computer and \\ Software Engineering\\
+Ontario Tech University, Canada\\
+Email: ridwan.hossain@ontariotechu.net}
+}
+\date{June 2022}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+There currently exists a need for a platform that provides users with the ability to perform extensive, repeatable and meaningful simulation and testing for an autonomous vehicle system whilst being broadly accessible, widely supported and provides robust features and development tools. The contemporary implementations of similar systems are either financially exorbitant or highly regulated and contained. The system reflected in this paper aims to fill a gap in the industry of autonomous vehicles and infrastructure by providing a highly robust and streamlined platform to support the development of autonomous vehicle driving systems using widely supported and easily accessible open-source software. This paper will outline the design and development of a proposed system to fulfill this need. Everything from the software tools and hardware components chosen will be discussed, as well as the features constructed throughout the development process. The results and benefits proceeding from the development of the system will also be presented, and future plans for the system will be highlighted.  
+\end{abstract}
+
+\section{Introduction}
+With the rapid growth experienced by the autonomous vehicle industry, the need for development support is a point of focus which is becoming much more paramount. "The global autonomous vehicle market was estimated USD 94.43 billion in 2021 and is is projected to hit around USD 1808.44 billion by 2030" [1]. While there is clear evidence of the dominating presence of autonomous vehicle technology, the availability of tools and platforms to provide backing for the development of autonomous vehicle systems is much less strong. Currently, the most used software platforms to support the development of autonomous vehicle driving systems, such as RTI, Adasis and Waymo for example, are highly contained and available only to large industrial vehicle manufacturers who posses the resources and funds to partner with such companies [2]-[5]. Exorbitant costs of development tools also pose as a barricade as "current estimates for the cost of a self-driving hardware and software package range from \$70,000 to \$150,000" (USD) [6]. 
+
+In addition to the lack availability, there exists a need in the autonomous vehicle development space for a widely supported platform which provides the ability to perform repeatable, testable and highly extendable development and simulation activities. As of 2020, at least \$16 Billion USD has been expended towards autonomous vehicle system testing across only 30 companies [7]. One of the largest companies involved, Waymo, spent \$3.5 Billion USD alone performing testing activities [8]. The frequency of testing which may be performed is also constrained by currently adopted methods. One could run tests on an autonomous vehicle system using a live vehicle, but that would allow thorough testing to feasibly occur every few days. 
+
+Talk about how its evident that theres a need in this industry, look at stuff azim said on the notes doc, and then begin introducing our proposed method.
+
+\end{document}
