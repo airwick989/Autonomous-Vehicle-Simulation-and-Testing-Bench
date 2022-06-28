@@ -15,6 +15,10 @@
 % *** SUBFIGURE PACKAGES ***
 \usepackage[tight,footnotesize]{subfigure}
 
+% *** TABLE PACKAGES ***
+\usepackage{multirow}
+\usepackage{longtable}
+
 % *** PDF, URL AND HYPERLINK PACKAGES ***
 \usepackage{array}
 \usepackage{fancyhdr}
@@ -50,15 +54,114 @@ Email: ridwan.hossain@ontariotechu.net}
 \begin{document}
 \maketitle
 
+
 \begin{abstract}
 There currently exists a need for a platform that provides users with the ability to perform extensive, repeatable and meaningful simulation and testing for an autonomous vehicle system whilst being broadly accessible, widely supported and provides robust features and development tools. The contemporary implementations of similar systems are either financially exorbitant or highly regulated and contained. The system reflected in this paper aims to fill a gap in the industry of autonomous vehicles and infrastructure by providing a highly robust and streamlined platform to support the development of autonomous vehicle driving systems using widely supported and easily accessible open-source software. This paper will outline the design and development of a proposed system to fulfill this need. Everything from the software tools and hardware components chosen will be discussed, as well as the features constructed throughout the development process. The results and benefits proceeding from the development of the system will also be presented, and future plans for the system will be highlighted.  
 \end{abstract}
 
+
 \section{Introduction}
-With the rapid growth experienced by the autonomous vehicle industry, the need for development support is a point of focus which is becoming much more paramount. "The global autonomous vehicle market was estimated USD 94.43 billion in 2021 and is is projected to hit around USD 1808.44 billion by 2030" [1]. While there is clear evidence of the dominating presence of autonomous vehicle technology, the availability of tools and platforms to provide backing for the development of autonomous vehicle systems is much less strong. Currently, the most used software platforms to support the development of autonomous vehicle driving systems, such as RTI, Adasis and Waymo for example, are highly contained and available only to large industrial vehicle manufacturers who posses the resources and funds to partner with such companies [2]-[5]. Exorbitant costs of development tools also pose as a barricade as "current estimates for the cost of a self-driving hardware and software package range from \$70,000 to \$150,000" (USD) [6]. 
+With the rapid growth experienced by the autonomous vehicle industry, the need for development support is a point of focus which is becoming much more paramount. "The global autonomous vehicle market was estimated USD 94.43 billion in 2021 and is is projected to hit around USD 1808.44 billion by 2030" [1]. While there is clear evidence of the dominating presence of autonomous vehicle technology, the availability of tools and platforms to provide backing for the development of autonomous vehicle systems is much less strong. Currently, the most used software platforms to support the development of autonomous vehicle driving systems, such as RTI, Adasis and Waymo for example, are highly contained and available only to large industrial vehicle manufacturers who posses the resources and funds to partner with such companies [2]-[5]. There exists no readily available simulation and development platform in this industry and large vehicle manufacturers all have personal access to such facilities, making access to such tools highly contained. Exorbitant costs of development tools also pose as a barricade as "current estimates for the cost of a self-driving hardware and software package range from \$70,000 to \$150,000" (USD) [6]. 
 
 In addition to the lack availability, there exists a need in the autonomous vehicle development space for a widely supported platform which provides the ability to perform repeatable, testable and highly extendable development and simulation activities. As of 2020, at least \$16 Billion USD has been expended towards autonomous vehicle system testing across only 30 companies [7]. One of the largest companies involved, Waymo, spent \$3.5 Billion USD alone performing testing activities [8]. The frequency of testing which may be performed is also constrained by currently adopted methods. One could run tests on an autonomous vehicle system using a live vehicle, but that would allow thorough testing to feasibly occur every few days. 
 
-Talk about how its evident that theres a need in this industry, look at stuff azim said on the notes doc, and then begin introducing our proposed method.
+From the evidence presented, it is apparent that there is a need in the autonomous vehicle development space for a platform the fulfills the mentioned needs and criteria. The contemporary implementations of similar systems are either financially exorbitant or highly regulated and contained. In order to fill this gap in the industry, research and development was conducted to develop a system which will target the critical areas of interest as highlighted previously. The goal of the proposed system is to provide a hardware bench that can streamline the development process by providing robust testing and development tools, a highly extendable and modifiable platform, an intuitive and interactive environment, all whilst containing repeatable consistent data logging features. In addition, one of the primary goals of the proposed system is to be easily accessible and widely supported, as such, the choices of both the software and hardware are critical. 
+
+This paper will outline the design and construction of a platform that was established to support the development and simulation of autonomous vehicle driving systems and algorithms. Everything from the software tools and hardware components chosen will be discussed, as well as the features constructed throughout the development process. The results and benefits proceeding from the development of the system will also be presented, and future plans for the system will be highlighted.
+
+
+\section{Preliminary System Objectives}
+This section will outline more specifically what features the system aims to have and what objectives it projects to meet. Shown below is a list containing the specific action items to be achieved as a result of the development of the system.
+
+\begin{enumerate}
+\item A software platform that: 
+    \begin{itemize}
+        \item Contains a wide selection of tools and resources to perform advanced simulation activities of autonomous vehicle systems and their environments.
+        \item Has real-time traffic control and traffic flow simulation.
+        \item Provides interfaces to access key data and parameters from the simulations.
+        \item Contains built-in sensors which simulate the behaviour of their real-world counterparts.
+        \item Supports multiple maps and locations.
+        \item Contains varying time-of-day and weather controls.
+    \end{itemize}
+\item Hardware peripherals which provide a more cohesive experience to the user by providing the following:
+    \begin{itemize}
+        \item Steering Wheel
+        \item Pedals
+        \item Gear Shifter
+        \item Gauge Cluster
+    \end{itemize}
+\item A head unit containing a widely used operating system to communicate useful data to and from the simulator and also support application development.
+\item Integrate a CAN (Control Area Network) bus into the system.
+\item Data recording functionalities which automatically outputs and visualizes large data sets.
+\item Design an automated testing framework to support continuous integration and development for the system.
+\end{enumerate}
+
+The end result of obtaining these objectives is an autonomous vehicle system simulation and development platform in the form of a hardware bench. This bench should provide the ability to easily record simulation telemetry of both manual driving and autonomous driving while providing meaningful data to support the development of autonomous driving algorithms. This bench should also allow for testing activities to take place regarding various aspects of an autonomous vehicle system in order to streamline the development process. The entire system should also be designed in such a manner that the software components are easily modifiable to meet development needs.
+
+
+\section{Tools, Technologies and Materials Chosen}
+This will highlight what choices have been made in regards to the selection of tools and technologies for the key areas of the simulation bench.
+
+\subsection{Selection of the Base Software Platform}
+The software platform that was chosen to be the base of the simulation bench was CARLA. CARLA (Car Learning to Act) has been "developed from the ground up to support development, training, and validation of autonomous driving systems. In addition to open-source code and protocols, CARLA provides open digital assets (urban layouts, buildings, vehicles) that were created for this purpose and can be used freely. The simulation platform supports flexible specification of sensor suites, environmental conditions, full control of all static and dynamic actors, maps generation and much more" [9].
+
+As CARLA is an open-source software platform, it is much more accessible than other, more proprietary methods. Being open-source allows anyone to be able to access the software and begin development with very little setup. This aspect also promotes continuous support as a larger user base has access to the platform and may suggest improvements or help to implement those improvements as well. 
+
+Furthermore, CARLA supports key features which was targeted for the simulation bench in the preliminary objectives. Some of the features present in CARLA include:
+    \begin{itemize}
+        \item A powerful API that provides the ability to access data from and control various aspects of the simulator, such as "traffic generation, pedestrian behaviors, weathers, sensors, and much more" [9].
+        \item Supports a flexible specification of numerous sensor suites, such as "LIDARs, multiple cameras, depth sensors and GPS among others" [9].
+        \item Offers advanced simulation of traffic flow and road behaviors [9].
+        \item Allows users to import or generate custom maps using third part software to be used in the simulation environment [9].
+        \item Has the ability to simulate various weather and time-of-day conditions which have real-time effects on the dynamics of vehicles and traffic [9].
+    \end{itemize}
+    
+CARLA has been written in Python and has been designed to be highly modifiable and extendable [9]. This is to easily allow the addition of new features and to support the development of autonomous vehicle driving algorithms in the CARLA platform. CARLA has shown to be a very promising base for the simulation bench. 
+
+\subsection{Hardware Peripherals to be Connected to the Software}
+The CARLA software mentioned previously comes preconfigured with keyboard controls when driving vehicles in manual mode, meaning autonomous control is inactive [9]. These keyboard controls are perfectly suitable for testing purposes focusing on autonomous driving and is not necessary if that is the primary focus, however, the simulation bench should be able to simulate both manual and autonomous driving nearly simultaneously by allowing users to switch between the modes in real-time. This would allow for better testing and development opportunities. 
+
+In order to provide that cohesive experience to better simulate real-world driving, various hardware peripherals were paired with the software to provide a more familiar method for users to interface with the simulation bench. 
+
+Found below is a Bill of Materials for the hardware components used for manual control [10]-[11]:
+\begin{table}[!ht]
+    \centering
+        \begin{tabular}{ |c|c|c| } 
+            \hline
+            \multicolumn{3}{|c|}{Control Peripherals BOM} \\
+            \hline
+            Item & Quantity & Price (CAD) \\
+            \hline
+            USB steering wheel/pedals & 1 & 160 \\ 
+            Cluster (BMW e36) & 1 & 200 \\ 
+            Arduino Uno & 1 & 30 \\ 
+            DC jack socket plug & 1 & 5 \\ 
+            AC power supply & 1 & 10 \\ 
+            \hline
+        \end{tabular}
+    \caption{[10]-[11]}
+\end{table}
+
+For the head unit that will communicate with the simulator, an Android-based infotainment was chosen. This is because the Android operating system is widely supported in the application of external device and software connectivity while also having the most users [12]. The Android operating system holds over 43\% of the OS market share worlwide, with "over 2.5 billion active users spanning over 190 countries" [13], [12]. Due to this large support, there exists tools and packages that provide communication interfaces with the operating system, making an Android-based head unit a perfect candidate. 
+
+Found below is a Bill of Materials for the hardware components used for implementing the head unit to the simulation bench [11]:
+\begin{table}[!ht]
+    \centering
+        \begin{tabular}{ |c|c|c| } 
+            \hline
+            \multicolumn{3}{|c|}{Head Unit Connection BOM} \\
+            \hline
+            Item & Quantity & Price (CAD) \\
+            \hline
+            Android Head Unit & 1 & 450 \\ 
+            Power Supply & 1 & 110 \\ 
+            USB-USB Connector & 1 & 10 \\ 
+            \hline
+        \end{tabular}
+    \caption{[11]}
+\end{table}
+
+Now talk about the hardware architecture of the system, show the diagram, and all that stuff.
+
 
 \end{document}
