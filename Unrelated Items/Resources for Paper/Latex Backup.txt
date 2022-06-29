@@ -161,7 +161,58 @@ Found below is a Bill of Materials for the hardware components used for implemen
     \caption{[11]}
 \end{table}
 
-Now talk about the hardware architecture of the system, show the diagram, and all that stuff.
+\subsection{Facilitating Communication with the Android Head Unit}
+Communication between the Android-based head unit and the simulation software will be enabled using the Android-developed Android Debug Bridge (ADB). 
+
+The ADB is a powerful command-line tool which facilitates communication and data transfer to and from an Android device [14]. It essentially acts as in interface for transmitting and receiving messages/data to and from a device running the Android operating system [14]. The ADB allows for the control of various device functions, installing and debugging applications, running commands on the device externally, retrieving data from the device, etc [14].  
+
+The simulation software will use the pure-python-adb Python package in order to create a communication bridge between the Python-based simulator and the ADB interface [15]. This library will allow the simulation software to use the ADB interface's functionalities using purely Python code [15]. 
+
+\subsection{CAN Technologies to be Integrated into the System}
+To support CAN development and testing on the simulation bench, the cantools (CAN Bus Tools) Python package and the CANdevStudio software for Linux will be used. 
+
+The cantools package provides tools that provide the ability to perform CAN data encoding and decoding, CAN bus generation and monitoring, network node testing and many others [16]. This package provides powerful functions which will allow the simulation bench to establish CAN buses, enabling vehicle subsystem communication and interpretation of CAN data to and from vehicle networks [16]. 
+
+The CANdevStudio software is a CAN simulation software which aims to provide cost-effective means of simulating CAN messages and providing an easy-to-use interface for sending CAN signals [17]. CANdevStudio has been specifically designed keeping automotive development in mind and functions with various forms of hardware interfaces as well as virtual [17]. 
+
+\subsection{Tools Chosen to Construct the Testing Framework}
+The continuous testing and development framework is planned to primarily be developed using the Python Unittest library and the Jenkins platform. 
+
+The Python Unittest library provides a unit testing framework for Python 3 environments [18]. It provides a wide array of functions to support "test automation, sharing of setup and shutdown code for tests, aggregation of tests into collections, and independence of the tests from the reporting framework" [18]. Python Unittest will allow for effortless construction of complex and thorough test suites that will be run on the simulation bench while also running setup and tear down of the test cases automatically [18].
+
+The Jenkins platform is the leading open-source automation server and "provides hundreds of plugins to support building, deploying and automating any project" [19]. This allows for Jenkins to be fashioned as a continuous integration an testing server, allowing for the automation of unit testing, integration testing, and regression testing as changes in the code are committed [19]. Jenkins can be used to automate the testing framework on the simulation bench, such that as updates are pushed to the simulation bench's repository, a slew of testing activities automatically take place to ensure the integrity of both the system and the changes being made to it [19].
+
+
+\section{High-Level System Architecture Overview}
+This section will outline the the general architecture and control flow of the major hardware and software aspects of the simulation bench. The hardware architecture making up the simulation bench can be found below [10]:
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{Hardware Layout.drawio.png}
+  \caption{System Hardware Communication [10]}
+\end{figure}
+
+\subsection{Server Multi-client Architecture}
+An important point contention is that the CARLA architecture is structured in a client-server fashion [9]. The world in which the simulation takes place in will contain the map, all environmental assets, and will be responsible for rendering those elements [9]. In addition, all traffic rendering and simulation will also take place on the server-side [9]. This allows for high scalability as a server machine may serve multiple client machines, creating a server multi-client architecture [9]. Adopting this architecture allows multiple clients in the same or different nodes to control different actors (vehicles) in the same world [9]. Alternatively, the client and server may also exist on the same machine [9].
+
+\subsection{Control Peripherals}
+A user of the simulation bench will interact with only the client machine, where simulation of the testing vehicle takes place. The user will primarily interface through the steering wheel/pedals/shifter kit, but may also use the keyboard for additional functions such as switching which sensors are monitored, changing environment variables, performing ADB functions, etc. All these inputs will be sent to and interpreted by the simulation software on the client machine.
+
+Using CARLA's extensive API, the original input mapping was rebound to correctly comprehend the input received from the newly connected hardware peripherals. As some input from the hardware peripherals are analog, notably the pedals, some processing was done using logarithmic functions to correctly translate the input data when being sent to the simulation software. 
+
+\subsection{Arduino Microcontroller and Gauge Cluster}
+As the gauge cluster strictly uses analog signals which are read using serial pins, there exists no easily accessible interface to communicate digital data from the simulation software to the cluster. As a result, an Arduino microcontroller is required to act as a middleware of communication between the simulation software and the gauge cluster hardware. Shown below is a realistic schematic of the physical connections required to enable signal communication between the microcontroller and the gauge cluster [20]:
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.43\textwidth]{arduino_to_cluster.jpg}
+  \caption{Microcontroller to Cluster Schematic [20]}
+\end{figure}
+
+The microcontroller is used to read the digital data exported from the simulation and correctly map it to an analog signal. This remapping procedure was refined extensively to scale to correct physical readings on the gauge cluster. This data processing and conversion is done within an Arduino script that is uploaded into the microcontroller itself.
+
+The data sent from the simulation software consisted of the vehicle speed (Kilometers per Hour) and the crankshaft's angular velocity within the vehicle's engine (Revolutions per Minute).
+
+\subsection{The ADB and Head Unit}
+Hello there
 
 
 \end{document}
