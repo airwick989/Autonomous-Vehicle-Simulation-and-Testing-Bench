@@ -204,7 +204,7 @@ As the gauge cluster strictly uses analog signals which are read using serial pi
 \begin{figure}[h]
   \centering
       \includegraphics[width=0.43\textwidth]{arduino_to_cluster.jpg}
-  \caption{Microcontroller to Cluster Schematic [20]}
+  \caption{Microcontroller to Cluster Connection Schematic [20]}
 \end{figure}
 
 The microcontroller is used to read the digital data exported from the simulation and correctly map it to an analog signal. This remapping procedure was refined extensively to scale to correct physical readings on the gauge cluster. This data processing and conversion is done within an Arduino script that is uploaded into the microcontroller itself.
@@ -212,7 +212,85 @@ The microcontroller is used to read the digital data exported from the simulatio
 The data sent from the simulation software consisted of the vehicle speed (Kilometers per Hour) and the crankshaft's angular velocity within the vehicle's engine (Revolutions per Minute).
 
 \subsection{The ADB and Head Unit}
-Hello there
+The Android-based head unit is connected to the client machine via USB. With the ADB interface built into the head unit's operating system, the pure-python-adb package on the client machine will be used to establish a communication channel and send commands and data through it. For this communication to be possible, USB debugging needs to be enabled on the Android-based head unit. Found below is a figure outlining the high-level architecture of the client-to-ADB connection [15]:
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.5\textwidth]{adb connection.png}
+  \caption{ADB Connection Architecture [15]}
+\end{figure}
+
+The pure-python-adb package can be used to connect to the Android device by establishing a locally hosted server communicating at TCP port 5037 by default [15]. Using that port as the channel of communication, the ADB server will begin running the ADB daemon on the Android device such that all ADB operations will be handled as a background process [15].\\ 
+
+This concludes the overview of the simulation bench's layout and architecture. The remaining elements that have been implemented into the system are strictly software based and will be covered in following sections.
+
+\section{Enhancements and Features Integrated into the System}
+This section will highlight the features and improvements introduced to the simulation bench as incremental developments. The connection and mapping of manual vehicle controls to the hardware peripherals will be omitted from this section as this topic was already previously covered. 
+
+\subsection{ADB Functions and Development Potential}
+Upon installing the necessary ADB tools on the simulation bench and establishing the required communications, several features were implemented to the system to take advantage of the Android-based head unit. 
+
+Firstly, a curated library was developed, containing preconfigured methods for controlling various functions on the head unit. This library will allow for future development to more readily take place as many functionalities regarding the control of the head unit has already been developed and may be reused as required. Functionalities include controlling the operating system navigation on the head unit, various user interface controls, and most importantly, application launching and debugging functions. 
+
+Numerous library functions were integrated into the simulation software and mapped to button controls on the steering wheel. Found below is an overview of the button mappings and their corresponding functionalities:
+\begin{table}[!ht]
+    \centering
+        \begin{tabular}{ |c|c| } 
+            \hline
+            ADB Functionality & Wheel Button Mapping \\
+            \hline
+            Return to Home Menu & Home Button (bottom-most button) \\ 
+            Volume Up & Upper-right Thumb Control \\ 
+            Volume Down & Lower-right Thumb Control \\ 
+            Play/Pause & Right Circular Button on Right Cluster \\ 
+            Play Next Track & Upper Left Thumb Control \\ 
+            Play Previous Track & Lower Left Thumb Control \\ 
+            Back & Upper-left Diagonal Button from Home \\ 
+            Recent Applications & Upper-right Diagonal Button from Home \\ 
+            Launch Google Maps & Left Paddle \\ 
+            \hline
+        \end{tabular}
+    \caption{Sample ADB Functions}
+\end{table}
+
+The functions above represent the most rudimentary operations which can be undertaken as a result of the ADB implementation. The primary advantage are the testing and debugging capabilities that come with this communication interface. 
+
+Take for example, a user of this simulation bench has developed a driving agent which has advanced far enough that they would like to begin testing the agent's navigational capabilities. As mentioned before, the CARLA platform supports importing custom maps from external software [9]. A replication of real-world driving environments may be imported into the simulation bench and be used for the testing and development of autonomous driving systems. 
+
+The user can take advantage of the simulation bench's capabilities and perform navigation testing on their driving agent within real-world road conditions. The user may develop some functionality into their autonomous driving algorithms to fetch data from the Google Maps application in the Android head unit in order to guide their agent to a waypoint. There exists an API to retrieve Google Maps data which comes included in the Android Software Development Kit [21]. While the user's agent will be responsible for controlling the vehicle and all that it entails, the navigation data guiding the agent can be retrieved from the ADB interface on the head unit. This can save extensive amounts of both money and time by performing a large amount of real-world testing from within a simulation environment and without being constrained by the limitations which come with real-world testing of such systems.
+
+The communication is also possible in the reverse order, where the head unit may retrieve information from the simulation software. Take for example, a user wishes to perform development on user interface features for their driving system, one of which is for lane-invasion warning to appear on the head unit. As the simulation software has built in lane-invasion sensors whose messages can easily be accessed using the CARLA API, this sort of development is possible with the ADB [9].
+
+\subsection{Integration of a CAN Bus}
+Modern day vehicles contain multitudes of computers and subsystems which all must communicate successfully. As of 2016, the " average car has 30 to 50 different computers, and high-end cars have as many as 100" [22]. Furthermore, modern day vehicles on average are "accompanied by 60 to 100 different electronic sensors", all of which must function in unison whilst transferring data in real time [22]. This is even more prevalent currently, particularly in the autonomous vehicle space, where an even larger number of sensors and computers which are communicating are present. 
+
+Communication amongst these vehicle subsystems are critical, as a majority of them function in a complementary manner [23]. The traditional means of enabling this communications is through hard-wired means such as circuitry and digital systems [23]. However, the disadvantages of this approach are that it presents challenges when designing the architecture of the vehicle's subsystems and this approach also presents higher costs for both the design and implementation [23]. 
+The CAN (Control Area Network) standard was introduced to resolve the drawbacks of the traditional approach by allowing the communication features implemented using software alone [23]. The introduction of the CAN bus saves both time and money on creating complex, hard-wired systems to handle communication between vehicle subsystems [23]. In addition, a CAN bus allows various microcontrollers and devices to communicate with each other's applications directly without the need of a host machine [23]. 
+
+Using the cantools package, a CAN bus was integrated into the simulation bench to enable data transfer among vehicle subsystems. Found below is a figure depicting the high-level architecture of the CAN bus implementation within the client machine:
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.47\textwidth]{CAN Architecture.drawio.png}
+  \caption{CAN Bus Implementation}
+\end{figure}
+
+The cantools package, along with establishing a CAN bus and facilitating the transfer of CAN data, also provides an interface for users to view the data being transmitted on the bus in multiple formats [16]. This CAN data can be decoded using DBC files in order to make reading them more user-friendly [16]. Data being transmitted on the CAN bus can be dumped onto the cantools CAN bus interface and the interface may be used to send data on the bus as well [16]. 
+
+The CAN nodes within the CARLA platform represent devices or sensors within the CARLA simulation software that are transmitting and receiving data on the CAN bus. Those devices have no connection to a CAN by default, this feature was integrated into the software. Found below is a sample screenshot of the CAN bus interface when it is receiving data:
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.3\textwidth]{CAN interface.png}
+  \caption{cantools CAN Bus Sample Interface}
+\end{figure}
+
+Above is a sample decoded capture of the data being transmitted by the simulation software when the vehicle is in motion. The data being shown in the sample consist of individual wheel speeds, the current gear the vehicle's transmission is in, and the steering angle. As shown in the capture, the raw data is shown as hex values and then decoded using a preconfigured DBC file. Much more data can be transmitted across the CAN bus, however these 3 data items were chosen for demonstration purposes. 
+
+The primary reason for the implementation of the CAN bus within the simulation bench was to support future development on autonomous vehicle communication with smart infrastructure. This is when an autonomous vehicle system works in tandem with a smart systems embedded in an environment's infrastructure to improve the autonomous vehicle's driving capabilities and also to improve traffic flow and traffic safety [24]. This is done by having the vehicle's sensors and devices communicate with the smart infrastructure [24]. This uncovers a plethora of possibilities such as having autonomous vehicles know ahead of time what traffic signals will be, adjusting autonomous driving characteristics based off data received from the smart infrastructure, and much more [24]. 
+
+The notion of smart infrastructure communicating with autonomous vehicles is emerging as key solution for safer roads [24]. The CARLA platform has built-in traffic managers which can be used to retrieve traffic and infrastructure data (such as traffic light information) from the CARLA API [9]. These capabilities in conjunction with the integration of a CAN within the simulation bench allows for the future development and simulation of these systems possible on this bench [24].    
+
+Another aspect of CANs which can be simulated in this system are CAN attacks. One of the contingency point regarding the use of CANs are its security [25]. "Integrity is the accuracy, completeness, and validity of the data. The CAN bus has a CRC for verification of integrity against the transmission errors, but it cannot prevent data injected by malicious parties, which breaks the integrity. The protocol does not have a comprehensive integrity check and fails to sustain integrity" ALL THIS BEFORE IS FROM SOURCE 25.
+
+\subsection{Real-time Data Recording and Logging Pipeline}
 
 
 \end{document}
