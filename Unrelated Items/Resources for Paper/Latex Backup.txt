@@ -456,9 +456,27 @@ Found below is a sample capture of a obstacle detection data CSV file:
 \end{figure} 
 
 \subsubsection{Visualization and Interpretation of Sample Data}\leavevmode \\
-In order to demonstrate the meaningfulness of the visualized data and the opportunities for analysis it brings forth, this subsection will focus on interpreting the data collected from 2 sample runs of the simulation bench. The first run focuses on longer, more open highway-like roads without any traffic and was conducted using a compact vehicle. The second run takes place in a tighter city environment consisting of active traffic on local roads and was conducted in an SUV. Anomalies and moments of interest will be highlighted and analyzed to show the benefits of having this data logging pipeline in the simulation bench.
+In order to demonstrate the meaningfulness of the visualized data and the opportunities for analysis it brings forth, this subsection will focus on interpreting the data collected from 2 sample runs of the simulation bench. The first run focuses on longer, more open highway-like roads without any traffic and was conducted using a compact vehicle. The second run takes place in a tighter city environment consisting of active traffic on local roads and was conducted in an SUV. 
+
+Anomalies and moments of interest will be highlighted and analyzed to show the benefits of having this data logging pipeline in the simulation bench. It must be stated that for these runs, the autonomous agent that comes prepackaged with CARLA will be used for the simulations. While the simulation bench is meant to be a platform to support the development of autonomous driving algorithms, the CARLA platform provides a basic autonomous driving agent as a baseline.
 
 \paragraph{Run 1}\leavevmode \\
+The first event of interest in this run was observing how the autonomous driving agent handles a situation wherein the user is manually driving down the incorrect direction on a one-way road when autopilot is enabled. Shown below are a series of screenshots showing the events that occurred:
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.45\textwidth]{ss1.png}
+  \caption{Manually Driving Incorrect Direction Down a One-way Road}
+\end{figure} 
+
+\pagebreak
+
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.45\textwidth]{ss2.png}
+  \caption{Manually Driving Incorrect Direction Down a One-way Road}
+\end{figure} 
+
+As shown in Figure 16, upon enabling autopilot, the agent made an immediate and harsh right turn and came to a stop. These can be confirmed as the driving agent's inputs and not a result of the vehicle losing control by reviewing the visualized steering input and brake application graphs shown below:
 Hello there
 
 
