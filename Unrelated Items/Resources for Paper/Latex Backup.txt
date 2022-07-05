@@ -340,6 +340,126 @@ Shown below are screenshots of the simulation software running normally and the 
 As visible in Figure 8, the vehicle in the simulation software is driving normally. In figure 9, after the CAN attacks have been transmitted through the CAN bus, the vehicle applies full throttle and begins steering sporadically, causing the vehicle to crash. This is because the data being injected into the CAN bus is being interpreted as autonomous agent inputs and is granting control to the vehicle's subsystems. This is possible as no security measures have been put in place for this vehicle's CAN bus. This is a simple demonstration of the sorts of simulation activities which can take place on this system and highlights how development on CANs can be done using this simulation bench as a platform.
 
 \subsection{Real-time Data Recording and Logging Pipeline}
-Arguably the most critical aspect of a simulation platform is the ability to collect and log data resulting from the simulation activities. As such, the moot important feature implemented into the simulation bench is the data recording 
+Arguably the most critical aspect of a simulation platform is the ability to collect and log data resulting from the simulation activities. As such, the most important feature implemented into the simulation bench is the data recording and logging pipeline.
+
+This pipeline was constructed to dramatically streamline testing and development on the simulation bench. A framework was generated from the ground up to easily be able to begin recording simulation data and log it into organized data sets automatically. 
+
+In addition to recording and logging the collected data, the framework also provides tools to automatically visualize the collected data in the form of interactive HTML files. This allows the user of the simulation bench to easily examine and interpret the data that was recorded during the simulation, resulting in meaningful data collection. In addition to this preconfigured arrangement of the data logging pipeline, this pipeline can easily be extended to include more data if the user wishes to do so. Currently, most of the major sensors and critical aspects of the vehicle telemetry are recorded, but the framework is not limited to this data alone. 
+
+\subsubsection{Data Logging Control Flow}\leavevmode \\
+The data being collected presently can be categorized into 4 major categories: vehicle telemetry, collision data, lane invasion sensor warnings and obstacle detection data. Found below is a high-level flow chart depicting the control flow of the data logging pipeline:
+\pagebreak
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{Data Logging Control Flow.drawio.png}
+  \caption{Data Logging Control Flow}
+\end{figure} 
+
+The user begins recording data using a key on the keyboard, which subsequently is also the key used to end data recording. Upon beginning recording, 4 dataframes are instantiated, each of which will be eventually exported into distinct CSV files. 3 of the 4 dataframes record data upon new data being available, whereas the vehicle telemetry is recorded according to a sampling interval as shown in Figure 10. This is because the vehicle telemetry is constantly changing in motion, and recording constantly would result in unnecessarily large data sets. The sampling rate of the vehicle telemetry is 120 samples per minute by default (every 0.5 seconds), however, this rate may be modified easily and removed if desired.
+
+\subsubsection{Vehicle Telemetry}\leavevmode \\
+The vehicle telemetry consists of sensor readings and measurements pertaining to the simulation vehicle specifically, readings such as speed, compass heading, accelerometer readings, etc. Found below are the data items recording in the vehicle telemetry dataframe:
+\begin{itemize}
+  \item Simulation Time
+  \item Recording Time
+  \item Server Performance
+  \item Client Performance
+  \item Autopilot Flag
+  \item Vehicle Speed
+  \item Compass Heading
+  \item Accelerometer Readings
+  \item Gyroscope Readings
+  \item Vehicle Coordinates
+  \item GNSS Data
+  \item Vehicle Z Axis Displacement
+  \item Throttle Position
+  \item Brake Position
+  \item Current Gear
+  \item Steering Angle
+  \item Current Vehicle Make and Model
+\end{itemize}
+
+The simulation and recording times are logged for synchronization purposes with the screen recording of the simulation. As the simulation time is always displayed in the simulator, the user may use that to synchronize the recording of the simulator with the data collected. The recording times are used to help build the graph visualizations of the data afterwards, giving distinct points in time with a relative start and end. 
+
+The server and client performance is measured in frames per second, allowing to gauge the performance of either side of the simulation at any given moment. This information can be used to examine whether certain system functions of specific aspects of the user's algorithm are particularly taxing. 
+
+The autopilot flag simply indicates whether the vehicle is being driven autonomously or manually in that point in time. The remaining data items are self explanatory and are readings of various sensors on the vehicle or measurements of certain vehicle components themselves. These data items can be used to examine what effects occur on the vehicle itself during a simulation.
+
+Found below is sample capture of a vehicle telemetry CSV file: 
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{vehicle telemetry.png}
+  \caption{Sample Capture of a Vehicle Telemetry CSV}
+\end{figure} 
+
+\subsubsection{Collision Data}\leavevmode \\
+The collision data consists of data pertaining to any collisions that occur with the simulation vehicle during recording time. Found below are the data items recorded in the collision data dataframe:
+\begin{itemize}
+  \item Simulation Time
+  \item Recording Time
+  \item Autopilot Flag
+  \item Collision Event
+  \item Collision Intensity
+\end{itemize}
+
+Like in the vehicle telemetry dataframe, the simulation and recording times are strictly used for synchronization purposes and the autopilot flag indicates whether the vehicle is driving autonomously or not.
+
+The collision event is the message associated with the collision that occurred. The messages states what object or other actor the simulation vehicle collided with. The collision intensity is the magnitude of the collision that occurred, measured in kilogram centimetres per second. 
+
+Found below is a sample capture of a collision data CSV file:
+\pagebreak
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{collision data.png}
+  \caption{Sample Capture of a Collision Data CSV}
+\end{figure} 
+
+\subsubsection{Lane Invasion Sensor Data}\leavevmode \\
+The lane invasion sensor data consists of all warnings raised by the lane invasion sensor during the recording time. The readings consist of all types of road markers passed over when driving. Found below are the data items recorded in the lane invasion data dataframe:
+\begin{itemize}
+  \item Simulation Time
+  \item Recording Time
+  \item Autopilot Flag
+  \item Lane Invasion Warning
+\end{itemize}
+
+Like in the previous dataframes, the simulation and recording times are strictly used for synchronization purposes and the autopilot flag indicates whether the vehicle is driving autonomously or not.
+
+The lane invasion warning is the warning raised by the lane invasion sensor. The warning consists of a message containing the type of road marker passed over and may be any of the following: 'broken', 'solid', 'solidsolid' (double solid) and any combination of these if multiple lines are crossed at once. 
+
+Found below is a sample capture of a lane invasion sensor data CSV file:
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.40\textwidth]{lane invasion data.png}
+  \caption{Sample Capture of a Lane Invasion Sensor Data CSV}
+\end{figure} 
+
+\subsubsection{Obstacle Detection Data}\leavevmode \\
+The obstacle detection data consists of all objects detected by the vehicle's sensors within a specified range, defined by the configuration of the sensor in the simulation software. The sensor by default sits in the front of the vehicle and is effective within a 30 metre radius. Found below are the data items recorded in the obstacle detection data dataframe:
+\begin{itemize}
+  \item Simulation Time
+  \item Recording Time
+  \item Autopilot Flag
+  \item Obstacle Detected
+  \item Distance from Obstacle
+\end{itemize}
+
+Like before, the simulation and recording times are strictly used for synchronization purposes and the autopilot flag indicates whether the vehicle is driving autonomously or not.
+
+The obstacle detected item refers to the name and/or id of the object or actor detected by the vehicle's sensors. The distance from obstacle item is how far away the vehicle sensors detected an obstacle from the sensors themselves, measured in metres. 
+
+Found below is a sample capture of a obstacle detection data CSV file:
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.40\textwidth]{obstacle detection data.png}
+  \caption{Sample Capture of an Obstacle Detection Data CSV}
+\end{figure} 
+
+\subsubsection{Visualization and Interpretation of Sample Data}\leavevmode \\
+In order to demonstrate the meaningfulness of the visualized data and the opportunities for analysis it brings forth, this subsection will focus on interpreting the data collected from 2 sample runs of the simulation bench. The first run focuses on longer, more open highway-like roads without any traffic and was conducted using a compact vehicle. The second run takes place in a tighter city environment consisting of active traffic on local roads and was conducted in an SUV. Anomalies and moments of interest will be highlighted and analyzed to show the benefits of having this data logging pipeline in the simulation bench.
+
+\paragraph{Run 1}\leavevmode \\
+Hello there
+
 
 \end{document}
