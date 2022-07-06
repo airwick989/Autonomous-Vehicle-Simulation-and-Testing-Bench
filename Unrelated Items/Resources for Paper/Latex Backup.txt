@@ -599,7 +599,30 @@ While the autonomous driving agent did manage to avoid colliding with the pedest
   \caption{Accelerometer Readings (Run 2)}
 \end{figure} 
 
-Hello there
+As seen in Figure 32, the collision with the traffic light resulting from the dangerous maneuver generated an intensity of approximately 15500 kilogram-centimetres per second, which is equivalent to approximately 1500 joules per second. To put this information into perspective, a force of 80 joules has a 20\% chance of being lethal for a human and a 90\% chance is the force strikes the head [27]. As such, the collision experienced by the driver in the event of the dangerous maneuver would be fatal. 
+
+Also seen from the data collected, the vehicle exhibited extreme amounts of rotation speed as well as acceleration. From Figure 33, it is shown that the vehicle experienced an angular velocity of 84.7 radians per second along its Z-axis and a negative acceleration of 12.4 metres per second squared along its X-axis at the moment of impact. The axes of the vehicle for gyroscope and accelerometer readings have been highlighted below:
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.45\textwidth]{gyroscope.drawio.png}
+  \caption{Vehicle Axes for Gyroscope Readings [28]}
+\end{figure} 
+\newpage
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.35\textwidth]{accelerometer.drawio.png}
+  \caption{Vehicle Axes for Accelerometer Readings [28]}
+\end{figure} 
+
+As demonstrated by the data collected, the maneuver to avoid the pedestrian resulted in catastrophic effects on the vehicle, and by extension, the driver. This data can then be used to modify what actions are taken by the autonomous driving agent upon being presented with a similar situation. 
+
+All these simulation and testing activities may occur rapidly and for a much lower cost relative to traditional industrial practices, allowing for a much more streamlined development process. Furthermore, the examples shown are only a subset of the entire data logging pipeline's capabilities, as much more data can be visualized and collected. Additionally, the user may easily modify the data logging framework in order to visualize the data differently or even begin logging other data items from the simulation.
+
+
+\section{Next Steps and Future Developments for the System}
+This is where I talk about what other stuff we wanna add, talk about testing framework, maps and real world simulation, smart infrastructure stuff, etc.
+
+Then have conclusion and references.
 
 
 \end{document}
