@@ -19,6 +19,10 @@
 \usepackage{multirow}
 \usepackage{longtable}
 
+% *** SPECIAL CHARACTERS PACKAGES ***
+\usepackage{tikz}
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
+
 % *** PDF, URL AND HYPERLINK PACKAGES ***
 \usepackage{array}
 \usepackage{fancyhdr}
@@ -142,7 +146,7 @@ Found below is a Bill of Materials for the hardware components used for manual c
     \caption{[10]-[11]}
 \end{table}
 
-For the head unit that will communicate with the simulator, an Android-based infotainment was chosen. This is because the Android operating system is widely supported in the application of external device and software connectivity while also having the most users [12]. The Android operating system holds over 43\% of the OS market share worlwide, with "over 2.5 billion active users spanning over 190 countries" [13], [12]. Due to this large support, there exists tools and packages that provide communication interfaces with the operating system, making an Android-based head unit a perfect candidate. 
+For the head unit that will communicate with the simulator, an Android-based infotainment was chosen. This is because the Android operating system is widely supported in the application of external device and software connectivity while also having the most users [12]. The Android operating system holds over 43\% of the OS market share worldwide, with "over 2.5 billion active users spanning over 190 countries" [13], [12]. Due to this large support, there exists tools and packages that provide communication interfaces with the operating system, making an Android-based head unit a perfect candidate. 
 
 Found below is a Bill of Materials for the hardware components used for implementing the head unit to the simulation bench [11]:
 \begin{table}[!ht]
@@ -620,9 +624,108 @@ All these simulation and testing activities may occur rapidly and for a much low
 
 
 \section{Next Steps and Future Developments for the System}
-This is where I talk about what other stuff we wanna add, talk about testing framework, maps and real world simulation, smart infrastructure stuff, etc.
+This section will overview the future plans in place for the simulation bench and will highlight the remaining features left to be implemented before the entirety of the system objectives have been achieved. It must be noted that this paper acts as a progress report for the work done on the simulation bench thus far.
 
-Then have conclusion and references.
+\subsection{Custom Map Generation}
+There currently exists third-party software which can be used to generate and export custom maps to the CARLA platform, and by extension, the simulation bench. An example of a software is RoadRunner. RoadRunner is a MATLAB software that provides an interactive editor for designing fully detailed environments for "simulating and testing automated driving systems" [29]. 
+
+RoadRunner provides an extensive array of tools which help to develop a highly advanced simulation setting, supporting "the visualization of lidar point cloud, aerial imagery, and GIS data" [29]. RoadRunner allows users to easily create roadways by providing the ability to generate functional road networks, traffic lights and intersections, signs, guardrails, road markings, etc [29].
+
+One of the more appealing features of RoadRunner is the ability to import and export road networks using OpenDRIVE [29]. This can allow for the replication of real-world road networks and environments to be used in simulations. One of the future goals of the simulation bench is to reproduce a selection of local Canadian roads using the RoadRunner software and export these environments into the system. This addition to the simulation bench will allow for users to perform all forms of simulation and testing activities in real-world, local roads which can heavily streamline and alleviate the development process of autonomous vehicle systems.
+
+\subsection{Automated Testing Framework}
+One of the most prominent features left to be implemented into the simulation bench is an automated testing framework which supports continuous integration. 
+
+Currently, the simulation bench has been given a small suite of test cases designed to primarily assess the functional correctness of the system and the soundness of the integrated hardware and software components. Found below is an outline of all the tests developed thus far as well as the tests yet to be developed:
+\begin{table}[!ht]
+    \centering
+        \begin{tabular}{ |c|c|c| } 
+            \hline
+            Test Case & Implemented & Not Yet Implemented \\
+            \hline
+            Create ADB Connection & \checkmark & \\
+            View Installed Packages on ADB & \checkmark & \\
+            ADB Install and Debug APK & \checkmark & \\
+            ADB Launch Application & \checkmark & \\
+            ADB Command Processing & \checkmark & \\
+            Serial Connection Establishment & \checkmark & \\
+            Serial Data Transmission & \checkmark & \\
+            Vehicle Acceleration & \checkmark & \\
+            Vehicle Reverse & \checkmark & \\
+            Vehicle Shifter & \checkmark & \\
+            Vehicle Park & \checkmark & \\
+            Vehicle Emergency Brake & \checkmark & \\
+            Vehicle Steering & \checkmark & \\
+            CAN Establishment & & \checkmark \\
+            CAN Data Transmission & & \checkmark \\
+            CAN Attack Simulation & & \checkmark \\
+            \hline
+        \end{tabular}
+    \caption{Test Cases for the System Test Suite}
+\end{table}
+
+\subsubsection{Create ADB Connection}\leavevmode \\
+This test case is to validate that a sufficient connection can be made with an ADB supported device and is detected by the ADB server.
+
+\subsubsection{View Installed Packages on ADB}\leavevmode \\
+This test case ensures that installed packages and other privileged information is accessible from an external software. In this case, a series of specific commands are sent to the ADB interface to retrieve package information as a proof of ability to retrieve protected data from the Android operating system.
+
+\subsubsection{ADB Install and Debug APK}\leavevmode \\
+This test case is used to confirm that a third party APK file can be successfully installed and have debugging operations performed on it.
+
+\subsubsection{ADB Launch Application}\leavevmode \\
+This test case verifies that a series of applications can be successfully launches as an active process on the Android device using the ADB interface.
+
+\subsubsection{ADB Command Processing}\leavevmode \\
+This test case validates that the Android device successfully accepts and process external system commands being received through the ADB interface.
+
+\subsubsection{Serial Connection Establishment}\leavevmode \\
+This test case ensures that a successful serial connection can be established with the microcontroller connected on a specified port and is in the list of detected serial devices.
+
+\subsubsection{Serial Data Transmission}\leavevmode \\
+This test case is used to confirm that the serial connection with the microcontroller is correctly transmitting data from the simulation software. This is done by transmitting specific byte code, and if the microcontroller receives that specific code, the microcontroller replies with an acknowledgement.
+
+\subsubsection{Vehicle Acceleration}\leavevmode \\
+This test case verifies that a simulated external throttle pedal input causes the vehicle accelerate when in drive.
+
+\subsubsection{Vehicle Reverse}\leavevmode \\
+This test case is similar to that of the Vehicle Acceleration test, where in this case, the vehicle is put in reverse gear and sensors in the simulation software is used to ensure that the vehicle is experiencing velocity in the negative direction.
+
+\subsubsection{Vehicle Shifter}\leavevmode \\
+This test case simulates external shifter inputs for every gear and ensures that each external input corresponds to the correct gear change in the simulation software.  
+
+\subsubsection{Vehicle Park}\leavevmode \\
+This test case validates that no amount of throttle input can cause the vehicle to move when it is in park.
+
+\subsubsection{Vehicle Emergency Brake}\leavevmode \\
+This test case verifies that when the vehicle's emergency brake is applied, the vehicle comes to a complete stop.
+
+\subsubsection{Vehicle Steering}\leavevmode \\
+This test case simulated external steering wheel input to ensure that the input is translated to the correct vehicle steering movement in the simulation software. \\
+
+The following test cases have not yet been developed at the time of writing this paper, but will be constructed in the future.
+\subsubsection{CAN Establishment}\leavevmode \\
+This test will be used to confirm that a CAN bus can be successfully established and open for data transmission on the simulation bench.
+
+\subsubsection{CAN Data Transmission}\leavevmode \\
+This test case will be used to ensure that data being transmitted on the CAN bus is correct and is changing in real-time with respect to the simulation software.
+
+\subsubsection{CAN Attack Simulation}\leavevmode \\
+This test case will be used to ensure that the CAN attack software is correctly simulating attacks and injecting those attacks into the simulation vehicle's network. \\
+
+The current test suite is designed to be easily modified according to a user's distinct needs and also may easily be extended to include a plethora of new tests for validating a user's newly developed autonomous driving algorithms.
+
+One of the major key areas of development that is planned to be integrated into the simulation bench is and automated continuous integration and testing framework. This will allow the system to adhere to more streamlined development practices, such that as changes are made to the software or any new features are being pushed to the user's autonomous vehicle system, the framework will automatically run a personalized suite of tests (including the preexisting tests). This can help avoid system regression, improve component integration and make development activities on the simulation bench more efficient.
+
+The automated testing framework is planned to be powered by the Jenkins automation server. As mentioned before in section 3.5, Jenkins may be used as a continuous integration an testing server, allowing for the automation of unit testing, integration testing, and regression testing as changes in the code are committed [19]. 
+
+
+\section{Conclusion}
+Hello there
+
+
+\section{References}
+Hello there
 
 
 \end{document}
