@@ -11,6 +11,7 @@
 
 % *** SPECIALIZED LIST PACKAGES ***
 \usepackage{amsmath}
+\usepackage{enumitem}
 
 % *** SUBFIGURE PACKAGES ***
 \usepackage[tight,footnotesize]{subfigure}
@@ -22,6 +23,7 @@
 % *** SPECIAL CHARACTERS PACKAGES ***
 \usepackage{tikz}
 \def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
+\usepackage[hyphens]{url}
 
 % *** PDF, URL AND HYPERLINK PACKAGES ***
 \usepackage{array}
@@ -721,11 +723,62 @@ The automated testing framework is planned to be powered by the Jenkins automati
 
 
 \section{Conclusion}
-Hello there
+The system that has been proposed in this paper addresses numerous key issues mentioned with the currently existing methods used for the development of autonomous vehicle systems. The main points of contingency that were highlighted were:
+\begin{itemize}
+  \item Inaccessible and mostly constrained.
+  \item Expensive and regulated.
+  \item Involves great risk.
+  \item Not easily repeatable (low testing frequency).
+  \item Mostly proprietary and not extendable. 
+\end{itemize}
+
+The autonomous vehicle simulation bench, whose design and development has been thoroughly outline in this paper, fills a need in the autonomous vehicle development industry by specifically targeting the key areas mentioned above. 
+
+Being based-entirely on open-source software which is backed by large communities and nearly endless support, the simulation bench brings forth a much more widely accessible platform to perform development and simulation activities for autonomous vehicle systems. Furthermore, this form of platform is completely unregulated and requires no corporate involvement of any kind, allowing for this system to be much more approachable by a larger user base.
+
+Another benefit relative to currently adopted methods of autonomous vehicle development is the low cost associated with the construction of the simulation bench. Most of the costs associated with the construction of the simulation bench are not critical to the aspects that enable the development features of the system, allowing the cost to be reduced significantly if required.
+
+As the system is based entirely on a simulation approach, testing activities can occur much more frequently and easily. The resources and time required to establish controlled testing for a real-world autonomous vehicle is highly unattainable unless the development is being undertaken by a large manufacturer. Furthermore, the frequency of testing would be significantly lower. The simulation bench provides mean of being able to perform thorough, accurate to life testing on real world roads in a repeatable manner.
+
+Finally, the open-source nature of the system allows users to easily tailor and extend the simulation bench's capabilities as they desire. The simulation bench is in no way constrained by the traditional limitations of autonomous vehicle development and allows for a large user base to easily engage and perform research, testing and development on numerous aspects of autonomous vehicle systems. From the infotainment software, to the networking of vehicle subsystems, to the algorithms that physically drive the vehicle itself, the development of all these aspects of autonomous driving systems are supported by the autonomous vehicle simulation bench.
+
+In addition to the points mentioned, the proposed system also supports the development of emerging technologies such as smart infrastructure communications with autonomous vehicles. However, the possible extents to what development is supported in this system is virtually endless, as continuous support is provided for the technologies that power the simulation bench and there is no barriers to what additions can be made to an open-source platform.
+
+The proposed autonomous vehicle simulation bench bridges a gap that has been left unfilled in the autonomous vehicle development space by providing a base for a solution that is an inexpensive, widely accessible, highly repeatable, extremely robust, largely supported and tremendously extendable platform to support the development of autonomous vehicle systems.
 
 
-\section{References}
-Hello there
+\section*{References}
+\begin{enumerate}[label={[\arabic*]}]
+ \item “Autonomous Vehicle Market (by application: Defense, Transportation; by level of automation: Level 1, level 2, level 3, level 4, level 5; by propulsion: Semi-autonomous, fully autonomous; by vehicle: Passenger Car, commercial vehicle) - global industry analysis, size, share, growth, trends, regional outlook, and forecast 2022 - 2030,” Precedence Research. [Online]. Available: \url{https://www.precedenceresearch.com/autonomous-vehicle-market}. [Accessed: 07-Jul-2022]. 
+ \item R.-T. Innovations, “Intelligent, distributed, Real Time Systems work together as one,” RTI. [Online]. Available: \url{https://www.rti.com/en/}. [Accessed: 07-Jul-2022]. 
+ \item “Advancing map-enhanced driver assistance systems leading to automated driving,” Adasis website. [Online]. Available: \url{https://adasis.org/}. [Accessed: 07-Jul-2022]. 
+ \item “Waymo Driver,” Waymo. [Online]. Available: \url{https://waymo.com/}. [Accessed: 07-Jul-2022]. 
+ \item J. Yoshida, “Tracking Autonomous Vehicle Software Platforms,” Embedded.com, 12-May-2020. [Online]. Available: \url{https://www.embedded.com/tracking-autonomous-vehicle-software-platforms/}. [Accessed: 07-Jul-2022]. 
+ \item P. Lienert, “Self-driving costs could drop 90 percent by 2025, Delphi CEO says,” Reuters, 04-Dec-2017. [Online]. Available: \url{https://www.reuters.com/article/us-autos-delphi-idUSKBN1DY2AC}. [Accessed: 07-Jul-2022]. 
+ \item A. Efrati, “Money pit: Self-driving cars' \$16 billion cash burn,” The Information, 21-Dec-2020. [Online]. Available: \url{https://www.theinformation.com/articles/money-pit-self-driving-cars-16-billion-cash-burn?irclickid=WWZ1yqyYPxyIT2LXgOUUvyZOUkDw0dTRQwFBXc0\&amp;irgwc=1\&amp;utm\_source=affiliate\&amp;utm\_medium=cpa\&amp;utm\_campaign=10078-Skimbit\%2BLtd.\&amp;utm\_term=caranddriver.com}. [Accessed: 07-Jul-2022]. 
+ \item R. Baldwin, “Self-driving-car research has cost \$16 billion. what do we have to show for it?,” Car and Driver, 29-Nov-2021. [Online]. Available: \url{https://www.caranddriver.com/news/a30857661/autonomous-car-self-driving-research-expensive/}. [Accessed: 07-Jul-2022]. 
+ \item C. A. R. L. A. Team, “Carla: Open-source simulator for autonomous driving research,” CARLA Simulator. [Online]. Available: \url{https://carla.org/}. [Accessed: 07-Jul-2022]. 
+ \item J. Kaipada, A. Parameswaran, S. Patel, and G. Zakharov, Ontario Tech University, Oshawa, Ontario, rep., 2019. 
+ \item T. Akhtar, R. Amin, U. Malik, J. Singh, and L. Valenski, Ontario Tech University, Oshawa, Ontario, rep., 2022.
+ \item D. Curry, “Android Statistics (2022),” Business of Apps, 04-May-2022. [Online]. Available: \url{https://www.businessofapps.com/data/android-statistics/#:~:text=Android\%20is\%20the\%20most\%20popular,users\%20spanning\%20over\%20190\%20countries}. [Accessed: 07-Jul-2022]. 
+ \item “Operating system market share worldwide,” StatCounter Global Stats. [Online]. Available: \url{https://gs.statcounter.com/os-market-share}. [Accessed: 07-Jul-2022].
+ \item “Android Debug Bridge (ADB) ,” Android Developers. [Online]. Available: \url{https://developer.android.com/studio/command-line/adb}. [Accessed: 07-Jul-2022].
+ \item “Pure-Python-ADB,” PyPI. [Online]. Available: \url{https://pypi.org/project/pure-python-adb/}. [Accessed: 07-Jul-2022]. 
+ \item “Can bus tools,” CAN BUS tools - cantools 34.3.0 documentation. [Online]. Available: \url{https://cantools.readthedocs.io/en/latest/#about}. [Accessed: 07-Jul-2022]. 
+ \item Genivi, “CANdevStudio: Development Tool for Can Bus Simulation,” GitHub. [Online]. Available: \url{https://github.com/GENIVI/CANdevStudio}. [Accessed: 07-Jul-2022]. 
+ \item “Unittest - unit testing framework,” unittest - Unit testing framework - Python 3.10.5 documentation. [Online]. Available: \url{https://docs.python.org/3/library/unittest.html}. [Accessed: 07-Jul-2022]. 
+ \item “Jenkins: Build great things at any scale,” Jenkins. [Online]. Available: \url{https://www.jenkins.io/}. [Accessed: 07-Jul-2022]. 
+ \item SHWotever, “BMW E36 Cluster Setup · Simhub,” GitHub. [Online]. Available: \url{https://github.com/SHWotever/SimHub/wiki/BMW-E36-Cluster-Setup}. [Accessed: 07-Jul-2022]. 
+ \item “Maps SDK for Android overview,” Google Maps Platform. [Online]. Available: \url{https://developers.google.com/maps/documentation/android-sdk/overview}. [Accessed: 07-Jul-2022]. 
+ \item B. Kinniry, “More auto computers means more complicated, costly and longer repairs,” CEI Network, 08-Oct-2021. [Online]. Available: \url{https://ceinetwork.com/news-archive/auto-computers-means-complicated-costly-longer-repairs/}. [Accessed: 07-Jul-2022]. 
+ \item “Can bus,” Wikipedia, 29-Jun-2022. [Online]. Available: \url{https://en.wikipedia.org/wiki/CAN\_bus}. [Accessed: 07-Jul-2022]. 
+ \item S. Kundu and P. Liu, “Connected driverless cars are the key to a smarter, Safer City,” Social Innovation, 02-Aug-2021. [Online]. Available: \url{https://social-innovation.hitachi/en-us/think-ahead/transportation/autonomous-vehicles-and-smart-city/#:~:text=The\%20emergence\%20of\%20smart\%20cities,makes\%20driving\%20on\%20roads\%20safer}. [Accessed: 07-Jul-2022]. 
+ \item M. Bozdal, M. Samie, S. Aslam, and I. Jennions, “Evaluation of CAN bus security challenges,” Sensors (Basel, Switzerland), 21-Apr-2020. [Online]. Available: \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7219335/#:~:text=The\%20CAN\%20bus\%20has\%20a,and\%20fails\%20to\%20sustain\%20integrity}. [Accessed: 07-Jul-2022]. 
+ \item “Cyclic redundancy check,” Wikipedia, 25-Jun-2022. [Online]. Available: \url{https://en.wikipedia.org/wiki/Cyclic\_redundancy\_check#:~:text=CRCs\%20are\%20specifically\%20designed\%20to,against\%20intentional\%20alteration\%20of\%20data}. [Accessed: 07-Jul-2022]. 
+ \item “How many Joules will kill you?,” HOME·X, 12-Jul-2021. [Online]. Available: \url{https://homex.com/ask/how-many-joules-will-kill-you}. [Accessed: 07-Jul-2022]. 
+ \item hatchback-car-three-quarter-view-vector. .
+ \item “Roadrunner: Design 3D scenes for automated driving simulation,” MATLAB \& Simulink. [Online]. Available: \url{https://www.mathworks.com/products/roadrunner.html}. [Accessed: 07-Jul-2022]. 
+\end{enumerate}
 
 
 \end{document}
