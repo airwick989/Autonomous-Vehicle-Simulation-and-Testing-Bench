@@ -71,6 +71,7 @@ from __future__ import print_function
 
 import glob
 import os
+from pydoc import ispackage
 from tracemalloc import start
 from turtle import hideturtle
 import cv2
@@ -549,9 +550,6 @@ class World(object):
 # ==============================================================================
 
 dfvehic = None
-dfcoll = None
-dflane = None
-dfobs = None
 recording_start_time = None
 
 def create_dfs():
@@ -574,39 +572,13 @@ def create_dfs():
         'Gear': [],
         'Steering': [],
         'Vehicle': [],
-        'Weather/Time': []
-    }
-    dfvehic = pd.DataFrame(vehicdata)
-
-    global dfcoll
-    colldata = {
-        'Sim_time': [],
-        'Rec_time': [],
-        'Autopilot': [],
-        'Event': [],
-        'Intensity': []
-    }
-    dfcoll = pd.DataFrame(colldata)
-
-    global dflane
-    lanedata = {
-        'Sim_time': [],
-        'Rec_time': [],
-        'Autopilot': [],
-        'Event': []
-    }
-    dflane = pd.DataFrame(lanedata)
-
-    global dfobs
-    obsdata = {
-        'Sim_time': [],
-        'Rec_time': [],
-        'Autopilot': [],
+        'Collision_Event': [],
+        'Collision_Intensity': [],
+        'Lane_Invasion_Warning': [],
         'Obstacle_Detected': [],
         'Distance_from_Obstacle': []
     }
-    dfobs = pd.DataFrame(obsdata)
-
+    dfvehic = pd.DataFrame(vehicdata)
 
 
 
@@ -639,7 +611,7 @@ class DualControl(object):
         # if joystick_count > 1:
         #     raise ValueError("Please Connect Just One Joystick")
 
-        self._joystick = pygame.joystick.Joystick(0)    #index out of range or joystick switch
+        self._joystick = pygame.joystick.Joystick(0)    #index out of range
         self._joystick.init()
 
         self._parser = ConfigParser()
@@ -649,7 +621,7 @@ class DualControl(object):
         self._brake_idx = 1
         self._reverse_idx = 5
         self._handbrake_idx = 0
-        self._joystick1 = pygame.joystick.Joystick(1)   #index out of range or joystick switch
+        self._joystick1 = pygame.joystick.Joystick(1)   #index out of range
         self._joystick1.init()
 
     def parse_events(self, world, clock, testingFlag, testButton):
@@ -693,7 +665,7 @@ class DualControl(object):
                 #index 2 = steering wheel kit
 
                 #(REZWANA) this if statement checks, if the input is from the gear shifter
-                if event.joy == 1:  #index out of range or joystick switch
+                if event.joy == 1:  #index out of range
                     
                     #RIDWAN everything up to the END comment is added
                     if globalManualFlag:
@@ -786,7 +758,7 @@ class DualControl(object):
                     # elif event.button == 4:
                     #     adblib.launch_app('com.google.android.apps.maps')
 
-                    # #RIDWAN added
+                    #RIDWAN added
                     # if testingFlag == 24:   #For testing ADB commands   
                     #     return ADB_command_success
             elif event.type == pygame.KEYUP:    #RIDWAN Keyboard controls
@@ -817,16 +789,13 @@ class DualControl(object):
                         foldername = global_map
                         dataset = 'dataset1'
                         file_index = 1
-                        if not os.path.exists(f'./datasets/{foldername}'):
-                            os.mkdir(f'./datasets/{foldername}')
-                        while os.path.exists(f'./datasets/{foldername}/{dataset}'):
+                        if not os.path.exists(f'./synchronous_datasets/{foldername}'):
+                            os.mkdir(f'./synchronous_datasets/{foldername}')
+                        while os.path.exists(f'./synchronous_datasets/{foldername}/{dataset}'):
                             file_index += 1
                             dataset = f'dataset{file_index}'
-                        os.mkdir(f'./datasets/{foldername}/{dataset}')
-                        dfvehic.to_csv(f'./datasets/{foldername}/{dataset}/vehicle_telemetry.csv')
-                        dfcoll.to_csv(f'./datasets/{foldername}/{dataset}/collision_data.csv')
-                        dflane.to_csv(f'./datasets/{foldername}/{dataset}/lane_invasion_data.csv')
-                        dfobs.to_csv(f'./datasets/{foldername}/{dataset}/obstacle_detection_data.csv')
+                        os.mkdir(f'./synchronous_datasets/{foldername}/{dataset}')
+                        dfvehic.to_csv(f'./synchronous_datasets/{foldername}/{dataset}/vehicle_telemetry.csv')
                         world.hud.notification("Recording was SAVED")
                     else:
                         create_dfs()
@@ -1238,6 +1207,8 @@ class HelpText(object):
 # -- CollisionSensor -----------------------------------------------------------
 # ==============================================================================
 global_elapsed_time = None
+collEvent = None
+collIntensity = None
 
 class CollisionSensor(object):
     def __init__(self, parent_actor, hud):
@@ -1274,20 +1245,17 @@ class CollisionSensor(object):
 
         #RIDWAN added data logging
         if(global_recording):
-            global global_sim_time
-            global dfcoll
-            global global_elapsed_time
-            global global_autonomous
-            event = 'Collision with %r' % actor_type
-            dfcoll = dfcoll.append({'Sim_time': global_sim_time, 'Rec_time': global_elapsed_time,'Autopilot': str(global_autonomous),
-            'Event': event, 'Intensity': intensity}, ignore_index= True)
+            global collEvent
+            global collIntensity
+            collEvent = 'Collision with %r' % actor_type
+            collIntensity = intensity
 
 
 
 # ==============================================================================
 # -- LaneInvasionSensor --------------------------------------------------------
 # ==============================================================================
-
+laneEvent = None
 
 class LaneInvasionSensor(object):
     def __init__(self, parent_actor, hud):
@@ -1316,12 +1284,8 @@ class LaneInvasionSensor(object):
 
         #RIDWAN added data logging
         if(global_recording):
-            global global_sim_time
-            global dflane
-            global global_elapsed_time
-            global global_autonomous
-            lane_event = 'Crossed line %s' % ' and '.join(text)
-            dflane = dflane.append({'Sim_time': global_sim_time, 'Rec_time': global_elapsed_time, 'Autopilot': str(global_autonomous), 'Event': lane_event}, ignore_index= True)
+            global laneEvent
+            laneEvent = 'Crossed line %s' % ' and '.join(text)
 
 
 # ==============================================================================
@@ -1357,6 +1321,8 @@ class GnssSensor(object):
 # ==============================================================================
 # -- ObstacleDetection ---------------------------------------------------------
 # ==============================================================================
+obsName = None
+obsDist = None
 
 class ObstacleSensor(object):
     def __init__(self, parent_actor):
@@ -1389,12 +1355,10 @@ class ObstacleSensor(object):
 
         #RIDWAN added data logging
         if(global_recording):
-            global global_sim_time
-            global dfobs
-            global global_elapsed_time
-            global global_autonomous
-            dfobs = dfobs.append({'Sim_time': global_sim_time, 'Rec_time': global_elapsed_time, 'Autopilot': str(global_autonomous), 'Obstacle_Detected': obstacle, 
-            'Distance_from_Obstacle': distance}, ignore_index= True)
+            global obsName
+            global obsDist
+            obsName = obstacle
+            obsDist = distance
 
 
 
@@ -1764,12 +1728,17 @@ def game_loop(args, testingFlag):
                     world.player.apply_control(carla.VehicleControl(throttle=.25, steer=steer))
                 pygame.display.flip()
 
-
+                
 
                 #RIDWAN added data logging
                 global global_recording
+                global collEvent
+                global collIntensity
+                global laneEvent
+                global obsName
+                global obsDist
                 if(global_recording == True):
-                    if time.time() > run_time + 0.5:    #0.5 is 120 samples per minute
+                    if time.time() > run_time + 0.25:    #0.25 is 240 samples per minute
                         run_time = time.time() 
                         global recording_start_time
                         global speed
@@ -1777,7 +1746,6 @@ def game_loop(args, testingFlag):
                         global global_compass
                         global global_sim_time
                         global global_elapsed_time
-                        global globalWeather
 
                         elapsed_time = time.time() - recording_start_time
                         global_elapsed_time = elapsed_time
@@ -1793,11 +1761,38 @@ def game_loop(args, testingFlag):
                         gear = '%s' % {-1: 'R', 0: 'N'}.get(world.player.get_control().gear, world.player.get_control().gear)
                         steering = world.player.get_control().steer
                         vehicle = get_actor_display_name(world.player, truncate=20)
+                        global globalWeather
+                        
+                        if collEvent == None:
+                            collision = 'No Collision'
+                            collisionIntensity = 'Not Applicable'
+                        else:
+                            collision = collEvent
+                            collisionIntensity = collIntensity
+
+                        if laneEvent == None:
+                            laneInvasion = 'No Warning'
+                        else:
+                            laneInvasion = laneEvent
+
+                        if obsName == None:
+                            obstacle = 'None Detected'
+                            obstacleDistance = 'Not Applicable'
+                        else:
+                            obstacle = obsName
+                            obstacleDistance = obsDist
 
                         dfvehic = dfvehic.append({'Sim_time': global_sim_time, 'Rec_time': elapsed_time, 'Server_fps': hud.server_fps, 'Client_fps': clock.get_fps(), 
                         'Autopilot': str(global_autonomous),'Speed': speed, 'Heading': global_compass, 'Accelerometer': accelerometer, 'Gyroscope': gyroscope, 'Location': location, 
-                        'GNSS': gnss, 'Height': height, 'Throttle': throttle, 'Brake': brake, 'Gear': gear, 'Steering': steering, 'Vehicle': vehicle, 'Weather/Time': globalWeather}, 
-                        ignore_index= True)
+                        'GNSS': gnss, 'Height': height, 'Throttle': throttle, 'Brake': brake, 'Gear': gear, 'Steering': steering, 'Vehicle': vehicle, 'Collision_Event': collision,
+                        'Collision_Intensity': collisionIntensity, 'Lane_Invasion_Warning': laneInvasion, 'Obstacle_Detected': obstacle, 'Distance_from_Obstacle': obstacleDistance,
+                        'Weather/Time': globalWeather}, ignore_index= True)
+                    else:
+                        collEvent = None
+                        collIntensity = None
+                        laneEvent = None
+                        obsName = None
+                        obsDist = None
 
                 #RIDWAN added CAN messages
                 msg = hud.can.can_bus.recv(0)
