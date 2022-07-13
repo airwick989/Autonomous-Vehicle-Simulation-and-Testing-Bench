@@ -131,7 +131,7 @@ def main():
     argparser.add_argument(
         '--car-lights-on',
         action='store_true',
-        default=False,
+        default=True,
         help='Enable automatic car light management')
     argparser.add_argument(
         '--hero',
@@ -165,6 +165,8 @@ def main():
         world = client.get_world()  #RIDWAN changed this for map selection. Original was client.get_world(), specific was client.load_world('Town06')
 
         traffic_manager = client.get_trafficmanager(args.tm_port)
+        for actor in vehicles_list:
+            traffic_manager.update_vehicle_lights(actor, True)
         traffic_manager.set_global_distance_to_leading_vehicle(2.5)
         if args.respawn:
             traffic_manager.set_respawn_dormant_vehicles(True)
