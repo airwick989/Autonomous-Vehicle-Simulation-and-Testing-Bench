@@ -893,7 +893,6 @@ class DualControl(object):
                     self._parse_vehicle_wheel(testingFlag)
                     self._control.reverse = self._control.gear < 0
 
-                    self._control.reverse = self._control.gear < 0
                     # Set automatic control-related vehicle lights
                     if self._control.brake:
                         current_lights |= carla.VehicleLightState.Brake
