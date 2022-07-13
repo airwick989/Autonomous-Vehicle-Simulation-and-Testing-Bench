@@ -623,6 +623,8 @@ class DualControl(object):
         if isinstance(world.player, carla.Vehicle):
             self._control = carla.VehicleControl()
             world.player.set_autopilot(self._autopilot_enabled)
+            self._lights = carla.VehicleLightState.NONE
+            world.player.set_light_state(self._lights)
         elif isinstance(world.player, carla.Walker):
             self._control = carla.WalkerControl()
             self._autopilot_enabled = False
@@ -658,6 +660,8 @@ class DualControl(object):
         global park
         global reverse
         global globalManualFlag
+        if isinstance(self._control, carla.VehicleControl):
+            current_lights = self._lights
         #(REZWANA) CODE FOR TEST CASES, SENDS A CLICK MOUSE EVENT SO THAT THE CLIENT IS IN FOCUS
         if testingFlag >= 1:
             if testingFlag >= 23 and testingFlag <= 25:
@@ -833,6 +837,33 @@ class DualControl(object):
                         recording_start_time = time.time()
                         global_recording = True
                         world.hud.notification("Recording has STARTED")
+                elif event.key == K_l and pygame.key.get_mods() & KMOD_CTRL:
+                        current_lights ^= carla.VehicleLightState.Special1
+                elif event.key == K_l and pygame.key.get_mods() & KMOD_SHIFT:
+                    current_lights ^= carla.VehicleLightState.HighBeam
+                elif event.key == K_l:
+                    # Use 'L' key to switch between lights:
+                    # closed -> position -> low beam -> fog
+                    if not self._lights & carla.VehicleLightState.Position:
+                        world.hud.notification("Position lights")
+                        current_lights |= carla.VehicleLightState.Position
+                    else:
+                        world.hud.notification("Low beam lights")
+                        current_lights |= carla.VehicleLightState.LowBeam
+                    if self._lights & carla.VehicleLightState.LowBeam:
+                        world.hud.notification("Fog lights")
+                        current_lights |= carla.VehicleLightState.Fog
+                    if self._lights & carla.VehicleLightState.Fog:
+                        world.hud.notification("Lights off")
+                        current_lights ^= carla.VehicleLightState.Position
+                        current_lights ^= carla.VehicleLightState.LowBeam
+                        current_lights ^= carla.VehicleLightState.Fog
+                elif event.key == K_i:
+                    current_lights ^= carla.VehicleLightState.Interior
+                elif event.key == K_z:
+                    current_lights ^= carla.VehicleLightState.LeftBlinker
+                elif event.key == K_x:
+                    current_lights ^= carla.VehicleLightState.RightBlinker
 
                 if isinstance(self._control, carla.VehicleControl):
                     if event.key == K_q:
@@ -861,6 +892,20 @@ class DualControl(object):
                     self._parse_vehicle_keys(pygame.key.get_pressed(), clock.get_time())
                     self._parse_vehicle_wheel(testingFlag)
                     self._control.reverse = self._control.gear < 0
+
+                    self._control.reverse = self._control.gear < 0
+                    # Set automatic control-related vehicle lights
+                    if self._control.brake:
+                        current_lights |= carla.VehicleLightState.Brake
+                    else: # Remove the Brake flag
+                        current_lights &= ~carla.VehicleLightState.Brake
+                    if self._control.reverse:
+                        current_lights |= carla.VehicleLightState.Reverse
+                    else: # Remove the Reverse flag
+                        current_lights &= ~carla.VehicleLightState.Reverse
+                    if current_lights != self._lights: # Change the light state only if necessary
+                        self._lights = current_lights
+                        world.player.set_light_state(carla.VehicleLightState(self._lights))
                 elif isinstance(self._control, carla.WalkerControl):
                     self._parse_walker_keys(pygame.key.get_pressed(), clock.get_time())
                 world.player.apply_control(self._control)
@@ -1683,7 +1728,7 @@ def game_loop(args, testingFlag):
         global_client = client 
         client.set_timeout(20.0)
 
-        sim_world = client.get_world()  #RIDWAN changed this for map selection. Original was client.get_world(), specific was client.load_world('Town06')
+        sim_world = client.load_world('Town01')  #RIDWAN changed this for map selection. Original was client.get_world(), specific was client.load_world('Town06')
         if args.sync:
             original_settings = sim_world.get_settings()
             settings = sim_world.get_settings()
