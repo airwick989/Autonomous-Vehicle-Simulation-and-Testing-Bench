@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 
 # Copyright (c) 2019 Computer Vision Center (CVC) at the Universitat Autonoma de
@@ -195,6 +196,8 @@ def find_weather_presets():
     rgx = re.compile('.+?(?:(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|$)')
     name = lambda x: ' '.join(m.group(0) for m in rgx.finditer(x))
     presets = [x for x in dir(carla.WeatherParameters) if re.match('[A-Z].+', x)]
+    #print("preasets",presets)
+    #print("weather parameters",carla.WeatherParameters)
     return [(getattr(carla.WeatherParameters, x), name(x)) for x in presets]
 
 
@@ -258,7 +261,7 @@ def get_speed(world, arduinotestFlag):
                 try:
                     gear = p.forward_gears[c.gear]
                     calcGear = {-1: 'R', 0: 'N'}.get(c.gear, c.gear)
-                    #print(calcGear)
+                   #print("calgear",calcGear)
 
                     #RPM Calculation
                     mph = int(speed) * 0.62137119223733 #convert speed from kph to mph
@@ -1069,7 +1072,7 @@ class HUD(object):
         default_font = 'ubuntumono'
         mono = default_font if default_font in fonts else fonts[0]
         mono = pygame.font.match_font(mono)
-        self._font_mono = pygame.font.Font(mono, 12 if os.name == 'nt' else 14)
+        self._font_mono = pygame.font.Font(mono, 20 if os.name == 'nt' else 22)
         self._notifications = FadingText(font, (width, 40), (0, height - 40))
         self.help = HelpText(pygame.font.Font(mono, 16), width, height)
         self.can = CAN()    #RIDWAN added CAN
@@ -1123,6 +1126,7 @@ class HUD(object):
         global_sim_time = ('% 12s' % datetime.timedelta(seconds=self.simulation_time)).strip()
         global global_map
         global_map = ('% 20s' % world.map.name.split('/')[-1]).strip()
+        global global_autonomous
 
         self._info_text = [
             'Server:  % 16.0f FPS' % self.server_fps,
@@ -1131,6 +1135,7 @@ class HUD(object):
             'Vehicle: % 20s' % get_actor_display_name(world.player, truncate=20),
             'Map:     % 20s' % world.map.name.split('/')[-1],
             'Sim time: % 12s' % datetime.timedelta(seconds=(self.simulation_time)),
+            'Autopilot: % 12s' % ('Enabled' if global_autonomous else 'Disabled'),
             '',
             'Speed:   % 15.0f km/h' % (3.6 * math.sqrt(v.x**2 + v.y**2 + v.z**2)),
             u'Compass:% 17.0f\N{DEGREE SIGN} % 2s' % (compass, heading),
@@ -1182,11 +1187,11 @@ class HUD(object):
 
     def render(self, display):
         if self._show_info:
-            info_surface = pygame.Surface((220, self.dim[1]))
+            info_surface = pygame.Surface((350, self.dim[1]))
             info_surface.set_alpha(100)
             display.blit(info_surface, (0, 0))
             v_offset = 4
-            bar_h_offset = 100
+            bar_h_offset = 200
             bar_width = 106
             for item in self._info_text:
                 if v_offset + 18 > self.dim[1]:
@@ -1905,8 +1910,8 @@ def main(testingFlag):
     argparser.add_argument(
         '--res',
         metavar='WIDTHxHEIGHT',
-        default='1280x720',
-        help='window resolution (default: 1280x720)')
+        default='1600x900',
+        help='window resolution (default: 1600x900)')
     argparser.add_argument(
         '--filter',
         metavar='PATTERN',

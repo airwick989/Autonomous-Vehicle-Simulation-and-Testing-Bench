@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ #!/usr/bin/env python
 
 # Copyright (c) 2021 Computer Vision Center (CVC) at the Universitat Autonoma de
 # Barcelona (UAB).
@@ -196,7 +196,7 @@ def main():
 
         blueprints = get_actor_blueprints(world, args.filterv, args.generationv)
         blueprintsWalkers = get_actor_blueprints(world, args.filterw, args.generationw)
-
+        
         if args.safe:
             blueprints = [x for x in blueprints if int(x.get_attribute('number_of_wheels')) == 4]
             blueprints = [x for x in blueprints if not x.id.endswith('microlino')]

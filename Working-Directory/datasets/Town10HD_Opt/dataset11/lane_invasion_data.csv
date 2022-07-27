@@ -1,0 +1,10 @@
+,Sim_time,Rec_time,Autopilot,Event
+0,0:04:17.813954,10.061899900436401,False,Crossed line 'Broken'
+1,0:04:19.763954,11.637815952301025,False,Crossed line 'SolidSolid'
+2,0:04:19.963954,12.175904273986816,False,Crossed line 'Broken'
+3,0:04:20.063954,12.175904273986816,False,Crossed line 'SolidSolid'
+4,0:04:20.163954,12.175904273986816,False,Crossed line 'Broken'
+5,0:04:20.213954,12.175904273986816,False,Crossed line 'Broken'
+6,0:04:20.363954,12.175904273986816,False,Crossed line 'Broken'
+7,0:04:20.613954,12.720174551010132,False,Crossed line 'Solid'
+8,0:04:20.963954,12.720174551010132,False,Crossed line 'Solid'
