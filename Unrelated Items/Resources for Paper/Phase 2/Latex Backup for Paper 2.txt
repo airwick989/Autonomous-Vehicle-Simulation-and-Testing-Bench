@@ -1,0 +1,392 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{blindtext, graphicx}
+
+% *** CITATION PACKAGE ***
+\usepackage{cite}
+
+% *** GRAPHICS RELATED PACKAGES ***
+\ifCLASSINFOpdf
+\else
+\fi
+
+% *** SPECIALIZED LIST PACKAGES ***
+\usepackage{amsmath}
+\usepackage{enumitem}
+
+% *** SUBFIGURE PACKAGES ***
+\usepackage[tight,footnotesize]{subfigure}
+
+% *** TABLE PACKAGES ***
+\usepackage{multirow}
+\usepackage{longtable}
+
+% *** SPECIAL CHARACTERS PACKAGES ***
+\usepackage{tikz}
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
+\usepackage[hyphens]{url}
+
+% *** PDF, URL AND HYPERLINK PACKAGES ***
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage[export]{adjustbox}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{pifont}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+\usepackage{amsthm}
+\usepackage{commath}
+\usepackage{multirow}
+\usepackage{oz, amsfonts}
+\newtheorem{definition}{Definition}[]
+\newtheorem{case-study}{Case-Study}[]
+\newtheorem{exmp}{Example}[]
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\renewcommand{\thesection}{\arabic{section}}
+\def\thesectiondis{\thesection.} \def\thesubsectiondis{\thesectiondis\arabic{subsection}.} \def\thesubsubsectiondis{\thesubsectiondis\arabic{subsubsection}.} \def\theparagraphdis{\thesubsubsectiondis\arabic{paragraph}.}
+
+\title{Dataset Generation and Scenario-based Hardware-in-the-loop Testing for Autonomous Vehicles}
+\author{\IEEEauthorblockN{Ridwan Hossain}
+\IEEEauthorblockA{Department of Electrical, Computer and \\ Software Engineering\\
+Ontario Tech University, Canada\\
+Email: ridwan.hossain@ontariotechu.net}
+}
+\date{August 2022}
+\begin{document}
+\maketitle
+
+
+\begin{abstract}
+There currently exists a need in the AV research and development space for the open-source generation of autonomous vehicle datasets. In addition to this, there is also a need for the controlled testing and verification of autonomous vehicle systems before deployment in real-world environments. The current methods of testing autonomous vehicles exhibit key weaknesses in numerous areas which do not allow for the sufficient testing and validation of the software and hardware components that make up autonomous driving systems. This paper will overview datasets generated from a scenario-based hardware-in-the-loop (HIL) testing platform that has been developed explicitly using open-source components. This paper will also highlight the usefulness of dataset generation when performing autonomous vehicle testing activities by examining a number of case studies that have been recorded on the testing platform from which the data has been derived. 
+\end{abstract}
+
+
+\section{Introduction}
+The autonomous vehicle space is a rapidly growing industry and has already demonstrated a strong presence on today's roads. "In 2020, there were around 35.02 million autonomous vehicles worldwide.
+In addition, that number showed an increase of about 3.62 million driverless cars from 2019, when that number was about 31.4 million" [1]. 
+
+As a result of this tremendous pace, the amount of resources being expended into autonomous vehicle research and testing has also increased significantly.  "As of 2020, at least \$16 Billion USD has been expended towards autonomous vehicle system testing
+across only 30 companies" [2]. In addition to the resources, a great deal of time is required in the process of developing a new autonomous vehicle and may take "about 16 years for them to be ready for the road" [3]. 
+
+The reasoning for such high development time and costs associated with AVs is partly due to Safety Integrity Level requirements. Safety Integrity Levels or SILs are "a measure of safety system performance, in terms of probability of failure on demand (PFD)" [4]. There are for levels of SIL: SIL 1, SIL 2, SIL 3, and SIL 4, where the "higher the associated safety level" denotes a "lower probability that a system will fail to perform properly" [4]. 
+
+An evolution of SILs are ASILs which stand for Automotive Safety Integrity Levels [5]. ASILs are denoted by letters a through D, where "ASIL A represents the lowest degree and ASIL D represents the highest degree of automotive hazard" (ASIL A is the safest level) [5]. Automotive Safety Integrity Levels are more stringent than normal SILs and consider safety factors in a more critical manner [5]. ASIL covers aspects such as possibility and severities of injury, controllability of the vehicle, frequency of exposures to hazards, and more [5]. 
+
+Evident from the information presented, there is a need in the autonomous vehicle research and development space for a way to reduce the time and resources required to perform autonomous vehicle development and testing activities. 
+
+
+\section{The Simulation Bench Method}
+One method to achieve more streamlined development and testing for autonomous vehicle systems is the utilization of a contained simulation environment. Using simulation tools would allow for much more testing to occur much more rapidly, and would also mitigate many of the time and resource constraints associated with autonomous vehicle development. 
+
+Such a system has been developed in the form of a scenario-based hardware-in-the-loop testing and simulation platform for autonomous vehicles. The construction and synopsis of the simulation bench has been thoroughly outlined and explored in a research paper titled "Design and Development of an Advanced Scenario-based HIL Testing and Simulation Platform for Autonomous Vehicles" by R. Hossain [6]. 
+
+\subsection{Brief System Overview}
+To briefly overview, the simulation bench is a system that was designed to to fill a gap in the industry of autonomous vehicle development by providing a highly robust and streamlined platform to support the development of autonomous vehicle driving systems, using widely supported and easily accessible open-source software [6]. 
+
+The software powering this system has been developed from the ground up by a large community to support the development, training and validation of autonomous driving systems [6]. The platform supports flexible specification of sensor suites such as LIDAR, depth sensors, RGB cameras, and many more [6]. 
+
+Additionally, the platform realistically simulates all aspects of a vehicle and its environment such as vehicle telemetry, various environmental conditions, full control of all static and dynamic actors, fully simulated traffic networks, and much more [6].
+
+The system allows for rapid, repeatable, accurate, and nearly endless testing and simulation of many of the components that make up an autonomous vehicle system by allowing users to co-simulate a digital twin of a real world vehicle [6]. This enables users to gain valuable simulation and testing data whilst not being constrained by real-world factors [6].
+
+The simulation bench also has a hardware-in-the-loop configuration, which allows for hardware components to be tested alongside the software components within the simulation environment [6]. This provides users of the system with the ability to connect various hardware peripherals to the bench and perform simulation activities in a contained environment in order to attain controlled testing and verification before being deployed for real-world testing [6]. 
+
+\subsection{Dataset Generation}
+One of the most critical aspects of the simulation bench is it's data recording and logging capabilities. The ability to collect and examine the data collected from simulation and testing activities provides very powerful information which can be used to influence what modifications or development is required for various components of an autonomous vehicle system. 
+
+The controlled testing environment within the simulation bench provides an accessible platform where users can perform thorough testing and receive telemetry regarding the software and hardware components of their autonomous vehicle system. Additionally, the simulation-based approach allows users to perform an extensive amount of testing in an amount of time which would be much more efficient relative to real-world testing every component. Furthermore, the simulation-based approach would allow users to perform certain test cases that may not be traditionally possible due to real-world constraints. 
+
+The data logging pipeline within the simulation bench enables users to retrieve large amounts of data and perform large amounts of simulation and testing which was not before possible. In addition to this, the open-source nature and HIL configuration of the bench would allow for much wider research and development opportunities for autonomous vehicles. 
+
+
+\section{Overview of the Real-time Data Recording and Logging Pipeline}
+This section will look more closely at the design and features of the data logging pipeline. The data logging pipeline enables users to seamlessly record all their simulation telemetry in real-time and also have automatic datasets and subdirectories generated. Additionally, users may also have their collected data automatically visualized using the features built into this framework. The data logging pipeline is powered by the Pandas and Plotly Python libraries (the simulation bench's software is primarily Python based, refer to source [6] for more).
+
+The Pandas package is responsible for sampling and organizing the collected data into organized datasets, which upon recording get exported as organized CSV files within their automatically generated subdirectories. 
+
+The Plotly package is used for data visualization purposes, providing users with sample graphs of their recorded data for quick viewing. The data logging pipeline automatically visualizes the collected data in the form of interactive HTML files. This allows the user of the simulation bench to easily examine and interpret the data that was recorded during the simulation, resulting in meaningful data collection. 
+
+In addition to this preconfigured arrangement of the data logging pipeline, this pipeline can easily be extended or modified to include more data or different data if the user wishes to do so. This is also true for the data visualization capabilities. Currently, most of the major sensors and critical aspects of the vehicle telemetry are recorded, but the framework is not limited to this data alone.
+
+The data logging pipeline has been designed in such a manner where users can begin recording real-time simulation straight away, or easily configure the framework to more closely fit their needs. 
+
+\subsection{Data Logging Control Flow}
+The data being collected presently can be categorized into 4 major categories: vehicle telemetry, collision data, lane invasion sensor warnings and obstacle detection data. Found below is a high-level flow chart depicting the control flow of the data logging pipeline:
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.44\textwidth]{Data Logging Control Flow.drawio.png}
+  \caption{Data Logging Control Flow}
+\end{figure} 
+
+The user begins recording data using a key on the keyboard, which subsequently is also the key used to end data recording. Upon beginning recording, 4 dataframes are instantiated, each of which will be eventually exported into distinct CSV files. 3 of the 4 dataframes record data upon new data being available, whereas the vehicle telemetry is recorded according to a sampling interval as shown in Figure 10. This is because the vehicle telemetry is constantly changing in motion, and recording constantly would result in unnecessarily large data sets. The sampling rate of the vehicle telemetry is 120 samples per minute by default (every 0.5 seconds), however, this rate may be modified easily and removed if desired.
+
+\subsection{Vehicle Telemetry}
+The vehicle telemetry consists of sensor readings and measurements pertaining to the simulation vehicle specifically, readings such as speed, compass heading, accelerometer readings, etc. Found below are the data items recording in the vehicle telemetry dataframe:
+\begin{itemize}
+  \item Simulation Time
+  \item Recording Time
+  \item Server Performance
+  \item Client Performance
+  \item Autopilot Flag
+  \item Vehicle Speed
+  \item Compass Heading
+  \item Accelerometer Readings
+  \item Gyroscope Readings
+  \item Vehicle Coordinates
+  \item GNSS Data
+  \item Vehicle Z Axis Displacement
+  \item Throttle Position
+  \item Brake Position
+  \item Current Gear
+  \item Steering Angle
+  \item Current Vehicle Make and Model
+\end{itemize}
+
+The simulation and recording times are logged for synchronization purposes with the screen recording of the simulation. As the simulation time is always displayed in the simulator, the user may use that to synchronize the recording of the simulator with the data collected. The recording times are used to help build the graph visualizations of the data afterwards, giving distinct points in time with a relative start and end. 
+
+The server and client performance is measured in frames per second, allowing to gauge the performance of either side of the simulation at any given moment. This information can be used to examine whether certain system functions of specific aspects of the user's algorithm are particularly taxing. 
+
+The autopilot flag simply indicates whether the vehicle is being driven autonomously or manually in that point in time. The remaining data items are self explanatory and are readings of various sensors on the vehicle or measurements of certain vehicle components themselves. These data items can be used to examine what effects occur on the vehicle itself during a simulation.
+
+Found below is sample capture of a vehicle telemetry CSV file: 
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{vehicle telemetry.png}
+  \caption{Sample Capture of a Vehicle Telemetry CSV}
+\end{figure} 
+
+\subsection{Collision Data}
+The collision data consists of data pertaining to any collisions that occur with the simulation vehicle during recording time. Found below are the data items recorded in the collision data dataframe:
+\begin{itemize}
+  \item Simulation Time
+  \item Recording Time
+  \item Autopilot Flag
+  \item Collision Event
+  \item Collision Intensity
+\end{itemize}
+
+Like in the vehicle telemetry dataframe, the simulation and recording times are strictly used for synchronization purposes and the autopilot flag indicates whether the vehicle is driving autonomously or not.
+
+The collision event is the message associated with the collision that occurred. The messages states what object or other actor the simulation vehicle collided with. The collision intensity is the magnitude of the collision that occurred, measured in kilogram centimetres per second. 
+
+Found below is a sample capture of a collision data CSV file:
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{collision data.png}
+  \caption{Sample Capture of a Collision Data CSV}
+\end{figure} 
+
+\subsection{Lane Invasion Sensor Data}
+The lane invasion sensor data consists of all warnings raised by the lane invasion sensor during the recording time. The readings consist of all types of road markers passed over when driving. Found below are the data items recorded in the lane invasion data dataframe:
+\begin{itemize}
+  \item Simulation Time
+  \item Recording Time
+  \item Autopilot Flag
+  \item Lane Invasion Warning
+\end{itemize}
+
+Like in the previous dataframes, the simulation and recording times are strictly used for synchronization purposes and the autopilot flag indicates whether the vehicle is driving autonomously or not.
+
+The lane invasion warning is the warning raised by the lane invasion sensor. The warning consists of a message containing the type of road marker passed over and may be any of the following: 'broken', 'solid', 'solidsolid' (double solid) and any combination of these if multiple lines are crossed at once. 
+
+Found below is a sample capture of a lane invasion sensor data CSV file:
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.40\textwidth]{lane invasion data.png}
+  \caption{Sample Capture of a Lane Invasion Sensor Data CSV}
+\end{figure} 
+
+\subsection{Obstacle Detection Data}
+The obstacle detection data consists of all objects detected by the vehicle's sensors within a specified range, defined by the configuration of the sensor in the simulation software. The sensor by default sits in the front of the vehicle and is effective within a 30 metre radius. Found below are the data items recorded in the obstacle detection data dataframe:
+\begin{itemize}
+  \item Simulation Time
+  \item Recording Time
+  \item Autopilot Flag
+  \item Obstacle Detected
+  \item Distance from Obstacle
+\end{itemize}
+
+Like before, the simulation and recording times are strictly used for synchronization purposes and the autopilot flag indicates whether the vehicle is driving autonomously or not.
+
+The obstacle detected item refers to the name and/or id of the object or actor detected by the vehicle's sensors. The distance from obstacle item is how far away the vehicle sensors detected an obstacle from the sensors themselves, measured in metres. 
+
+Found below is a sample capture of a obstacle detection data CSV file:
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.40\textwidth]{obstacle detection data.png}
+  \caption{Sample Capture of an Obstacle Detection Data CSV}
+\end{figure} 
+
+\section{Interpretation of Sample Case Studies}
+In order to demonstrate the meaningfulness of the visualized data and the opportunities for analysis it brings forth, this subsection will focus on interpreting the data collected from 2 sample runs of the simulation bench. The first run focuses on longer, more open highway-like roads without any traffic and was conducted using a compact vehicle. The second run takes place in a tighter city environment consisting of active traffic on local roads and was conducted in an SUV. 
+
+Anomalies and moments of interest will be highlighted and analyzed to show the benefits of having this data logging pipeline in the simulation bench. It must be stated that for these runs, the autonomous agent that comes prepackaged with CARLA will be used for the simulations. While the simulation bench is meant to be a platform to support the development of autonomous driving algorithms, the CARLA platform provides a basic autonomous driving agent as a baseline.
+
+\subsection{Run 1}
+The first event of interest in this run was observing how the autonomous driving agent handles a situation wherein the user is manually driving down the incorrect direction on a one-way road when autopilot is enabled. Shown below are a series of screenshots showing the events that occurred:
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss1.png}
+  \caption{Manually Driving Incorrect Direction Down a One-way Road}
+\end{figure} 
+
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss2.png}
+  \caption{Manually Driving Incorrect Direction Down a One-way Road}
+\end{figure} 
+
+As shown in Figure 16, upon enabling autopilot, the agent made an immediate and harsh right turn before coming to a sudden stop. These can be confirmed as the driving agent's inputs and not a result of the vehicle losing control by reviewing the visualized data shown below:
+\begin{figure*}[!h]
+  \centering
+      \includegraphics[width=0.82\textwidth]{steering graph 1.png}
+  \caption{Steering Input (Run 1)}
+\end{figure*} 
+\begin{figure*}[!h]
+  \centering
+      \includegraphics[width=0.82\textwidth]{brake graph 1.png}
+  \caption{Brake Application (Run 1)}
+\end{figure*} 
+\begin{figure*}[!h]
+  \centering
+      \includegraphics[width=0.82\textwidth]{speed vs time graph 1.png}
+  \caption{Speed vs Time (Run 1)}
+\end{figure*} 
+
+\newpage
+On Figures 17-19, the blue lines correspond to manual driving whereas the red lines are when the autopilot is enabled. As visible from those figures, it is evident that the autonomous driving agent was responsible for the maneuvers made in Figure 16. Undeniably a satisfactory driving agent should correct the vehicle's course if it is detected that the vehicle's heading is in a dangerous direction. However, the manner in which the autonomous driving agent corrected the user's error posed a very high risk of damage to both the vehicle itself and any surrounding vehicles if present. 
+
+The driving algorithms powering the autonomous driving agent may be altered to not make such maneuvers above certain speeds if no imminent danger is present, and instead be designed to come to a steady stop when presented with a similar situation. This data collected can be used to help improve how the autonomous driving agent corrects such errors and also may help uncover various other anomalies that may be present in the driving algorithms. For example, while the basic autonomous driving agent seemed to be able to navigate through lanes in city areas just fine, it exhibited some major issues when attempting to remain within lanes on roads with higher speed limits and wider lanes in between road markers. Shown below are a series of screenshots demonstrating this finding:
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss3.png}
+  \caption{Uncontrolled Swerving from the Autonomous Driving Agent (1)}
+\end{figure} 
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss4.png}
+  \caption{Uncontrolled Swerving from the Autonomous Driving Agent (2)}
+\end{figure} 
+\pagebreak
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss5.png}
+  \caption{Uncontrolled Swerving from the Autonomous Driving Agent (3)}
+\end{figure} 
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss6.png}
+  \caption{Uncontrolled Swerving from the Autonomous Driving Agent (4)}
+\end{figure} 
+
+This behaviour can be cross referenced with the data collected during this run of the simulation. It must be noted that this swerving behaviour occurred around the 0:04:40 mark in simulation time, which is equivalent to approximately 120 seconds in the recording time. As shown in Figure 17, the 120 second mark (the red line between 100 and 150 seconds) is when the autopilot is enabled and begins making full left and right turns. As evident in Figure 17, the autonomous driving agent is struggling to keep the vehicle within the road markers on roads with wider lanes and higher speeds than previously tested. This is further reinforced by the graph of lane invasion sensor warnings show below:
+
+\begin{figure*}[!h]
+  \centering
+      \includegraphics[width=\textwidth]{lane invasion graph.png}
+  \caption{Lane Invasion Sensor Warnings (Run 1)}
+\end{figure*} 
+
+\newpage
+This is another demonstration of the simulation bench's usefulness, particularly with the implementation of the data logging pipeline. Certain points of contingency of autonomous driving algorithms can both be discovered and studied using the data collected, allowing further development and testing to be done with the aid of the simulation bench. 
+
+\subsection{Run 2}
+The event of focus in the second run was observing how the autonomous driving agent reacted when being presented with a potentially deadly, high speed head on collision with a pedestrian whilst being around active traffic. Not only are the environment conditions highly contrasting from the first run, but the vehicle type (SUV) is very different as well. The environment and vehicle type applies further constraints on the situation, as these factors contribute negatively to the driving agent's potential chances of correcting the driver's errors.
+
+This setting was devised in such a manner that the user possessed manual control over the vehicle until the vehicle was relatively close to the pedestrian, after which autopilot was enabled. One of many different scenarios may occur in this situation. For example, the driving agent may attempt to come to a stop within the time, the driving agent may try to swerve out of the way and continue past the pedestrian, the agent may not do anything at all, etc. 
+
+Shown below are a series of screenshots displaying the transition from manual control of the vehicle to the autonomous driving agent taking control of the vehicle in this dangerous driving test:
+\begin{figure}[bp!]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss7.png}
+  \caption{Dangerous Driving Test (1)}
+\end{figure} 
+\begin{figure}[bp!]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss8.png}
+  \caption{Dangerous Driving Test (2)}
+\end{figure} 
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss9.png}
+  \caption{Dangerous Driving Test (3)}
+\end{figure} 
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss10.png}
+  \caption{Dangerous Driving Test (4)}
+\end{figure} 
+
+Evident from the captures shown, the vehicle exhibited a nearly identical behaviour to that of the first run, where upon being presented with a dangerous situation, the vehicle made a harsh right turn and attempted to come to a stop. This seems to be a trend in the autonomous driving agent's behaviour, despite the types of dangers being faced having inherently different levels of urgency. In the first run, the vehicle was heading in the incorrect direction on a one-way road, whereas in this run, the vehicle is heading towards a pedestrian at high speed.
+
+To ensure this reaction was a result of detecting the pedestrian and not simply a sudden reaction to the change of the traffic lights or suddenly activating autopilot in an intersection, the data collected in the simulation can be reviewed. It must be stated that the time at which autopilot was enabled is approximately at the 0:44:35 mark, which is approximately equivalent to the 101 second mark in recording time:
+
+\begin{figure*}[bp!]
+  \centering
+      \includegraphics[width=0.82\textwidth]{obstacle detection graph.png}
+  \caption{Obstacle Detection Data (Run 2)}
+\end{figure*} 
+\begin{figure*}[bp!]
+  \centering
+      \includegraphics[width=0.82\textwidth]{steering graph 2.png}
+  \caption{Steering Input (Run 2)}
+\end{figure*} 
+\begin{figure*}[bp!]
+  \centering
+      \includegraphics[width=0.82\textwidth]{brake graph 2.png}
+  \caption{Brake Application (Run 2)}
+\end{figure*} 
+
+\clearpage
+Evident from Figure 29, the autonomous driving agent did make the sudden maneuver as a result of detecting the pedestrian approximately 23 metres away. The input from the agent in response to the detection of the pedestrian are reflected in Figures 30 and 31.
+
+While the autonomous driving agent did manage to avoid colliding with the pedestrian, the vehicle did nevertheless collide with a traffic light which was close proximity with other traffic vehicles. We may examine the consequences of the maneuver by viewing some more of the data collected in the simulation:
+\begin{figure*}[bp!]
+  \centering
+      \includegraphics[width=0.82\textwidth]{collision data graph.png}
+  \caption{Collision Intensity (Run 2)}
+\end{figure*} 
+\begin{figure*}[bp!]
+  \centering
+      \includegraphics[width=0.82\textwidth]{gyroscope readings graph.png}
+  \caption{Gyroscope Readings (Run 2)}
+\end{figure*} 
+\begin{figure*}[bp!]
+  \centering
+      \includegraphics[width=0.82\textwidth]{accelerometer readings graph.png}
+  \caption{Accelerometer Readings (Run 2)}
+\end{figure*} 
+
+\clearpage
+As seen in Figure 32, the collision with the traffic light resulting from the dangerous maneuver generated an intensity of approximately 15500 kilogram-centimetres per second, which is equivalent to approximately 1500 joules per second. To put this information into perspective, a force of 80 joules has a 20\% chance of being lethal for a human and a 90\% chance is the force strikes the head [28]. As such, the collision experienced by the driver in the event of the dangerous maneuver would be fatal. 
+
+Also seen from the data collected, the vehicle exhibited extreme amounts of rotation speed as well as acceleration. From Figure 33, it is shown that the vehicle experienced an angular velocity of 84.7 radians per second along its Z-axis and a negative acceleration of 12.4 metres per second squared along its X-axis at the moment of impact. The axes of the vehicle for gyroscope and accelerometer readings have been highlighted below:
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{gyroscope.drawio.png}
+  \caption{Vehicle Axes for Gyroscope Readings [29]}
+\end{figure} 
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{accelerometer.drawio.png}
+  \caption{Vehicle Axes for Accelerometer Readings [29]}
+\end{figure} 
+
+As demonstrated by the data collected, the maneuver to avoid the pedestrian resulted in catastrophic effects on the vehicle, and by extension, the driver. This data can then be used to modify what actions are taken by the autonomous driving agent upon being presented with a similar situation. 
+
+\pagebreak
+All these simulation and testing activities may occur rapidly and for a much lower cost relative to traditional industrial practices, allowing for a much more streamlined development process. Furthermore, the examples shown are only a subset of the entire data logging pipeline's capabilities, as much more data can be visualized and collected. Additionally, the user may easily modify the data logging framework in order to visualize the data differently or even begin logging other data items from the simulation.
+
+\section{Conclusion}
+Hello
+
+
+\end{document}
