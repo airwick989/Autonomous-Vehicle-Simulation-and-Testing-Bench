@@ -99,19 +99,19 @@ The simulation bench also has a hardware-in-the-loop configuration, which allows
 \subsection{Dataset Generation}
 The most critical aspect of the simulation bench is it's data recording and logging capabilities. The ability to collect and examine the data collected from simulation and testing activities provides very powerful information which can be used to influence what modifications or development is required for various components of an autonomous vehicle system. 
 
-The controlled testing environment within the simulation bench provides an accessible platform where users can perform thorough testing and receive telemetry regarding the software and hardware components of their autonomous vehicle system. Additionally, the simulation-based approach allows users to perform an extensive amount of testing in an amount of time which would be much more efficient relative to real-world testing every component. Furthermore, the simulation-based approach would allow users to perform certain test cases that may not be traditionally possible due to real-world constraints. 
+The controlled testing environment within the simulation bench provides an accessible platform where users can perform thorough testing and receive telemetry regarding the software and hardware components of their autonomous vehicle system. Additionally, the simulation-based approach allows users to perform an extensive amount of testing in an amount of time which is much more efficient relative to real-world testing every component. Furthermore, the simulation-based approach would allow users to perform certain test cases that may not be traditionally possible due to real-world constraints. 
 
 The data logging pipeline within the simulation bench enables users to retrieve large amounts of data and perform large amounts of simulation and testing which was not before possible. In addition to this, the open-source nature and HIL configuration of the bench would allow for much wider research and development opportunities for autonomous vehicles. 
 
 
 \section{Overview of the Real-time Data Recording and Logging Pipeline}
-This section will look more closely at the design and features of the data logging pipeline. The data logging pipeline enables users to seamlessly record all their simulation telemetry in real-time and also have automatic datasets and subdirectories generated. Additionally, users may also have their collected data automatically visualized using the features built into this framework. The data logging pipeline is powered by the Pandas and Plotly Python libraries (the simulation bench's software is primarily Python based, refer to source [6] for more).
+This section will look more closely at the design and features of the data logging pipeline. The data logging pipeline enables users to seamlessly record all their simulation telemetry in real-time and also have automatic datasets and subdirectories generated. Additionally, users may also have their collected data automatically visualized using the features built into this framework. The data logging pipeline is powered by the Pandas and Plotly Python libraries (the simulation bench's software is primarily Python based, refer to source [6] for further information).
 
-The Pandas package is responsible for sampling and organizing the collected data into organized datasets, which upon recording get exported as organized CSV files within their automatically generated subdirectories. 
+The Pandas package is responsible for sampling and organizing the collected data into organized datasets, which upon recording get exported as CSV files within their automatically generated subdirectories. 
 
 The Plotly package is used for data visualization purposes, providing users with sample graphs of their recorded data for quick viewing. The data logging pipeline automatically visualizes the collected data in the form of interactive HTML files. This allows the user of the simulation bench to easily examine and interpret the data that was recorded during the simulation, resulting in meaningful data collection. 
 
-In addition to this preconfigured arrangement of the data logging pipeline, this pipeline can easily be extended or modified to include more data or different data if the user wishes to do so. This is also true for the data visualization capabilities. Currently, most of the major sensors and critical aspects of the vehicle telemetry are recorded, but the framework is not limited to this data alone.
+In addition to the preconfigured arrangement of the data logging pipeline, this pipeline can easily be extended or modified to include more data or different data if the user wishes to do so. This is also true for the data visualization capabilities. Currently, most of the major sensors and critical aspects of the vehicle telemetry are recorded, but the framework is not limited to this data alone.
 
 The data logging pipeline has been designed in such a manner where users can begin recording real-time simulation straight away, or easily configure the framework to more closely fit their needs. 
 
@@ -232,13 +232,13 @@ The first event of interest in this run was observing how the autonomous driving
 \begin{figure}[!h]
   \centering
       \includegraphics[width=0.50\textwidth]{ss1.png}
-  \caption{Manually Driving Incorrect Direction Down a One-way Road}
+  \caption{Manually Driving Incorrect Direction Down a One-way Road (1)}
 \end{figure} 
 
 \begin{figure}[!h]
   \centering
       \includegraphics[width=0.50\textwidth]{ss2.png}
-  \caption{Manually Driving Incorrect Direction Down a One-way Road}
+  \caption{Manually Driving Incorrect Direction Down a One-way Road (2)}
 \end{figure} 
 
 As shown in Figure 7, upon enabling autopilot, the agent made an immediate and harsh right turn before coming to a sudden stop. These can be confirmed as the driving agent's inputs and not a result of the vehicle losing control by reviewing the visualized data shown below:
@@ -300,7 +300,7 @@ The event of focus in the second run was observing how the autonomous driving ag
 
 This setting was devised in such a manner that the user possessed manual control over the vehicle until the vehicle was relatively close to the pedestrian, after which autopilot was enabled. One of many different scenarios may occur in this situation. For example, the driving agent may attempt to come to a stop within the time, the driving agent may try to swerve out of the way and continue past the pedestrian, the agent may not do anything at all, etc. 
 
-Shown below are a series of screenshots displaying the transition from manual control of the vehicle to the autonomous driving agent taking control of the vehicle in this dangerous driving test:
+Shown are a series of screenshots displaying the transition from manual control of the vehicle to the autonomous driving agent taking control of the vehicle in this dangerous driving test:
 \begin{figure}[bp!]
   \centering
       \includegraphics[width=0.50\textwidth]{ss7.png}
@@ -376,7 +376,7 @@ Also seen from the data collected, the vehicle exhibited extreme amounts of rota
 \end{figure} 
 \begin{figure}[!h]
   \centering
-      \includegraphics[width=0.50\textwidth]{accelerometer.drawio.png}
+      \includegraphics[width=0.40\textwidth]{accelerometer.drawio.png}
   \caption{Vehicle Axes for Accelerometer Readings [8]}
 \end{figure} 
 
