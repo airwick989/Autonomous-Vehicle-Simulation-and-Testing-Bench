@@ -375,7 +375,7 @@ Shown below are screenshots of the simulation software running normally and the 
   \caption{Capture of Simulation Software After CAN Attacks are Injected}
 \end{figure}
 
-As visible in Figure 8, the vehicle in the simulation software is driving normally. In figure 9, after the CAN attacks have been transmitted through the CAN bus, the vehicle applies full throttle and begins steering sporadically, causing the vehicle to crash. This is because the data being injected into the CAN bus is being interpreted as autonomous agent inputs and is granting control to the vehicle's subsystems. This is possible as no security measures have been put in place for this vehicle's CAN bus. This is a simple demonstration of the sorts of simulation activities which can take place on this system and highlights how development on CANs can be done using this simulation bench as a platform.
+As visible in Figure 8, the vehicle in the simulation software is driving normally. In Figure 9, after the CAN attacks have been transmitted through the CAN bus, the vehicle applies full throttle and begins steering sporadically, causing the vehicle to crash. This is because the data being injected into the CAN bus is being interpreted as autonomous agent inputs and is granting control to the vehicle's subsystems. This is possible as no security measures have been put in place for this vehicle's CAN bus. This is a simple demonstration of the sorts of simulation activities which can take place on this system and highlights how development on CANs can be done using this simulation bench as a platform.
 
 \subsection{Real-time Data Recording and Logging Pipeline}
 Arguably the most critical aspect of a simulation platform is the ability to collect and log data resulting from the simulation activities. As such, the most important feature implemented into the simulation bench is the data recording and logging pipeline.
@@ -384,7 +384,7 @@ This pipeline was constructed to dramatically streamline testing and development
 
 In addition to recording and logging the collected data, the framework also provides tools to automatically visualize the collected data in the form of interactive HTML files. This allows the user of the simulation bench to easily examine and interpret the data that was recorded during the simulation, resulting in meaningful data collection. In addition to this preconfigured arrangement of the data logging pipeline, this pipeline can easily be extended to include more data if the user wishes to do so. Currently, most of the major sensors and critical aspects of the vehicle telemetry are recorded, but the framework is not limited to this data alone. 
 
-For a thorough and detailed overview of the data logging pipeline that has been integrated into the simulation bench, please refer to the research paper titled "INSERT TITLE" by R. Hossain [28].
+For a thorough and detailed overview of the data logging pipeline that has been integrated into the simulation bench, please refer to the research paper titled "Dataset Generation from Scenario-based Hardware-in-the-loop Testing of Autonomous Vehicles" by R. Hossain [28].
 
 
 \section{Future Developments for the System}
@@ -450,6 +450,7 @@ The proposed autonomous vehicle simulation bench bridges a gap that has been lef
  \item S. Kundu and P. Liu, “Connected driverless cars are the key to a smarter, Safer City,” Social Innovation, 02-Aug-2021. [Online]. Available: \url{https://social-innovation.hitachi/en-us/think-ahead/transportation/autonomous-vehicles-and-smart-city/#:~:text=The\%20emergence\%20of\%20smart\%20cities,makes\%20driving\%20on\%20roads\%20safer}. [Accessed: 07-Jul-2022]. 
  \item M. Bozdal, M. Samie, S. Aslam, and I. Jennions, “Evaluation of CAN bus security challenges,” Sensors (Basel, Switzerland), 21-Apr-2020. [Online]. Available: \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7219335/#:~:text=The\%20CAN\%20bus\%20has\%20a,and\%20fails\%20to\%20sustain\%20integrity}. [Accessed: 07-Jul-2022]. 
  \item “Cyclic redundancy check,” Wikipedia, 25-Jun-2022. [Online]. Available: \url{https://en.wikipedia.org/wiki/Cyclic\_redundancy\_check#:~:text=CRCs\%20are\%20specifically\%20designed\%20to,against\%20intentional\%20alteration\%20of\%20data}. [Accessed: 07-Jul-2022]. 
+ \item R. Hossain, Oshawa, Ontario, rep., 2022. 
  \item “Roadrunner: Design 3D scenes for automated driving simulation,” MATLAB \& Simulink. [Online]. Available: \url{https://www.mathworks.com/products/roadrunner.html}. [Accessed: 07-Jul-2022]. 
 \end{enumerate}
 
