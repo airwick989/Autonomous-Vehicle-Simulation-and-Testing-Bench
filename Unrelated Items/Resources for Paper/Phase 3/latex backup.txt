@@ -1,0 +1,742 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{blindtext, graphicx}
+
+% *** CITATION PACKAGE ***
+\usepackage{cite}
+
+% *** GRAPHICS RELATED PACKAGES ***
+\ifCLASSINFOpdf
+\else
+\fi
+
+% *** SPECIALIZED LIST PACKAGES ***
+\usepackage{amsmath}
+\usepackage{enumitem}
+
+% *** SUBFIGURE PACKAGES ***
+\usepackage[tight,footnotesize]{subfigure}
+
+% *** TABLE PACKAGES ***
+\usepackage{multirow}
+\usepackage{longtable}
+
+% *** SPECIAL CHARACTERS PACKAGES ***
+\usepackage{tikz}
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
+\usepackage[hyphens]{url}
+
+% *** PDF, URL AND HYPERLINK PACKAGES ***
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage[export]{adjustbox}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{pifont}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+\usepackage{amsthm}
+\usepackage{commath}
+\usepackage{multirow}
+\usepackage{oz, amsfonts}
+\newtheorem{definition}{Definition}[]
+\newtheorem{case-study}{Case-Study}[]
+\newtheorem{exmp}{Example}[]
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\renewcommand{\thesection}{\arabic{section}}
+\def\thesectiondis{\thesection.} \def\thesubsectiondis{\thesectiondis\arabic{subsection}.} \def\thesubsubsectiondis{\thesubsectiondis\arabic{subsubsection}.} \def\theparagraphdis{\thesubsubsectiondis\arabic{paragraph}.}
+
+\title{Design and Development of an Advanced Scenario-based HIL Testing and Simulation Platform for Road Vehicles and Autonomous Road Vehicles}
+\author{\IEEEauthorblockN{Ridwan Hossain}
+\IEEEauthorblockA{Department of Electrical, Computer and \\ Software Engineering\\
+Ontario Tech University, Canada\\
+Email: ridwan.hossain@ontariotechu.net}
+}
+\date{August 2022}
+\begin{document}
+\maketitle
+
+
+\begin{abstract}
+There currently exists a need for a platform that provides users with the ability to perform extensive, repeatable and meaningful simulation and testing for the hardware and software which compose vehicle/autonomous vehicle systems whilst being broadly accessible, widely supported and provides robust features and development tools. The contemporary implementations of similar systems are either financially exorbitant or highly contained. The system reflected in this paper aims to fill a gap in the industry of vehicle/autonomous vehicle development by extending on currently existing open-source software to provide a highly streamlined platform to support the production of general road vehicle and autonomous vehicle driving systems. The software tools and hardware components chosen for the system will be discussed, followed by the features constructed throughout the development process. The end result of the system is a platform that allows for quick, repeatable, accurate, and nearly endless testing of a digital twin of real life vehicles. This system will allow users to gain valuable simulation and testing data of hardware and software components in a manner which is not always feasible using the traditional methods of autonomous vehicle testing.
+\end{abstract}
+
+
+\section{Introduction}
+With the rapid growth experienced by the autonomous vehicle industry, the need for development support is a point of focus which is becoming paramount. "The global autonomous vehicle market was estimated USD 94.43 billion in 2021 and is is projected to hit around USD 1808.44 billion by 2030" [1]. While there is clear evidence of the dominating presence of autonomous vehicle technology, the availability of tools and platforms to provide backing for the development of autonomous vehicle systems is much less strong. Currently, the most used software platforms to support the development of autonomous vehicle driving systems, such as RTI, Adasis and Waymo for example, are highly contained and available only to large industrial vehicle manufacturers who possess the resources and funds to partner with such companies [2]-[5]. While there exists open-source software simulation platforms, there are no readily available hardware/software hybrid simulation systems which provide resources to perform testing and development activities on both the hardware and software that constitute modern road vehicles. In this industry, large vehicle manufacturers all have personal access to exclusive facilities, making such tools highly contained. Exorbitant costs of development tools also pose as a barricade as "current estimates for the cost of a self-driving hardware and software package range from \$70,000 to \$150,000" (USD) [6]. 
+
+In addition to the lack of availability, there exists a need in the road vehicle/autonomous road vehicle development space for a widely supported platform which provides the ability to perform repeatable, testable and highly extendable development and simulation activities. As of 2020, at least \$16 Billion USD has been spent on autonomous vehicle system testing across only 30 companies [7]. One of the largest companies involved, Waymo, spent \$3.5 Billion USD alone performing testing activities [8]. The frequency of testing which may be performed is also constrained by currently adopted methods. One could run tests on an autonomous vehicle system using a live vehicle, but that would allow thorough testing to feasibly occur only every few days. 
+
+From the statistics presented, it is apparent that there is a need in the road vehicle/autonomous road vehicle development space for a platform the fulfills the mentioned criteria. The contemporary implementations of similar systems are either financially exorbitant or highly contained. In order to fill this gap in the industry, research and development was conducted to develop key extensions on existing open-source software to construct a system which will target the critical areas of interest as highlighted previously. 
+
+The end product of the development work will be a hardware bench which works in tandem with a software simulation platform. The goal of the proposed system is to streamline the development process of vehicles and autonomous vehicles by providing robust testing and development tools, a highly extendable and modifiable platform, an intuitive and interactive environment, all whilst containing repeatable and consistent data logging features. In addition, one of the primary goals of the proposed system is to be easily accessible and widely supported, and as such, the choices of both the software and hardware are critical. 
+
+Currently, no such widely accessible hardware/software hybrid test bed exists. The construction of such a system will enable the simulation and testing of new algorithms in different, real-world driving situations within a hardware-in-the-loop environment. Hardware-in-the-loop or HIL systems are apparatuses which manipulate real signals from a controller "into thinking it is in the assembled product", whereas in reality, the controller is "connected to a test system that simulates reality" [9]. This configuration allows for design iterations to be influenced by results obtained from tests and simulations which emulate the real-world system in realistic situations [9]. This enables users to "easily run through thousands of possible scenarios to properly exercise their controller without the cost and time associated with actual physical tests" [9].
+
+This paper will outline the design and construction of a platform that was established to support the development and simulation of road vehicle/autonomous road vehicle driving systems. Section 2 of this paper will present the contributions of the simulation bench and what the system will offer. Section 3 will overview the initial objectives set out for the system and the requirements it must fulfill. Section 4 will highlight what tools and technologies were chosen for the construction of the system and provide reasoning for those decisions. Section 5 will examine the architecture of the system which was constructed from the materials in section 4. Section 6 will outline what enhancements and features have been added to the system throughout its development lifespan thus far. Section 7 will briefly discuss the future developments that have been planned to be integrated into the system. Section 8 will provide concluding remarks on the topics which have been covered throughout this paper.
+
+
+\section{System Contributions}
+This section will overview the primary benefits which the simulation bench will offer as a result of its development and construction.
+
+\subsection{A Widely Accessible and Inexpensive Testing Solution}
+One of the most constraining factors of current methods of vehicle/autonomous vehicle testing and development is that the tools used for these activities are privately owned or proprietary. Most car manufacturers have their own systems in place and are inaccessible to the majority of the population. This makes the road vehicle/autonomous road vehicle development space highly contained. In addition, the financial backing required for vehicle/autonomous vehicle development and testing is excessive, as outlined in the introduction section of this paper.
+
+By having the system be based entirely on open-source software which is backed by large communities and support, the simulation bench brings forth a much more widely accessible platform to perform development and simulation activities for road vehicle/autonomous road vehicle systems. Furthermore, this form of platform is completely unconfined and requires no corporate involvement of any kind. This allows for this system to be much more approachable by a larger user base, particularly up and coming startup companies which require accessible testing and simulation solutions. 
+
+\subsection{A Method which is not Time-bound and is Repeatable}
+Using the traditional means of vehicle/autonomous vehicle testing, trials cannot simply be performed all day round at any time of the day. The tests would require personnel and preparation, as well as other environmental factors to work with the required test criteria.
+Furthermore, with real world tests of autonomous vehicles, testing cannot be done in a repeated fashion. There is lots of downtime in between tests and actions are hard to replicate.
+
+The simulation bench provides means of being able to perform thorough, accurate to life testing in a repeatable manner. Furthermore, as the testing would occur in simulation environment, all aspects of the environment and vehicle can be easily recorded and re-enacted for repeated testing.
+
+Another benefit of the simulation-based approach is that testing activities are not bound by time. There is no need to wait for personnel and preparation, as well as other environmental factors to work with the required test criteria. Everything can be set in the simulation as required and testing can occur at any time throughout the day.
+
+\subsection{A Contained Environment for Testing Before Deployment}
+Another negative aspect with the current methods of testing vehicle/autonomous vehicle systems is the inherent danger associated with it. If any anomalies are exhibited in the driving software or hardware components in real-world environments, the results may be catastrophic. Furthermore, with this form of testing, there will always be constraints and barriers that may not allow for corner cases to be thoroughly tested.
+
+The simulation bench provides a platform for the testing of software and hardware to occur in a contained simulation environment, where a variety of scenarios can be safely explored while mitigating the risk of deploying a component prematurely on a real-world vehicle. The simulation bench can act as a first phase of testing before eventually being deployed on a live vehicle for testing.
+
+\subsection{A System that Exhibits Extendability and Modifiability}
+ The open-source nature of the software being used in the system allows users to easily tailor and extend the simulation bench’s capabilities as they desire. The simulation bench is in no way constrained by the traditional limitations of vehicle/autonomous vehicle development and allows for a large user base to easily engage and perform research, testing and development on numerous aspects of road vehicle systems. 
+ 
+ The modifiable and modular nature of the simulation bench also saves on costs significantly. Using current methodologies, once most of the hardware and software of an autonomous vehicle system is established, if a change needs to occur, a lot of time and resources will need to be expended in order to make those changes. This can be avoided with the use of the simulation bench.
+
+\subsection{An HIL-based Testing System}
+The simulation bench is a hardware-in-the-loop based system and adopts a plug-and-play personality, allowing users to simulate and test different hardware and software components before deployment on real vehicles. 
+
+Users will be able to co-simulate digital twins of real-world systems in order to gain valuable simulation and testing data. The simulation bench can be used to verify both hardware and software components of an autonomous vehicle system before beginning testing on a real-world environment. 
+
+The HIL testing may be applied to all forms of hardware components, with the only acquirement being that the component has some form of analog or digital interface. The simulation bench can be used to test all forms of vehicle components such as steering wheels, gauge clusters, pedals, infotainment systems, control networks, and so on.
+
+
+\section{Preliminary System Objectives}
+This section will outline more specifically what features the system aims to have and what objectives it projects to meet. Shown below is a list containing the specific action items to be achieved as a result of the development of the system.
+
+\begin{enumerate}
+\item Extend on an open-source software platform that: 
+    \begin{itemize}
+        \item Contains a wide selection of tools and resources to perform advanced simulation activities of autonomous vehicle systems and their environments.
+        \item Has real-time traffic control and traffic flow simulation.
+        \item Provides interfaces to access key data and parameters from the simulations.
+        \item Contains built-in sensors which simulate the behaviour of their real-world counterparts.
+        \item Supports multiple maps and locations.
+        \item Contains varying time-of-day and weather controls.
+    \end{itemize}
+\item Connect a number of hardware peripherals to inaugurate HIL testing capabilities by implementing the following:
+    \begin{itemize}
+        \item Steering Wheel
+        \item Pedals
+        \item Gear Shifter
+        \item Gauge Cluster
+    \end{itemize}
+\item Connect a head unit containing a widely used operating system to communicate useful data to and from the simulator and also support application development.
+\item Integrate a CAN (Control Area Network) bus into the system and perform network integrity tests (CAN attacks).
+\item Implement data recording functionalities which automatically outputs and visualizes large data sets.
+\item Design an automated testing framework to support continuous integration and development for the system.
+\end{enumerate}
+
+The end result of obtaining these objectives is to establish a hardware bench that extends on an existing open-source software engine in order to provide a simulation and development platform for road vehicles and autonomous road vehicles. This bench should provide the ability to easily record both hardware and simulation telemetry of manual driving and autonomous driving while providing meaningful data to support the development of autonomous driving algorithms. This bench should also allow for testing activities to take place regarding various aspects of a vehicle/autonomous vehicle system in order to streamline the development process. The entire system should also be designed in such a manner that the components are easily modifiable and modular to meet development needs.
+
+
+\section{Tools, Technologies and Materials Chosen}
+This will highlight what choices have been made in regards to the selection of tools and technologies for the key areas of the simulation bench.
+
+\subsection{Selection of the Base Software Platform}
+The software platform that was chosen to be the base of the simulation bench was CARLA. CARLA (Car Learning to Act) has been "developed from the ground up to support development, training, and validation of autonomous driving systems. In addition to open-source code and protocols, CARLA provides open digital assets (urban layouts, buildings, vehicles) that were created for this purpose and can be used freely. The simulation platform supports flexible specification of sensor suites, environmental conditions, full control of all static and dynamic actors, maps generation and much more" [10].
+
+As CARLA is an open-source software platform, it is much more accessible than other, more proprietary methods. Being open-source allows anyone to be able to access the software and begin development with very little setup. This aspect also promotes continuous support as a larger user base has access to the platform and may suggest improvements or help to implement those improvements as well. 
+    
+CARLA has been written in Python and has been designed to be highly modifiable and extendable [10]. This is to easily allow the addition of new features and to support the development of autonomous vehicle driving algorithms in the CARLA platform. CARLA has shown to be a very promising base for the simulation bench. 
+
+\subsection{Hardware Peripherals to be Connected to the Software}
+The CARLA software mentioned previously comes preconfigured with keyboard controls when driving vehicles in manual mode, meaning autonomous control is inactive [10]. These keyboard controls are perfectly suitable for testing purposes focusing on autonomous driving and is not necessary if that is the primary focus, however, the simulation bench should be able to simulate both manual and autonomous driving nearly simultaneously by allowing users to switch between the modes in real-time. This would allow for a wider range of testing and development opportunities. 
+
+In order to provide that cohesive experience as well as provide a starting point for HIL testing opportunities, various hardware peripherals were paired with the software. 
+
+Found below are the initial setup materials for the HIL system [11]-[12]:
+\pagebreak
+\begin{table}[!ht]
+    \centering
+        \begin{tabular}{ |c|c|c| } 
+            \hline
+            \multicolumn{3}{|c|}{Control Peripherals BOM} \\
+            \hline
+            Item & Quantity & Price (CAD) \\
+            \hline
+            USB steering wheel/pedals & 1 & 160 \\ 
+            Gear shifter & 1 & 150 \\
+            Cluster (BMW e36) & 1 & 200 \\ 
+            Arduino Uno & 1 & 30 \\ 
+            DC jack socket plug & 1 & 5 \\ 
+            AC power supply & 1 & 10 \\ 
+            \hline
+        \end{tabular}
+    \caption{[11]-[12]}
+\end{table}
+
+The added hardware components provides a starting point to demonstrate the forms of hardware which can be integrated into the system and also exemplify the hardware testing which can be performed. Various data metrics can be collected from the hardware peripherals, such as steering angle, throttle application, brake pressure, etc. Additionally, the hardware peripherals can be tested to ensure the correctness of their functionality by interfacing them with the software simulation. All these hardware components successfully transfer data to and from the simulation environment and open the door for HIL testing opportunities of hardware that is more specific to autonomous vehicles.
+
+For the head unit that will communicate with the simulator, an Android-based infotainment was chosen. This is because the Android operating system is widely supported in the application of external device and software connectivity while also having the most users [13]. The Android operating system holds over 43\% of the OS market share worldwide, with "over 2.5 billion active users spanning over 190 countries" [14], [13]. Due to this large support, there exists tools and packages that provide communication interfaces with the operating system, making an Android-based head unit a perfect candidate. 
+
+Found below is a Bill of Materials for the hardware components used for implementing the head unit to the simulation bench [12]:
+\begin{table}[!ht]
+    \centering
+        \begin{tabular}{ |c|c|c| } 
+            \hline
+            \multicolumn{3}{|c|}{Head Unit Connection BOM} \\
+            \hline
+            Item & Quantity & Price (CAD) \\
+            \hline
+            Android Head Unit & 1 & 450 \\ 
+            Power Supply & 1 & 110 \\ 
+            USB-USB Connector & 1 & 10 \\ 
+            \hline
+        \end{tabular}
+    \caption{[12]}
+\end{table}
+
+\subsection{Facilitating Communication with the Android Head Unit}
+Communication between the Android-based head unit and the simulation software will be enabled using the Android-developed Android Debug Bridge (ADB). 
+
+The ADB is a powerful command-line tool which facilitates communication and data transfer to and from an Android device [15]. It essentially acts as in interface for transmitting and receiving messages/data to and from a device running the Android operating system [15]. The ADB allows for the control of various device functions, installing and debugging applications, running commands on the device externally, retrieving data from the device, etc [15].  
+
+The simulation software will use the pure-python-adb Python package in order to create a communication bridge between the Python-based simulator and the ADB interface [16]. This library will allow the simulation software to use the ADB interface's functionalities using purely Python code [16]. 
+
+The benefits and capabilities that come with the implementation of this communication channel between the simulation environment and the head unit will be explored in the following section.
+
+\subsection{CAN Technologies to be Integrated into the System}
+To support CAN development and testing on the simulation bench, the cantools (CAN Bus Tools) Python package and the CANdevStudio software for Linux will be used. 
+
+The cantools package provides tools that provide the ability to perform CAN data encoding and decoding, CAN bus generation and monitoring, network node testing and much more [17]. This package provides powerful functions which will allow the simulation bench to establish CAN buses, enabling vehicle subsystem communication and interpretation of CAN data to and from vehicle networks [17]. 
+
+The CANdevStudio software is a CAN simulation software which aims to provide cost-effective means of simulating CAN messages and providing an easy-to-use interface for sending CAN signals [18]. CANdevStudio has been specifically designed keeping automotive development in mind and functions with various forms of virtual and hardware interfaces [18]. 
+
+\subsection{Tools Chosen to Construct the Testing Framework}
+The continuous testing and development framework is planned to primarily be developed using the Python Unittest library and the Jenkins platform. 
+
+The Python Unittest library provides a unit testing framework for Python 3 environments [19]. It provides a wide array of functions to support "test automation, sharing of setup and shutdown code for tests, aggregation of tests into collections, and independence of the tests from the reporting framework" [19]. Python Unittest will allow for effortless construction of complex and thorough test suites that will be run on the simulation bench while also running setup and tear down of the test cases automatically [19].
+
+The Jenkins platform is the leading open-source automation server and "provides hundreds of plugins to support building, deploying and automating any project" [20]. This allows for Jenkins to be fashioned as a continuous integration an testing server, allowing for the automation of unit testing, integration testing, and regression testing as changes in the code are committed [20]. Jenkins can be used to automate the testing framework on the simulation bench, such that as updates are pushed to the simulation bench's repository, a slew of testing activities automatically take place to ensure the integrity of both the system and the changes being made to it [20].
+
+\subsection*{}
+Development has been undertaken to extend on the tools and technologies highlighted throughout this section and integrate them all into a singular system. While each component has various proficiencies independently, the research that has gone into constructing the extension of all these into a uniform bench provides support to vehicle/autonomous vehicle development in such a manner which is not currently possible when using each of the aforementioned subsystems in isolation. The new capabilities introduced by amalgamating the preexisting hardware and software components will be highlighted in following sections.
+
+
+\section{High-Level System Architecture Overview}
+This section will outline the the general architecture and control flow of the major hardware and software aspects of the simulation bench. The hardware architecture making up the simulation bench can be found below [11]:
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{Hardware Layout.drawio.png}
+  \caption{System Hardware Communication [11]}
+\end{figure}
+\subsection{Server Multi-client Architecture}
+A point of interest regarding the system is that the CARLA architecture is structured in a client-server fashion [10]. The world in which the simulation takes place in will contain the map, all environmental assets, and will be responsible for rendering those elements [10]. This rendering is to be done by the server machine [10]. In addition, all traffic rendering and simulation will also take place on the server-side [10]. This allows for high scalability as a server machine may serve multiple client machines, creating a server multi-client architecture [10]. Adopting this architecture allows multiple clients in the same or different nodes to control different actors (vehicles) in the same world [10]. Alternatively, the client and server may also exist on the same machine [10].
+
+\subsection{HIL: Control Peripherals}
+A user of the simulation bench will interact with only the client machine, where simulation of the testing vehicle takes place. The user will primarily interface through the steering wheel/pedals/shifter kit, but may also use the keyboard for additional functions such as switching which sensors are monitored, changing environment variables, performing ADB functions, etc. All these inputs will be sent to and interpreted by the simulation software on the client machine.
+
+Using CARLA's extensive API, the original input mapping was rebound to correctly comprehend the input received from the newly connected hardware peripherals. As some input from the hardware peripherals are analog, notably the pedals, some processing was done using logarithmic functions to correctly translate the input data when being sent to the software. 
+
+\subsection{HIL: Arduino Microcontroller and Gauge Cluster}
+As the gauge cluster strictly uses analog signals which are read using serial pins, there exists no easily accessible interface to communicate digital data from the simulation software to the cluster. As a result, an Arduino microcontroller is required to act as a middleware of communication between the simulation software and the gauge cluster hardware. Shown below is a schematic of the physical connections required to enable signal communication between the microcontroller and the gauge cluster [21]:
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.43\textwidth]{arduino_to_cluster.jpg}
+  \caption{Microcontroller to Cluster Connection Schematic [21]}
+\end{figure}
+
+The microcontroller is used to read the digital data exported from the simulation and correctly map it to an analog signal. This remapping procedure was refined extensively to scale to correct physical readings on the gauge cluster. This data processing and conversion is done within an Arduino script that is uploaded into the microcontroller itself.
+
+The data sent from the simulation software consisted of the vehicle speed (kilometers per hour) and the crankshaft's angular velocity within the vehicle's engine (revolutions per minute).
+
+\subsection{HIL: The ADB and Head Unit}
+The Android-based head unit is connected to the client machine via USB. With the ADB interface built into the head unit's operating system, the pure-python-adb package on the client machine will be used to establish a communication channel and send commands and data through it. For this communication to be possible, USB debugging needs to be enabled on the Android-based head unit. Found below is a figure outlining the high-level architecture of the client-to-ADB connection [16]:
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.5\textwidth]{adb connection.png}
+  \caption{ADB Connection Architecture [16]}
+\end{figure}
+
+The pure-python-adb package can be used to connect to the Android device by establishing a locally hosted server communicating at TCP port 5037 by default [16]. Using that port as the channel of communication, the ADB server will begin running the ADB daemon on the Android device such that all ADB operations will be handled as a background process [16].\\ 
+
+\section{Primary Features Provisioned by the Simulation Bench}
+
+\subsection{ADB Functions and Development Potential}
+Upon installing the necessary ADB tools on the simulation bench and establishing the required communications, several features were implemented to the system to take advantage of the Android-based head unit. 
+
+\subsubsection{Added ADB Functions}\leavevmode \\
+Firstly, a curated library was developed, containing preconfigured methods for controlling various functions on the head unit. This library will allow for future development to more readily take place as many functionalities regarding the control of the head unit has already been developed and may be reused as required. Functionalities include controlling the operating system navigation on the head unit, various user interface controls, and most importantly, application launching and debugging functions. 
+
+Numerous library functions were integrated into the simulation software and mapped to button controls on the steering wheel. Found below is an overview of the button mappings and their corresponding functionalities:
+\begin{table}[!ht]
+    \centering
+        \begin{tabular}{ |c|c| } 
+            \hline
+            ADB Functionality & Wheel Button Mapping \\
+            \hline
+            Return to Home Menu & Home Button (bottom-most button) \\ 
+            Volume Up & Upper-right Thumb Control \\ 
+            Volume Down & Lower-right Thumb Control \\ 
+            Play/Pause & Right Circular Button on Right Cluster \\ 
+            Play Next Track & Upper Left Thumb Control \\ 
+            Play Previous Track & Lower Left Thumb Control \\ 
+            Back & Upper-left Diagonal Button from Home \\ 
+            Recent Applications & Upper-right Diagonal Button from Home \\ 
+            Launch Google Maps & Left Paddle \\ 
+            \hline
+        \end{tabular}
+    \caption{Sample ADB Functions}
+\end{table}
+
+\subsubsection{Future Development and Testing Opportunities}\leavevmode \\
+The functions above represent the most rudimentary operations which can be undertaken as a result of the ADB implementation. The primary advantage are the testing and debugging capabilities that come with this communication interface. 
+
+Take for example, a user of this simulation bench has developed a driving agent which has advanced far enough that they would like to begin testing the agent's navigational capabilities. As mentioned before, the CARLA platform supports importing custom maps from external software [10]. A replication of real-world driving environments may be imported into the simulation bench and be used for the testing and development of autonomous driving systems. 
+
+The user can take advantage of the simulation bench's capabilities and perform navigation testing on their driving agent within real-world road conditions. The user may develop some functionality into their autonomous driving algorithms to fetch data from the Google Maps application in the Android head unit in order to guide their agent to a waypoint. There exists an API to retrieve Google Maps data which comes included in the Android Software Development Kit [22]. While the user's agent will be responsible for controlling the vehicle, the navigation data guiding the agent can be retrieved from the ADB interface on the head unit. This can save extensive amounts of both money and time by performing a large amount of real-world testing from within a simulation environment and without being constrained by the limitations which come with real-world testing of such systems.
+
+The communication is also possible in the reverse order, where the head unit may retrieve information from the simulation software. Take for example, a user wishes to perform development on user interface features for their driving system, one of which is for lane-invasion warning to appear on the head unit. As the simulation software has built in lane-invasion sensors whose messages can easily be accessed using the CARLA API, this sort of development is possible with the ADB [10].
+
+\subsection{Integration of a CAN Bus}
+Modern day vehicles contain multitudes of computers and subsystems which all must communicate successfully. As of 2016, the " average car has 30 to 50 different computers, and high-end cars have as many as 100" [23]. Furthermore, modern day vehicles on average are "accompanied by 60 to 100 different electronic sensors", all of which must function in unison whilst transferring data in real time [23]. This is even more prevalent in the autonomous vehicle space, where a larger number of sensors and computers which are communicating are present. 
+
+Communication amongst these vehicle subsystems are critical, as a majority of them function in a complementary manner [24]. The traditional means of enabling this communications is through hard-wired means such as circuitry and digital systems [24]. However, the disadvantages of this approach are that it presents challenges when designing the architecture of the vehicle's subsystems and this approach also presents higher costs for both the design and implementation [24]. 
+The CAN (Control Area Network) standard was introduced to resolve the drawbacks of the traditional approach by allowing the communication features implemented using software alone [24]. The introduction of the CAN bus saves both time and money on creating complex, hard-wired systems to handle communication between vehicle subsystems [24]. In addition, a CAN bus allows various microcontrollers and devices to communicate with each other's applications directly without the need of a host machine [24]. 
+
+\subsubsection{CAN Bus Architecture in the Client Machine}\leavevmode \\
+Using the cantools package, a CAN bus was integrated into the simulation bench to enable data transfer among vehicle subsystems. Found below is a figure depicting the high-level architecture of the CAN bus implementation within the client machine:
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.38\textwidth]{CAN Architecture.drawio.png}
+  \caption{CAN Bus Implementation}
+\end{figure}
+
+\subsubsection{CAN Bus Interface}\leavevmode \\
+The cantools package, along with establishing a CAN bus and facilitating the transfer of CAN data, also provides an interface for users to view the data being transmitted on the bus in multiple formats [17]. This CAN data can be decoded using DBC files in order to make reading them more user-friendly [17]. Data being transmitted on the CAN bus can be dumped onto the cantools CAN bus interface and the interface may be used to send data on the bus as well [17]. 
+
+The CAN nodes within the CARLA platform represent devices or sensors within the CARLA simulation software that are transmitting and receiving data on the CAN bus. Those devices have no connection to a CAN by default, this feature was integrated into the software. Found below is a sample screenshot of the CAN bus interface when it is receiving data:
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.3\textwidth]{CAN interface.png}
+  \caption{cantools CAN Bus Sample Interface}
+\end{figure}
+
+Figure 5 shows a sample decoded capture of the data being transmitted by the simulation software when the vehicle is in motion. The data being shown in the sample consist of individual wheel speeds, the current gear the vehicle's transmission is in, and the steering angle. As shown in the capture, the raw data is shown as hex values and then decoded using a preconfigured DBC file. Much more data can be transmitted across the CAN bus, however these 3 data items were chosen for demonstration purposes.
+
+\subsubsection{Future Development Opportunities on Smart Infrastructure}\leavevmode \\
+The primary reason for the implementation of the CAN bus within the simulation bench was to support future development on vehicle communication with smart infrastructure. A major application of this, particularly in the autonomous vehicle space, is when a vehicle works in tandem with smart systems embedded in an environment's infrastructure to improve the autonomous vehicle's driving capabilities and also to improve traffic flow and traffic safety [25]. This uncovers a plethora of possibilities such as having vehicles know ahead of time what traffic signals will be, adjusting autonomous driving characteristics based off data received from the smart infrastructure, and much more [25]. 
+
+The notion of smart infrastructure communicating with autonomous vehicles is emerging as key solution for safer roads [25]. The CARLA platform has built-in traffic managers which can be used to retrieve traffic and infrastructure data (such as traffic light information) from the CARLA API [10]. These capabilities in conjunction with the integration of a CAN within the simulation bench allows for the future development and simulation of these systems possible on this bench [25].    
+
+\subsubsection{CAN Security Testing}\leavevmode \\
+Another aspect of CANs which can be simulated in this system are CAN attacks. One of the contingency points regarding the use of CANs are its security capabilities [26]. While the CAN protocol uses "a CRC for verification of integrity against the transmission errors", "it cannot prevent data injected by malicious parties, which breaks the integrity" [26]. 
+
+As it is known, the CRC (Cyclic Redundancy Check) method of error detection is primarily used for assuring the integrity of network messages by detecting errors on the communication channel [27]. However, CRC is not capable of detecting all forms of error types that may be inhibited by the messages, and furthermore, CRC is "not suitable for protecting against intentional alteration of data" [27]. This results in the reality that the CAN "protocol does not have a comprehensive integrity check and fails to sustain integrity" [26]. 
+
+As these network integrity concerns are present in the current implementation of CANs, which are critical aspects of any vehicle system (particularly in autonomous vehicles), the simulation of CAN attacks was deemed to be an important feature as a part of the simulation bench's development. Having these capabilities integrated into the bench will help support future development on CAN buses and will also provide an accessible and robust platform for performing simulation and testing activities regarding CANs. 
+
+The CANdevStudio software application is used in the system for the simulation and injection of CAN attacks into the vehicle simulation software. The CANdevStudio application can be used to communicate to a CAN bus given the user is aware of the ports and network details of the simulated vehicle's CAN bus. Through that communication software, CANdevStudio can be used to send raw data through the bus which will be interpreted by the simulated vehicle's CAN interface and perform appropriate functions according to the data being sent. The data may range from being interpreted as a data transmission from another vehicle subsystem to an autonomous agent command which may be used to perform malicious actions.
+
+Found below are sample screenshots taken from the CANdevStudio application of a sample CAN attack which will be injected into the simulation software:
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.44\textwidth]{CANdevStudio1.png}
+  \caption{Sample Constructed CAN Attack in CANdevStudio}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.5\textwidth]{CANdevStudio2.png}
+  \caption{Raw Data of 3 Attack Messages in CandevStudio}
+\end{figure}
+
+Shown in Figure 6 is the construction of a sample CAN attack in CANdevStudio. The construction of the attack consists of 3 nodes, only 2 of which are necessary for the attack to take place. The CanRawSender node consists of the raw data which will be injected into the CAN bus and is shown in Figure 7. 
+
+The attack messages will be sent, each having a specific id for tracing purposes. The raw data will be interpreted within the vehicle simulation software, each message corresponding to a distinct malicious action. The raw data presented in Figure 7 will perform the following actions on the simulator side: turn the steering wheel fully clockwise, turn the steering wheel fully anti-clockwise and fully apply the throttle. These attack messages will be transmitted in a looping fashion with an interval specified by the user. 
+
+The CanDevice node contains all of the network details of the simulation software's CAN bus in order to communicate with it. The CanRawView node can be used if the user wishes to view the interface of the CAN bus as the messages are transmitted to it.
+
+Shown below are screenshots of the simulation software running normally and the aftermath of the CAN attacks being injected:
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{CANnormal.png}
+  \caption{Capture of Simulation Software Running Normally}
+\end{figure} 
+
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{CANattack.png}
+  \caption{Capture of Simulation Software After CAN Attacks are Injected}
+\end{figure}
+
+As visible in Figure 8, the vehicle in the simulation software is driving normally. In Figure 9, after the CAN attacks have been transmitted through the CAN bus, the vehicle applies full throttle and begins steering sporadically, causing the vehicle to crash. This is because the data being injected into the CAN bus is being interpreted as autonomous agent inputs and is granting control to the vehicle's subsystems. This is possible as no security measures have been put in place for this vehicle's CAN bus. This is a simple demonstration of the sorts of simulation activities which can take place on this system and highlights how development on CANs can be done using this simulation bench as a platform.
+
+\subsubsection{Extendability to support other protocols}\leavevmode \\
+While the simulation bench currently employs the CAN protocol for inter-vehicular control networks, other protocols such as automotive ethernet, may be implemented into the system for testing and simulation purposes. As a result of the bench's modular nature, additional functionality can be administered to the system as required. For example, the bench may be extended to support multiple ECU topologies. Security and extensibility issues regarding ECUs are well covered and illustrated within cantools.
+
+
+\subsection{Real-time Data Recording and Logging Pipeline}
+Arguably the most critical aspect of the simulation bench is it's data recording and logging capabilities. The ability to collect and examine the data collected from simulation and testing activities provides very powerful information which can be used to influence what modifications or development is required for various components of an autonomous vehicle system. 
+
+The controlled testing environment within the simulation bench provides an accessible platform where users can perform thorough testing and receive telemetry regarding the software and hardware components of their autonomous vehicle system. Additionally, the simulation-based approach allows users to perform an extensive amount of testing in an amount of time which is much more efficient relative to real-world testing every component. Furthermore, the simulation-based approach would allow users to perform certain test cases that may not be traditionally possible due to real-world constraints. 
+
+In addition to this, the open-source nature and HIL configuration of the bench would allow for much wider research and development opportunities for autonomous vehicles. 
+
+
+\section{Overview of the Real-time Data Recording and Logging Pipeline}
+This section will look more closely at the design and features of the data logging pipeline. The data logging pipeline enables users to seamlessly record all their simulation telemetry in real-time and also have automatic datasets and subdirectories generated. Additionally, users may also have their collected data automatically visualized using the features built into this framework. The data logging pipeline is powered by the Pandas and Plotly Python libraries (the simulation bench's software is primarily Python based).
+
+The Pandas package is responsible for sampling and organizing the collected data into organized datasets, which upon recording get exported as CSV files within their automatically generated subdirectories. 
+
+The Plotly package is used for data visualization purposes, providing users with sample graphs of their recorded data for quick viewing. The data logging pipeline automatically visualizes the collected data in the form of interactive HTML files. This allows the user of the simulation bench to easily examine and interpret the data that was recorded during the simulation, resulting in meaningful data collection. 
+
+In addition to the preconfigured arrangement of the data logging pipeline, this pipeline can easily be extended or modified to include more data or different data if the user wishes to do so. This is also true for the data visualization capabilities. Currently, most of the major sensors and critical aspects of the vehicle telemetry are recorded, but the framework is not limited to this data alone.
+
+The data logging pipeline has been designed in such a manner where users can begin recording real-time simulation straight away, or easily configure the framework to more closely fit their needs. 
+
+\subsection{Data Logging Control Flow}
+The data being collected presently can be categorized into 4 major categories: vehicle telemetry, collision data, lane invasion sensor warnings and obstacle detection data. Found below is a high-level flow chart depicting the control flow of the data logging pipeline:
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.44\textwidth]{Data Logging Control Flow.drawio.png}
+  \caption{Data Logging Control Flow}
+\end{figure} 
+
+The user begins recording data using a key on the keyboard, which subsequently is also the key used to end data recording. Upon beginning recording, 4 dataframes are instantiated, each of which will be eventually exported into distinct CSV files. 3 of the 4 dataframes record data upon new data being available, whereas the vehicle telemetry is recorded according to a sampling interval as shown in Figure 10. This is because the vehicle telemetry is constantly changing in motion, and recording constantly would result in unnecessarily large data sets. The sampling rate of the vehicle telemetry is 120 samples per minute by default (every 0.5 seconds), however, this rate may be modified easily and removed if desired.
+
+\subsection{Vehicle Telemetry}
+The vehicle telemetry consists of sensor readings and measurements pertaining to the simulation vehicle specifically, readings such as speed, compass heading, accelerometer readings, etc. Found below are the data items recording in the vehicle telemetry dataframe:
+\begin{itemize}
+  \item Simulation Time
+  \item Recording Time
+  \item Server Performance
+  \item Client Performance
+  \item Autopilot Flag
+  \item Vehicle Speed
+  \item Compass Heading
+  \item Accelerometer Readings
+  \item Gyroscope Readings
+  \item Vehicle Coordinates
+  \item GNSS Data
+  \item Vehicle Z Axis Displacement
+  \item Throttle Position
+  \item Brake Position
+  \item Current Gear
+  \item Steering Angle
+  \item Current Vehicle Make and Model
+\end{itemize}
+
+The simulation and recording times are logged for synchronization purposes with the screen recording of the simulation. As the simulation time is always displayed in the simulator, the user may use that to synchronize the recording of the simulator with the data collected. The recording times are used to help build the graph visualizations of the data afterwards, giving distinct points in time with a relative start and end. 
+
+The server and client performance is measured in frames per second, allowing to gauge the performance of either side of the simulation at any given moment. This information can be used to examine whether certain system functions of specific aspects of the user's algorithm are particularly taxing. 
+
+The autopilot flag simply indicates whether the vehicle is being driven autonomously or manually in that point in time. The remaining data items are self explanatory and are readings of various sensors on the vehicle or measurements of certain vehicle components themselves. These data items can be used to examine what effects occur on the vehicle itself during a simulation.
+
+Found below is sample capture of a vehicle telemetry CSV file: 
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{vehicle telemetry.png}
+  \caption{Sample Capture of a Vehicle Telemetry CSV}
+\end{figure} 
+
+\subsection{Collision Data}
+The collision data consists of data pertaining to any collisions that occur with the simulation vehicle during recording time. Found below are the data items recorded in the collision data dataframe:
+\begin{itemize}
+  \item Simulation Time
+  \item Recording Time
+  \item Autopilot Flag
+  \item Collision Event
+  \item Collision Intensity
+\end{itemize}
+
+Like in the vehicle telemetry dataframe, the simulation and recording times are strictly used for synchronization purposes and the autopilot flag indicates whether the vehicle is driving autonomously or not.
+
+The collision event is the message associated with the collision that occurred. The messages states what object or other actor the simulation vehicle collided with. The collision intensity is the magnitude of the collision that occurred, measured in kilogram centimetres per second. 
+
+Found below is a sample capture of a collision data CSV file:
+\begin{figure}[h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{collision data.png}
+  \caption{Sample Capture of a Collision Data CSV}
+\end{figure} 
+
+\subsection{Lane Invasion Sensor Data}
+The lane invasion sensor data consists of all warnings raised by the lane invasion sensor during the recording time. The readings consist of all types of road markers passed over when driving. Found below are the data items recorded in the lane invasion data dataframe:
+\begin{itemize}
+  \item Simulation Time
+  \item Recording Time
+  \item Autopilot Flag
+  \item Lane Invasion Warning
+\end{itemize}
+
+Like in the previous dataframes, the simulation and recording times are strictly used for synchronization purposes and the autopilot flag indicates whether the vehicle is driving autonomously or not.
+
+The lane invasion warning is the warning raised by the lane invasion sensor. The warning consists of a message containing the type of road marker passed over and may be any of the following: 'broken', 'solid', 'solidsolid' (double solid) and any combination of these if multiple lines are crossed at once. 
+
+Found below is a sample capture of a lane invasion sensor data CSV file:
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.40\textwidth]{lane invasion data.png}
+  \caption{Sample Capture of a Lane Invasion Sensor Data CSV}
+\end{figure} 
+
+\subsection{Obstacle Detection Data}
+The obstacle detection data consists of all objects detected by the vehicle's sensors within a specified range, defined by the configuration of the sensor in the simulation software. The sensor by default sits in the front of the vehicle and is effective within a 30 metre radius. Found below are the data items recorded in the obstacle detection data dataframe:
+\begin{itemize}
+  \item Simulation Time
+  \item Recording Time
+  \item Autopilot Flag
+  \item Obstacle Detected
+  \item Distance from Obstacle
+\end{itemize}
+
+Like before, the simulation and recording times are strictly used for synchronization purposes and the autopilot flag indicates whether the vehicle is driving autonomously or not.
+
+The obstacle detected item refers to the name and/or id of the object or actor detected by the vehicle's sensors. The distance from obstacle item is how far away the vehicle sensors detected an obstacle from the sensors themselves, measured in metres. 
+
+Found below is a sample capture of a obstacle detection data CSV file:
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.40\textwidth]{obstacle detection data.png}
+  \caption{Sample Capture of an Obstacle Detection Data CSV}
+\end{figure} 
+
+\section{Interpretation of Sample Case Studies}
+In order to demonstrate the meaningfulness of the data logging pipeline and the opportunities for analysis it brings forth, this section will focus on interpreting the data collected from 2 sample runs of the simulation bench. The first run focuses on longer, more open highway-like roads without any traffic and was conducted using a compact vehicle. The second run takes place in a tighter city environment consisting of active traffic on local roads and was conducted in an SUV. 
+
+Anomalies and moments of interest will be highlighted and analyzed to show the benefits of having this data logging pipeline in the simulation bench. It must be stated that for these runs, the autonomous agent that comes prepackaged with CARLA will be used for the simulations. While the simulation bench is meant to be a platform to support the development of autonomous driving algorithms, the CARLA platform provides a basic autonomous driving agent as a baseline.
+
+\subsection{Run 1}
+The first event of interest in this run was observing how the autonomous driving agent handles a situation wherein the user is manually driving down the incorrect direction on a one-way road when autopilot is enabled. Shown below are a series of screenshots showing the events that occurred:
+\pagebreak
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss1.png}
+  \caption{Manually Driving Incorrect Direction Down a One-way Road (1)}
+\end{figure} 
+
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss2.png}
+  \caption{Manually Driving Incorrect Direction Down a One-way Road (2)}
+\end{figure} 
+
+As shown in Figure 16, upon enabling autopilot, the agent made an immediate and harsh right turn before coming to a sudden stop. These can be confirmed as the driving agent's inputs and not a result of the vehicle losing control by reviewing the visualized data shown on the next page.
+\begin{figure*}[!h]
+  \centering
+      \includegraphics[width=0.82\textwidth]{steering graph 1.png}
+  \caption{Steering Input (Run 1)}
+\end{figure*} 
+\begin{figure*}[!h]
+  \centering
+      \includegraphics[width=0.82\textwidth]{brake graph 1.png}
+  \caption{Brake Application (Run 1)}
+\end{figure*} 
+\begin{figure*}[!h]
+  \centering
+      \includegraphics[width=0.82\textwidth]{speed vs time graph 1.png}
+  \caption{Speed vs Time (Run 1)}
+\end{figure*} 
+
+\newpage
+On Figures 17-19, the blue lines correspond to manual driving whereas the red lines are when the autopilot is enabled. As visible from those figures, it is evident that the autonomous driving agent was responsible for the maneuvers made in Figure 16. Undeniably a satisfactory driving agent should correct the vehicle's course if it is detected that the vehicle's heading is in a dangerous direction. However, the manner in which the autonomous driving agent corrected the user's error posed a very high risk of damage to both the vehicle itself and any surrounding vehicles if present. 
+
+The driving algorithms powering the autonomous driving agent may be altered to not make such maneuvers above certain speeds if no imminent danger is present, and instead be designed to come to a steady stop when presented with a similar situation. This data collected can be used to help improve how the autonomous driving agent corrects such errors and also may help uncover various other anomalies that may be present in the driving algorithms. For example, while the basic autonomous driving agent seemed to be able to navigate through lanes in city areas just fine, it exhibited some major issues when attempting to remain within lanes on roads with higher speed limits and wider lanes in between road markers. Shown below are a series of screenshots demonstrating this finding:
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss3.png}
+  \caption{Uncontrolled Swerving from the Autonomous Driving Agent (1)}
+\end{figure} 
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss4.png}
+  \caption{Uncontrolled Swerving from the Autonomous Driving Agent (2)}
+\end{figure} 
+
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss5.png}
+  \caption{Uncontrolled Swerving from the Autonomous Driving Agent (3)}
+\end{figure} 
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss6.png}
+  \caption{Uncontrolled Swerving from the Autonomous Driving Agent (4)}
+\end{figure} 
+
+This behaviour can be cross referenced with the data collected during this run of the simulation. It must be noted that this swerving behaviour occurred around the 0:04:40 mark in simulation time, which is equivalent to approximately 120 seconds in the recording time. As shown in Figure 17, the 120 second mark (the red line between 100 and 150 seconds) is when the autopilot is enabled and begins making full left and right turns. As evident in Figure 17, the autonomous driving agent is struggling to keep the vehicle within the road markers on roads with wider lanes and higher speeds than previously tested. This is further reinforced by the graph of lane invasion sensor warnings shown on the next page:
+
+\begin{figure*}[!h]
+  \centering
+      \includegraphics[width=\textwidth]{lane invasion graph.png}
+  \caption{Lane Invasion Sensor Warnings (Run 1)}
+\end{figure*} 
+
+\newpage
+This is another demonstration of the simulation bench's usefulness, particularly with the implementation of the data logging pipeline. Certain points of contingency of autonomous driving algorithms can both be discovered and studied using the data collected, allowing further development and testing to be done with the aid of the simulation bench. 
+
+\subsection{Run 2}
+The event of focus in the second run was observing how the autonomous driving agent reacted when being presented with a potentially deadly, high speed head on collision with a pedestrian whilst being around active traffic. Not only are the environment conditions highly contrasting from the first run, but the vehicle type (SUV) is very different as well. The environment and vehicle type applies further constraints on the situation, as these factors contribute negatively to the driving agent's potential chances of correcting the driver's errors.
+
+This setting was devised in such a manner that the user possessed manual control over the vehicle until the vehicle was relatively close to the pedestrian, after which autopilot was enabled. One of many different scenarios may occur in this situation. For example, the driving agent may attempt to come to a stop within the time, the driving agent may try to swerve out of the way and continue past the pedestrian, the agent may not do anything at all, etc. 
+
+Shown are a series of screenshots displaying the transition from manual control of the vehicle to the autonomous driving agent taking control of the vehicle in this dangerous driving test:
+\pagebreak
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss7.png}
+  \caption{Dangerous Driving Test (1)}
+\end{figure} 
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss8.png}
+  \caption{Dangerous Driving Test (2)}
+\end{figure} 
+
+\newpage
+
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss9.png}
+  \caption{Dangerous Driving Test (3)}
+\end{figure} 
+\begin{figure}[h!]
+  \centering
+      \includegraphics[width=0.50\textwidth]{ss10.png}
+  \caption{Dangerous Driving Test (4)}
+\end{figure} 
+
+Evident from the captures shown, the vehicle exhibited a nearly identical behaviour to that of the first run, where upon being presented with a dangerous situation, the vehicle made a harsh right turn and attempted to come to a stop. This seems to be a trend in the autonomous driving agent's behaviour, despite the types of dangers being faced having inherently different levels of urgency. In the first run, the vehicle was heading in the incorrect direction on a one-way road, whereas in this run, the vehicle is heading towards a pedestrian at high speed.
+
+To ensure this reaction was a result of detecting the pedestrian and not simply a sudden reaction to the change of the traffic lights or suddenly activating autopilot in an intersection, the data collected in the simulation can be reviewed. It must be stated that the time at which autopilot was enabled is approximately at the 0:44:35 mark, which is approximately equivalent to the 101 second mark in recording time:
+
+\begin{figure*}[bp!]
+  \centering
+      \includegraphics[width=0.82\textwidth]{obstacle detection graph.png}
+  \caption{Obstacle Detection Data (Run 2)}
+\end{figure*} 
+\begin{figure*}[bp!]
+  \centering
+      \includegraphics[width=0.82\textwidth]{steering graph 2.png}
+  \caption{Steering Input (Run 2)}
+\end{figure*} 
+\begin{figure*}[bp!]
+  \centering
+      \includegraphics[width=0.82\textwidth]{brake graph 2.png}
+  \caption{Brake Application (Run 2)}
+\end{figure*} 
+
+\clearpage
+
+Evident from Figure 29, the autonomous driving agent did make the sudden maneuver as a result of detecting the pedestrian approximately 23 metres away. The input from the agent in response to the detection of the pedestrian are reflected in Figures 30 and 31.
+
+While the autonomous driving agent did manage to avoid colliding with the pedestrian, the vehicle did nevertheless collide with a traffic light which was close proximity with other traffic vehicles. We may examine the consequences of the maneuver by viewing some more of the data collected in the simulation:
+\begin{figure*}[h!]
+  \centering
+      \includegraphics[width=0.82\textwidth]{collision data graph.png}
+  \caption{Collision Intensity (Run 2)}
+\end{figure*} 
+\begin{figure*}[h!]
+  \centering
+      \includegraphics[width=0.82\textwidth]{gyroscope readings graph.png}
+  \caption{Gyroscope Readings (Run 2)}
+\end{figure*} 
+\begin{figure*}[h!]
+  \centering
+      \includegraphics[width=0.82\textwidth]{accelerometer readings graph.png}
+  \caption{Accelerometer Readings (Run 2)}
+\end{figure*} 
+
+\clearpage
+As seen in Figure 32, the collision with the traffic light resulting from the dangerous maneuver generated an intensity of approximately 15500 kilogram-centimetres per second, which is equivalent to approximately 1500 joules per second. To put this information into perspective, a force of 80 joules has a 20\% chance of being lethal for a human and a 90\% chance is the force strikes the head [28]. As such, the collision experienced by the driver in the event of the dangerous maneuver would be fatal. 
+
+Also seen from the data collected, the vehicle exhibited extreme amounts of rotation speed as well as acceleration. From Figures 33 and 34, it is shown that the vehicle experienced an angular velocity of 84.7 radians per second along its Z-axis and a negative acceleration of 12.4 metres per second squared along its X-axis at the moment of impact. The axes of the vehicle for gyroscope and accelerometer readings have been highlighted below:
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.50\textwidth]{gyroscope.drawio.png}
+  \caption{Vehicle Axes for Gyroscope Readings [29]}
+\end{figure} 
+\begin{figure}[!h]
+  \centering
+      \includegraphics[width=0.40\textwidth]{accelerometer.drawio.png}
+  \caption{Vehicle Axes for Accelerometer Readings [29]}
+\end{figure} 
+
+As demonstrated by the data collected, the maneuver to avoid the pedestrian resulted in catastrophic effects on the vehicle, and by extension, the driver. This data can then be used to modify what actions are taken by the autonomous driving agent upon being presented with a similar situation. 
+
+All these simulation and testing activities may occur rapidly and for a much lower cost relative to traditional industrial practices, allowing for a much more streamlined development process. Furthermore, the examples shown are only a subset of the entire data logging pipeline's capabilities, as much more data can be visualized and collected. Additionally, the user may easily modify the data logging framework in order to visualize the data differently or even begin logging other data items from the simulation.
+
+
+\section{Future Developments for the System}
+This section will overview the next steps in place for the simulation bench and will highlight the remaining features left to be implemented before the entirety of the system objectives have been achieved. It must be noted that this paper acts as a progress report for the work done on the simulation bench thus far.
+
+\subsection{Custom Map Creation}
+There currently exists third-party software which can be used to generate and export custom maps to the CARLA platform, and by extension, the simulation bench. An example of a software is RoadRunner. RoadRunner is a MATLAB software that provides an interactive editor for designing fully detailed environments for "simulating and testing automated driving systems" [30]. 
+
+RoadRunner provides an extensive array of tools which help to develop a highly advanced simulation setting, supporting "the visualization of lidar point cloud, aerial imagery, and GIS data" [30]. RoadRunner allows users to easily create roadways by providing the ability to generate functional road networks, traffic lights and intersections, signs, guardrails, road markings, etc [30].
+
+One of the more appealing features of RoadRunner is the ability to import and export road networks using OpenDRIVE [30]. This can allow for the replication of real-world road networks and environments to be used in simulations. One of the future goals of the simulation bench is to reproduce a selection of local Canadian roads using the RoadRunner software and export these environments into the system. This addition to the simulation bench will allow for users to perform all forms of simulation and testing activities in real-world, local roads which can heavily streamline and alleviate the development process of road vehicle/autonomous road vehicle systems.
+
+\subsection{Automated Testing Framework}
+One of the major key areas of development that is planned to be integrated into the simulation bench is an automated continuous integration and testing framework. This will allow the system to adhere to more streamlined development practices, such that as changes are made to the software or any new features are being pushed to the user's vehicle/autonomous vehicle system, the framework will automatically run a personalized suite of tests (including preexisting tests). This can help avoid system regression, improve component integration and make development activities on the simulation bench more efficient.
+
+The automated testing framework is planned to be powered by the Jenkins automation server. As mentioned before in section 4.5, Jenkins may be used as a continuous integration an testing server, allowing for the automation of unit testing, integration testing, and regression testing as changes in the code are committed [20]. 
+
+
+\section{Conclusion}
+The system that has been proposed in this paper addresses numerous key issues mentioned with the currently existing methods used for the development of vehicle/autonomous vehicle systems.
+
+The road vehicle/autonomous road vehicle simulation bench, whose design and development has been thoroughly outline in this paper, fills a need in the road vehicle development industry by specifically targeting those critical areas of contention. 
+
+Being based-entirely on open-source software which is backed by large communities and nearly endless support, the simulation bench brings forth a much more widely accessible platform to perform development and simulation activities for vehicle/autonomous vehicle systems. Furthermore, this form of platform is completely unconfined and requires no corporate involvement of any kind, allowing for this system to be much more approachable by a larger user base.
+
+As the system is based entirely on a simulation approach, testing activities can occur much more frequently and easily. The resources and time required to establish controlled testing for a real-world vehicle/autonomous vehicle is highly unattainable unless the development is being undertaken by a large manufacturer. Furthermore, the frequency of testing would be significantly lower. The simulation bench provides mean of being able to perform thorough, accurate to life testing on real world roads in a repeatable manner.
+
+Finally, the open-source nature of the system allows users to easily tailor and extend the simulation bench's capabilities as they desire. The simulation bench is in no way constrained by the traditional limitations of vehicle/autonomous vehicle development and allows for a large user base to easily engage and perform research, testing and development on numerous aspects of vehicle/autonomous vehicle systems. From the infotainment software, to the networking of vehicle subsystems, to the algorithms that physically drive the vehicle itself, the development of all these aspects are supported by the simulation bench.
+
+In addition to the points mentioned, the proposed system also supports the development of emerging technologies such as smart infrastructure communications. However, the possible extents to what development is supported in this system is virtually endless, as continuous support is provided for the technologies that power the simulation bench and there is no barriers to what additions can be made to an open-source platform.
+
+The proposed simulation bench bridges a gap that has been left unfilled in the vehicle/autonomous vehicle development space by extending on existing technologies and providing a base for a solution that is an inexpensive, widely accessible, highly repeatable, extremely robust, largely supported and tremendously extendable platform to support the development of vehicle/autonomous vehicle systems.
+
+
+\section*{References}
+\begin{enumerate}[label={[\arabic*]}]
+ \item “Autonomous Vehicle Market (by application: Defense, Transportation; by level of automation: Level 1, level 2, level 3, level 4, level 5; by propulsion: Semi-autonomous, fully autonomous; by vehicle: Passenger Car, commercial vehicle) - global industry analysis, size, share, growth, trends, regional outlook, and forecast 2022 - 2030,” Precedence Research. [Online]. Available: \url{https://www.precedenceresearch.com/autonomous-vehicle-market}. [Accessed: 07-Jul-2022]. 
+ \item R.-T. Innovations, “Intelligent, distributed, Real Time Systems work together as one,” RTI. [Online]. Available: \url{https://www.rti.com/en/}. [Accessed: 07-Jul-2022]. 
+ \item “Advancing map-enhanced driver assistance systems leading to automated driving,” Adasis website. [Online]. Available: \url{https://adasis.org/}. [Accessed: 07-Jul-2022]. 
+ \item “Waymo Driver,” Waymo. [Online]. Available: \url{https://waymo.com/}. [Accessed: 07-Jul-2022]. 
+ \item J. Yoshida, “Tracking Autonomous Vehicle Software Platforms,” Embedded.com, 12-May-2020. [Online]. Available: \url{https://www.embedded.com/tracking-autonomous-vehicle-software-platforms/}. [Accessed: 07-Jul-2022]. 
+ \item P. Lienert, “Self-driving costs could drop 90 percent by 2025, Delphi CEO says,” Reuters, 04-Dec-2017. [Online]. Available: \url{https://www.reuters.com/article/us-autos-delphi-idUSKBN1DY2AC}. [Accessed: 07-Jul-2022]. 
+ \item A. Efrati, “Money pit: Self-driving cars' \$16 billion cash burn,” The Information, 21-Dec-2020. [Online]. Available: \url{https://www.theinformation.com/articles/money-pit-self-driving-cars-16-billion-cash-burn?irclickid=WWZ1yqyYPxyIT2LXgOUUvyZOUkDw0dTRQwFBXc0\&amp;irgwc=1\&amp;utm\_source=affiliate\&amp;utm\_medium=cpa\&amp;utm\_campaign=10078-Skimbit\%2BLtd.\&amp;utm\_term=caranddriver.com}. [Accessed: 07-Jul-2022]. 
+ \item R. Baldwin, “Self-driving-car research has cost \$16 billion. what do we have to show for it?,” Car and Driver, 29-Nov-2021. [Online]. Available: \url{https://www.caranddriver.com/news/a30857661/autonomous-car-self-driving-research-expensive/}. [Accessed: 07-Jul-2022]. 
+ \item “What is hardware-in-the-loop?,” NI. [Online]. Available: \url{https://www.ni.com/en-ca/innovations/white-papers/17/what-is-hardware-in-the-loop-.html#:~:text=Back\%20to\%20top-,What\%20Is\%20HIL\%3F,world\%20system\%20is\%20being\%20used}. [Accessed: 02-Aug-2022].
+ \item C. A. R. L. A. Team, “Carla: Open-source simulator for autonomous driving research,” CARLA Simulator. [Online]. Available: \url{https://carla.org/}. [Accessed: 07-Jul-2022]. 
+ \item J. Kaipada, A. Parameswaran, S. Patel, and G. Zakharov, Ontario Tech University, Oshawa, Ontario, rep., 2019. 
+ \item T. Akhtar, R. Amin, U. Malik, J. Singh, and L. Valenski, Ontario Tech University, Oshawa, Ontario, rep., 2022.
+ \item D. Curry, “Android Statistics (2022),” Business of Apps, 04-May-2022. [Online]. Available: \url{https://www.businessofapps.com/data/android-statistics/#:~:text=Android\%20is\%20the\%20most\%20popular,users\%20spanning\%20over\%20190\%20countries}. [Accessed: 07-Jul-2022]. 
+ \item “Operating system market share worldwide,” StatCounter Global Stats. [Online]. Available: \url{https://gs.statcounter.com/os-market-share}. [Accessed: 07-Jul-2022].
+ \item “Android Debug Bridge (ADB) ,” Android Developers. [Online]. Available: \url{https://developer.android.com/studio/command-line/adb}. [Accessed: 07-Jul-2022].
+ \item “Pure-Python-ADB,” PyPI. [Online]. Available: \url{https://pypi.org/project/pure-python-adb/}. [Accessed: 07-Jul-2022]. 
+ \item “Can bus tools,” CAN BUS tools - cantools 34.3.0 documentation. [Online]. Available: \url{https://cantools.readthedocs.io/en/latest/#about}. [Accessed: 07-Jul-2022]. 
+ \item Genivi, “CANdevStudio: Development Tool for Can Bus Simulation,” GitHub. [Online]. Available: \url{https://github.com/GENIVI/CANdevStudio}. [Accessed: 07-Jul-2022]. 
+ \item “Unittest - unit testing framework,” unittest - Unit testing framework - Python 3.10.5 documentation. [Online]. Available: \url{https://docs.python.org/3/library/unittest.html}. [Accessed: 07-Jul-2022]. 
+ \item “Jenkins: Build great things at any scale,” Jenkins. [Online]. Available: \url{https://www.jenkins.io/}. [Accessed: 07-Jul-2022]. 
+ \item SHWotever, “BMW E36 Cluster Setup · Simhub,” GitHub. [Online]. Available: \url{https://github.com/SHWotever/SimHub/wiki/BMW-E36-Cluster-Setup}. [Accessed: 07-Jul-2022]. 
+ \item “Maps SDK for Android overview,” Google Maps Platform. [Online]. Available: \url{https://developers.google.com/maps/documentation/android-sdk/overview}. [Accessed: 07-Jul-2022]. 
+ \item B. Kinniry, “More auto computers means more complicated, costly and longer repairs,” CEI Network, 08-Oct-2021. [Online]. Available: \url{https://ceinetwork.com/news-archive/auto-computers-means-complicated-costly-longer-repairs/}. [Accessed: 07-Jul-2022]. 
+ \item “Can bus,” Wikipedia, 29-Jun-2022. [Online]. Available: \url{https://en.wikipedia.org/wiki/CAN\_bus}. [Accessed: 07-Jul-2022]. 
+ \item S. Kundu and P. Liu, “Connected driverless cars are the key to a smarter, Safer City,” Social Innovation, 02-Aug-2021. [Online]. Available: \url{https://social-innovation.hitachi/en-us/think-ahead/transportation/autonomous-vehicles-and-smart-city/#:~:text=The\%20emergence\%20of\%20smart\%20cities,makes\%20driving\%20on\%20roads\%20safer}. [Accessed: 07-Jul-2022]. 
+ \item M. Bozdal, M. Samie, S. Aslam, and I. Jennions, “Evaluation of CAN bus security challenges,” Sensors (Basel, Switzerland), 21-Apr-2020. [Online]. Available: \url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7219335/#:~:text=The\%20CAN\%20bus\%20has\%20a,and\%20fails\%20to\%20sustain\%20integrity}. [Accessed: 07-Jul-2022]. 
+ \item “Cyclic redundancy check,” Wikipedia, 25-Jun-2022. [Online]. Available: \url{https://en.wikipedia.org/wiki/Cyclic\_redundancy\_check#:~:text=CRCs\%20are\%20specifically\%20designed\%20to,against\%20intentional\%20alteration\%20of\%20data}. [Accessed: 07-Jul-2022]. 
+ \item “How many Joules will kill you?,” homex, 12-Jul-2021. [Online]. Available: \url{https://homex.com/ask/how-many-joules-will-kill-you}. [Accessed: 07-Aug-2022].
+ \item S. Krestinin, Hatchback car three quarter view. stock illustration. 2020.
+ \item “Roadrunner: Design 3D scenes for automated driving simulation,” MATLAB \& Simulink. [Online]. Available: \url{https://www.mathworks.com/products/roadrunner.html}. [Accessed: 07-Jul-2022]. 
+\end{enumerate}
+
+
+\end{document}
