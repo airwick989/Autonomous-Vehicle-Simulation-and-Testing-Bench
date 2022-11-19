@@ -1,0 +1,158 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Design and Development of a Digital Twin Platform for Multi-domain Simulation and Testing of Autonomous Road Vehicles}
+
+\author{\IEEEauthorblockN{1\textsuperscript{st} Ridwan Hossain}
+\IEEEauthorblockA{
+\textit{Department of Electrical, Computer}\\
+\textit{and Software Engineering.}\\ 
+\textit{Ontario Tech University} \\
+Oshawa, ON, Canada \\
+ridwan.hossain@ontariotechu.net}
+\and
+\IEEEauthorblockN{2\textsuperscript{nd} Daniel Cheema}
+\IEEEauthorblockA{
+\textit{Department of Automotive and }\\
+\textit{Surface Transportation.}\\ 
+\textit{National Research Council Canada} \\
+London, ON, Canada \\
+daniel.cheema@nrc-cnrc.gc.ca}
+\and
+\IEEEauthorblockN{3\textsuperscript{rd} Taufiq Rahman}
+\IEEEauthorblockA{
+\textit{Department of Automotive and }\\
+\textit{Surface Transportation.}\\ 
+\textit{National Research Council Canada} \\
+London, ON, Canada \\
+taufiq.rahman@nrc-cnrc.gc.ca}
+\and
+\IEEEauthorblockN{4\textsuperscript{th} Akramul Azim}
+\IEEEauthorblockA{
+\textit{Department of Electrical, Computer}\\
+\textit{and Software Engineering.}\\ 
+\textit{Ontario Tech University} \\
+Oshawa, ON, Canada \\
+akramul.azim@ontariotechu.net}
+}
+
+\maketitle
+
+\begin{abstract}
+There exists a need for a platform that allows users to perform meaningful simulation and testing for the components which compose autonomous vehicle systems whilst being accessible and widely supported. Presented is an open-source co-simulation and testing platform for autonomous vehicles. Constructed by combining an HIL bench and a software simulation entity, the major benefits of the platform will be the automation capabilities brought forth by DevOps pipelines focused around application development for vehicles, the integration and regression testing performed by interfacing vehicle hardware with simulation environments, and the opportunities for probing messages between the hardware and software components.
+\end{abstract}
+
+
+\section{Introduction}
+The autonomous vehicle space is a rapidly growing industry and has already demonstrated a strong presence on today's roads. "In 2020, there were around 35.02 million autonomous vehicles worldwide.
+In addition, that number showed an increase of about 3.62 million driverless cars from 2019, when that number was about 31.4 million" [1]. 
+
+As a result of this tremendous pace, the amount of resources being expended into autonomous vehicle research and testing has also increased significantly.  "As of 2020, at least \$16 Billion USD has been expended towards autonomous vehicle system testing
+across only 30 companies" [2]. In addition to the resources, a great deal of time is required in the process of developing a new autonomous vehicle and may take "about 16 years for them to be ready for the road" [3]. 
+
+The reasoning for such high development time and costs associated with AVs is partly due to Safety Integrity Level requirements. Safety Integrity Levels or SILs are "a measure of safety system performance, in terms of probability of failure on demand (PFD)" [4]. There are four levels of SIL: SIL 1, SIL 2, SIL 3, and SIL 4, where the "higher the associated safety level" denotes a "lower probability that a system will fail to perform properly" [4]. 
+
+An evolution of SILs are ASILs which stand for Automotive Safety Integrity Levels [5]. ASILs are denoted by letters a through D, where "ASIL A represents the lowest degree and ASIL D represents the highest degree of automotive hazard" (ASIL A is the safest level) [5]. Automotive Safety Integrity Levels are more stringent than normal SILs and consider safety factors in a more critical manner [5]. ASIL covers aspects such as possibility and severities of injury, controllability of the vehicle, frequency of exposures to hazards, and more [5].
+
+These rigorous automotive safety integrity levels become particularly restrictive to the development of autonomous vehicle systems, and rightly so. However, this means that much more development and testing time must be expended in order to ensure that autonomous vehicle components are road ready.
+
+Another contributor to the difficulty of autonomous vehicle development is the restriction that is being introduced to the existing OBD-II standard. OBD-II refers to the second generation of On-board Diagnostics system which allows vehicle owners and technicians to access information pertaining to vehicle diagnostics and subsystem errors [6]. 
+
+OBD and OBD-II have remained as the standard protocols for retrieving vehicle diagnostic data across a vast majority of passenger vehicles, however, "OEMS are hoping to restrict OBD-II access" with newer vehicles moving forward [7]. While the on-board diagnostics system would be available while the vehicle is stationary, major OEMs plan to block the transfer of data on the OBD when the vehicle is driven [8]. This is a result of growing security concerns, particularly with the introduction of the fleet of heavily software-reliant road vehicles which use their on-board diagnostics for safety critical functions [8].
+
+The shift to a more restricted diagnostics system will make it significantly more difficult for third-party manufacturers of vehicle components that require the vehicle to be running. This also introduces barriers for start-up companies who do not have access to proprietary resources to perform meaningful testing and analysis on vehicle subsystems using current and forthcoming OBD protocols.
+
+Additionally, there are key automation features missing in the vehicle and autonomous vehicle development space. There currently exists few efficient DevOps frameworks for the development of software on vehicles due to the unique challenges regarding software delivery on vehicles. Road vehicle software requires "complex testing matrices and deployment processes" in order to meet "strict safety, regulation and compliance rules" [9]. Furthermore, automation frameworks which do exist are all propriety and restricted to the manufacturer's development purposes.
+
+Evident from all the information presented, there is a need in the autonomous vehicle research and development space for an open-source platform to fulfill the requirements mentioned whilst also reducing the time required to perform autonomous vehicle development and testing activities.
+
+
+\section{The Platform Designed to Address the Issues}
+This paper will present a platform that has been designed in order to target the key issues regarding autonomous vehicle development which were mentioned before. The platform will take the form of an open-source multi-domain simulation and testing platform for vehicles and autonomous vehicles. 
+
+The platform is currently in development and has been constructed by combining two major constituents, a hardware-in-the-loop bench and a software simulation entity. Each half of the platform will be explored further in the following sections. 
+
+
+\section{Software Simulation and Testing Bench}
+One method to achieve more streamlined development and testing for autonomous vehicle systems is the utilization of a contained simulation environment. Using simulation tools would allow for much more testing to occur much more rapidly, and would also mitigate many of the time and resource constraints associated with autonomous vehicle development. 
+
+Such a system has been developed in the form of a scenario-based testing and simulation platform for autonomous vehicles. The construction and synopsis of the simulation bench has been thoroughly outlined and explored in a research paper titled "Design and Development of an Open-source Scenario-based Testing and Simulation Platform for Autonomous Road Vehicles" by R. Hossain [10]. The paper covers all aspects of the simulation bench from the architecture and topology to results collected from the system.
+
+To briefly overview, the simulation bench is a system that was designed to to fill a gap in the industry of autonomous vehicle development by providing a highly robust and streamlined software platform to support the development of autonomous vehicle driving software, using only widely supported and easily accessible open-source components [10]. The software powering this system has been developed from the ground up by a large community to support the development, training and validation of autonomous driving systems [10]. The primary benefits and features of the simulation bench will be summarized in the subsections below.
+
+\subsection{Accurate Simulation of Sensors, Vehicles, and Environments}
+The platform supports flexible specification of sensor suites such as LIDAR, depth sensors, RGB cameras, and many more [10]. Additionally, the platform realistically simulates all aspects of a vehicle and its environment such as vehicle telemetry, various environmental conditions, full control of all static and dynamic actors, fully simulated traffic networks, and much more [10].
+
+\subsection{Simulation of a Digital Twin}
+The system allows for rapid, repeatable, accurate, and nearly endless testing and simulation of many of the components that make up an autonomous vehicle system by allowing users to co-simulate a digital twin of a real world vehicle [10]. This enables users to gain valuable simulation and testing data whilst not being constrained by real-world factors [10].
+
+\subsection{Interfaces for Hardware-in-the-loop Extensions}
+The simulation bench also has existing interfaces which allow it to adopt a hardware-in-the-loop or HIL configuration, which allows for hardware components to be tested alongside the software components within the simulation environment [10]. This provides users of the system with the ability to connect various hardware peripherals to the bench and perform simulation activities in a contained environment in order to attain controlled testing and verification before being deployed for real-world testing [10].
+
+\subsection{Dataset Generation}
+The most critical aspect of the simulation bench is it's data recording and logging capabilities. The ability to collect and examine the telemetry collected from the simulation and testing activities performed on vehicle subsystems provides powerful insight [10]. The data may also be visualized using the automated data visualization pipeline which is built into the dataset generation framework in order to make the datasets more human-readable [10]. The information extracted from the collected datasets can be used to influence what modifications or development is required for various components of an autonomous vehicle system [10].
+
+
+\section{Hardware-in-the-loop Bench}
+The hardware-in-the-loop or HIL test bench developed at NRC-London of Canada is a physical representation/replication of almost the entire global electrical system of a production automotive platform.
+
+The vehicle on which the bench is based on is the 2018 Ford Edge Titanium. The 2018 Ford Edge Titanium is a medium sized SUV with SAE (Society of Automotive Engineers) level 2 capable ADAS (Advanced Driver Assistance System) features. e.g. parking assistance, lane keep assist and speed-dependent adaptive cruise control. On the HIL bench, these features are partially or entirely disabled in their functionality due to the nature of the bench being a stationary object and therefore lacking input values of vehicle dynamics such as wheel speed, yaw rate, lateral and longitudinal acceleration.
+
+The bench is divided into subsystems in the form of a topological hierarchy, and interconnected with one another by means of electrical transmission media such as cables, wires and connectors carrying analog and digital signals. Furthermore, these electrical media also provide power to these subsystems. A subsystem can operate standalone or it can be dependent on a single or multiple subsystems to generate the desired electrical or mechanical output the module was designed for. A vast majority the vehicle subsystems are included within the HIL bench, including the instrument cluster control module, steering column control module, and obstacle detection modules, image processing modules just to name a few.
+
+The HIL bench consists of four CAN (Control Area Network) bus subsystems which are all connected to a gateway module. The subsystems are High Speed CAN 1, High Speed CAN 2, High Speed CAN 3 and Medium Speed CAN-bus. Drivetrain and battery/energy management related ECUs (Engine Control Units) are connected to High Speed CAN 1, ADAS related ECUs to High Speed CAN 2, infotainment related ECUs to High Speed CAN 3, and body control related ECU’s are connected to the Medium Speed CAN-bus.
+
+The HIL bench allows users to operate various vehicle subsystem components in conjunction with other subsystems through the communication which is provisioned by the CAN bus architecture. Users can also freely probe and observe the messages and data being transmitted across the system for testing and development purposes.
+
+
+\section{Merging the Two Benches into a Multi-domain Simulation and Testing Platform}
+Combining the two separate benches into a single entity results in a complete platform which can be used to perform extensive, repeatable, and meaningful simulation and testing for the hardware and software components which compose vehicle/autonomous vehicle systems. The real-world hardware components of a production vehicle embedded in the HIL bench can be interfaced to the software simulation in order to supply input to a digital twin.
+
+This will allow for vehicle subsystems to undergo extensive testing in a controlled simulation environment and enable users of the platform to curate more thorough test cases which may be executed in a repeatable and easily recordable manner. In addition to this, the extensible API of the simulation bench allows users to route specific simulation data to specified outputs. By extension, this means that 
+(mentioned controlled testing of vehicle subsystems and the components that comprise them, but also talk about sending simulation input to the hardware components for testing purposes).
+
+
+\section*{References}
+Please number citations consecutively within brackets \cite{b1}. The 
+sentence punctuation follows the bracket \cite{b2}. Refer simply to the reference 
+number, as in \cite{b3}---do not use ``Ref. \cite{b3}'' or ``reference \cite{b3}'' except at 
+the beginning of a sentence: ``Reference \cite{b3} was the first $\ldots$''
+
+Number footnotes separately in superscripts. Place the actual footnote at 
+the bottom of the column in which it was cited. Do not put footnotes in the 
+abstract or reference list. Use letters for table footnotes.
+
+Unless there are six authors or more give all authors' names; do not use 
+``et al.''. Papers that have not been published, even if they have been 
+submitted for publication, should be cited as ``unpublished'' \cite{b4}. Papers 
+that have been accepted for publication should be cited as ``in press'' \cite{b5}. 
+Capitalize only the first word in a paper title, except for proper nouns and 
+element symbols.
+
+For papers published in translation journals, please give the English 
+citation first, followed by the original foreign-language citation \cite{b6}.
+
+\begin{thebibliography}{00}
+\bibitem{b1} G. Eason, B. Noble, and I. N. Sneddon, ``On certain integrals of Lipschitz-Hankel type involving products of Bessel functions,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
+\bibitem{b2} J. Clerk Maxwell, A Treatise on Electricity and Magnetism, 3rd ed., vol. 2. Oxford: Clarendon, 1892, pp.68--73.
+\bibitem{b3} I. S. Jacobs and C. P. Bean, ``Fine particles, thin films and exchange anisotropy,'' in Magnetism, vol. III, G. T. Rado and H. Suhl, Eds. New York: Academic, 1963, pp. 271--350.
+\bibitem{b4} K. Elissa, ``Title of paper if known,'' unpublished.
+\bibitem{b5} R. Nicole, ``Title of paper with only first word capitalized,'' J. Name Stand. Abbrev., in press.
+\bibitem{b6} Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, ``Electron spectroscopy studies on magneto-optical media and plastic substrate interface,'' IEEE Transl. J. Magn. Japan, vol. 2, pp. 740--741, August 1987 [Digests 9th Annual Conf. Magnetics Japan, p. 301, 1982].
+\bibitem{b7} M. Young, The Technical Writer's Handbook. Mill Valley, CA: University Science, 1989.
+\end{thebibliography}
+\vspace{12pt}
+\color{red}
+IEEE conference templates contain guidance text for composing and formatting conference papers. Please ensure that all template text is removed from your conference paper prior to submission to the conference. Failure to remove the template text from your paper may result in your paper not being published.
+
+\end{document}
