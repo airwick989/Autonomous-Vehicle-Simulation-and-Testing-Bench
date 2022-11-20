@@ -121,7 +121,7 @@ The HIL bench allows users to operate various vehicle subsystem components in co
 \section{Merging the Two Benches into a Multi-domain Simulation and Testing Platform}
 Combining the two separate benches into a single entity results in a complete platform which can be used to perform extensive, repeatable, and meaningful simulation and testing for the hardware and software components which compose vehicle/autonomous vehicle systems. The real-world hardware components of a production vehicle embedded in the HIL bench can be interfaced to the software simulation in order to supply input to a digital twin.
 
-The primary benefits introduced by merging the two pre-existing benches can be summarized into 3 major categories: modular plug-and-play capabilities, a multi-domain DevOps pipeline, and anomaly detection via correlation. Each of these 3 topics will be further explored in following sections.
+The primary benefits introduced by merging the two pre-existing benches can be summarized into 3 major categories: modular plug-and-play capabilities, a multi-domain DevOps pipeline, and anomaly detection via dataset correlation. Each of these 3 topics will be further explored in following sections.
 
 
 \section{Modular Plug-and-play Capabilities}
@@ -171,54 +171,42 @@ Having a DevOps pipeline incorporating both the software bench and hardware benc
 The DevOps pipeline also brings forth benefits for improved regression testing in the multi-domain platform. Code changes or modifications in the hardware subsystems may be verified to confirm that the changes did not adversely affect existing capabilities. Tests may be designed to compare results from both software and hardware to make stronger and more extensive test criteria.
 
 
-\section{Anomaly Detection via Correlation}
-\subsection{Hello there}
+\section{Anomaly Detection via Dataset Correlation}
+\subsection{Inability to Validate Each Bench in Standalone Use}
 A capability which was previously not possible with each standalone bench is the ability to perform anomaly detection for each bench. While each separate bench was initially designed with the goal of providing means of streamlined testing and validation, there lacked a way to ensure that each bench was performing correctly. While this may be possible to do with curated test suites, it is not viable as the software and hardware components being run on each bench may be interchanged and modified frequently.
 
-In order to detect instances of either bench not functioning correctly, the opposing bench may be used to help perform anomaly detection. 
+\subsection{Cross-domain Anomaly Detection}
+In order to detect instances of either bench not functioning correctly, the opposing bench may be used to help perform anomaly detection. As large datasets will be generated constantly by both the software and hardware-centric ends of the platform, each bench can be tested for semantic interoperability to ensure that there are no unexpected deviations from an expected pattern exhibited by a dataset.
 
-Maybe use some challenges shown in source [12]
+By correlating the results collected from both benches, this form of cross-domain anomaly detection may occur, further helping to ensure the functional correctness of the components being integrated and developed. This can also help corroborate that the datasets being produced by both systems are equally valid.
 
 
 \section{Conclusion}
-The dataset generation capabilities of the simulation bench presents a highly effective solution for reducing the time and resources required to perform autonomous vehicle verification and testing activities. 
+The platform resulting from merging the simulation entity and HIL bench presents a highly effective solution for reducing the time and resources required to perform autonomous vehicle verification and testing activities. 
 
-The current methods for autonomous vehicle testing suffer in key areas which result in a compromised development process. Having to test components of an autonomous vehicle system by deploying them on an actual vehicle results in great time and resource constraints to be enforced on the development cycle. Furthermore, this form of validation is limited by real-world factors and can result in sub-optimal testing to be performed. 
+The current methods for autonomous vehicle testing suffer in critical areas which result in a compromised development process. Having to test components of an autonomous vehicle system by deploying them on an actual vehicle results in great time and resource constraints to be enforced on the development cycle. Furthermore, this form of validation is limited by real-world factors and can result in sub-optimal testing to be performed. 
 
-The features and sample results of the real-time data recording and logging pipeline within the simulation bench effectively demonstrates the feasibility of utilizing such a platform as a first phase of testing before finally deploying software and hardware components to real-world vehicles. In addition to significantly streamlining the testing and verification process of autonomous vehicle development, many resource and time related constraints are mitigated by using this approach. 
+In addition to the features and capabilities of the standalone software simulation bench outlined in the paper by R. Hossain [10], interfacing the HIL bench to the pre-existing system allows for key benefits to come to fruition. The benefits as outlined in this manuscript are distributed across 3 overarching categories. 
 
+The first is the ability to interface hardware components to the software entity  to be able to more thoroughly test, integrate, and simulate them in a controlled environment. The second is the automation capabilities brought forth by a multi-domain DevOps pipeline to enhance the integration and regression testing which can be performed as a result of interfacing vehicle hardware components with realistic simulation environments. The final major benefit brought forth by combining the benches into a single platform is how the amalgamation of these systems can be used to help detect possible anomalies in the software or hardware in either one of the benches.
 
-\section*{References}
-Please number citations consecutively within brackets \cite{b1}. The 
-sentence punctuation follows the bracket \cite{b2}. Refer simply to the reference 
-number, as in \cite{b3}---do not use ``Ref. \cite{b3}'' or ``reference \cite{b3}'' except at 
-the beginning of a sentence: ``Reference \cite{b3} was the first $\ldots$''
+The features and open areas for extension in this system effectively demonstrates the feasibility of utilizing such a platform as a first phase of testing before finally deploying software and hardware components to real-world vehicles. In addition to significantly streamlining the testing and verification process of autonomous vehicle development, many resource and time related constraints are mitigated by utilizing such an approach. 
 
-Number footnotes separately in superscripts. Place the actual footnote at 
-the bottom of the column in which it was cited. Do not put footnotes in the 
-abstract or reference list. Use letters for table footnotes.
-
-Unless there are six authors or more give all authors' names; do not use 
-``et al.''. Papers that have not been published, even if they have been 
-submitted for publication, should be cited as ``unpublished'' \cite{b4}. Papers 
-that have been accepted for publication should be cited as ``in press'' \cite{b5}. 
-Capitalize only the first word in a paper title, except for proper nouns and 
-element symbols.
-
-For papers published in translation journals, please give the English 
-citation first, followed by the original foreign-language citation \cite{b6}.
 
 \begin{thebibliography}{00}
-\bibitem{b1} G. Eason, B. Noble, and I. N. Sneddon, ``On certain integrals of Lipschitz-Hankel type involving products of Bessel functions,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
-\bibitem{b2} J. Clerk Maxwell, A Treatise on Electricity and Magnetism, 3rd ed., vol. 2. Oxford: Clarendon, 1892, pp.68--73.
-\bibitem{b3} I. S. Jacobs and C. P. Bean, ``Fine particles, thin films and exchange anisotropy,'' in Magnetism, vol. III, G. T. Rado and H. Suhl, Eds. New York: Academic, 1963, pp. 271--350.
-\bibitem{b4} K. Elissa, ``Title of paper if known,'' unpublished.
-\bibitem{b5} R. Nicole, ``Title of paper with only first word capitalized,'' J. Name Stand. Abbrev., in press.
-\bibitem{b6} Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, ``Electron spectroscopy studies on magneto-optical media and plastic substrate interface,'' IEEE Transl. J. Magn. Japan, vol. 2, pp. 740--741, August 1987 [Digests 9th Annual Conf. Magnetics Japan, p. 301, 1982].
-\bibitem{b7} M. Young, The Technical Writer's Handbook. Mill Valley, CA: University Science, 1989.
+\bibitem{b1} D. Milenkovic, ``24 self-driving car statistics \& facts,'' Carsurance, 26-Jul-2022. [Online].
+\bibitem{b2} A. Efrati, “Money pit: Self-driving cars' \$16 billion cash burn,” The Information, 21-Dec-2020. [Online].
+\bibitem{b3} Hyperdrive, “The State of the Self-Driving Car Race 2020,” Bloomberg.com, 15-May-2020. [Online].
+\bibitem{b4} “What Safety Integrity Level (SIL) means and how to calculate IT - spotlight on safety: MSA corporate blog,” Spotlight on Safety | MSA Corporate Blog, 06-Aug-2020. [Online].
+\bibitem{b5} “What is ASIL (Automotive Safety Integrity Level)? – overview: Synopsys automotive,” Synopsys. [Online].
+\bibitem{b6} V. Barreto, “What is OBDII? History of on-board diagnostics,” Geotab, 25-Nov-2020. [Online].
+\bibitem{b7} “Is it the end of OBD-II? If so, what comes next?” Automotive Industries Association of Canada, Ottawa. 
+\bibitem{b8} “OBD: The battle for control over car data has just started,” PTOLEMUS Consulting Group, 06-Oct-2017. [Online]. 
+\bibitem{b9} P. Belagatti, “The Scene of DevOps in the Automotive Industry,” DevOps Zone, 02-Jul-2020. [Online].
+\bibitem{b10} R. Hossain, ``Design and Development of an Open-source Scenario-based Testing and Simulation Platform for Autonomous Road Vehicles,'' unpublished.
+\bibitem{b11} “Challenges in Autonomous Vehicle Testing and Validation,” TITAN TLM, 27-Oct-2020. [Online].
+\bibitem{b12} “Accelerated Automotive Product Development using DevOps,” Telematics Wire, 15-Apr-2022. [Online].
 \end{thebibliography}
-\vspace{12pt}
-\color{red}
-IEEE conference templates contain guidance text for composing and formatting conference papers. Please ensure that all template text is removed from your conference paper prior to submission to the conference. Failure to remove the template text from your paper may result in your paper not being published.
+
 
 \end{document}
