@@ -106,10 +106,13 @@ The most critical aspect of the simulation bench is it's data recording and logg
 \section{Hardware-in-the-loop Bench}
 The hardware-in-the-loop or HIL test bench developed at NRC-London of Canada is a physical representation/replication of almost the entire global electrical system of a production automotive platform.
 
+\subsection{Donor Vehicle Details}
 The vehicle on which the bench is based on is the 2018 Ford Edge Titanium. The 2018 Ford Edge Titanium is a medium sized SUV with SAE (Society of Automotive Engineers) level 2 capable ADAS (Advanced Driver Assistance System) features. e.g. parking assistance, lane keep assist and speed-dependent adaptive cruise control. On the HIL bench, these features are partially or entirely disabled in their functionality due to the nature of the bench being a stationary object and therefore lacking input values of vehicle dynamics such as wheel speed, yaw rate, lateral and longitudinal acceleration.
 
+\subsection{Vehicle Subsystems}
 The bench is divided into subsystems in the form of a topological hierarchy, and interconnected with one another by means of electrical transmission media such as cables, wires and connectors carrying analog and digital signals. Furthermore, these electrical media also provide power to these subsystems. A subsystem can operate standalone or it can be dependent on a single or multiple subsystems to generate the desired electrical or mechanical output the module was designed for. A vast majority the vehicle subsystems are included within the HIL bench, including the instrument cluster control module, steering column control module, and obstacle detection modules, image processing modules just to name a few.
 
+\subsection{Brief Overview of CAN Bus Architecture}
 The HIL bench consists of four CAN (Control Area Network) bus subsystems which are all connected to a gateway module. The subsystems are High Speed CAN 1, High Speed CAN 2, High Speed CAN 3 and Medium Speed CAN-bus. Drivetrain and battery/energy management related ECUs (Engine Control Units) are connected to High Speed CAN 1, ADAS related ECUs to High Speed CAN 2, infotainment related ECUs to High Speed CAN 3, and body control related ECU’s are connected to the Medium Speed CAN-bus.
 
 The HIL bench allows users to operate various vehicle subsystem components in conjunction with other subsystems through the communication which is provisioned by the CAN bus architecture. Users can also freely probe and observe the messages and data being transmitted across the system for testing and development purposes.
@@ -118,8 +121,71 @@ The HIL bench allows users to operate various vehicle subsystem components in co
 \section{Merging the Two Benches into a Multi-domain Simulation and Testing Platform}
 Combining the two separate benches into a single entity results in a complete platform which can be used to perform extensive, repeatable, and meaningful simulation and testing for the hardware and software components which compose vehicle/autonomous vehicle systems. The real-world hardware components of a production vehicle embedded in the HIL bench can be interfaced to the software simulation in order to supply input to a digital twin.
 
-This will allow for vehicle subsystems to undergo extensive testing in a controlled simulation environment and enable users of the platform to curate more thorough test cases which may be executed in a repeatable and easily recordable manner. In addition to this, the extensible API of the simulation bench allows users to route specific simulation data to specified outputs. By extension, this means that 
-(mentioned controlled testing of vehicle subsystems and the components that comprise them, but also talk about sending simulation input to the hardware components for testing purposes).
+The primary benefits introduced by merging the two pre-existing benches can be summarized into 3 major categories: modular plug-and-play capabilities, a multi-domain DevOps pipeline, and anomaly detection via correlation. Each of these 3 topics will be further explored in following sections.
+
+
+\section{Modular Plug-and-play Capabilities}
+
+\subsection{Difficulties with Current Methods of Hardware Validation}
+One of the most prominent challenges in the testing of road vehicles and autonomous road vehicles is gathering enough data. "While real-world testing offers valuable feedback, there is the difficulty of scaling, where it is physically infeasible to run the millions of miles of tests required to gather enough data" [11]. 
+
+In order to ensure the functional correctness of a particular hardware component in a scenario where the entire vehicle is operational, the traditional means of real-world testing poses limitations. This is particularly due to resource constraints and safety risks. Take for example, a vehicle must be put in an unsafe situation where the driver and surrounding entities may be put at risk in order to meet sufficient testing of a certain subsystem, such as collision detection and mitigation systems. This sort of testing is difficult to do in a controlled manner and may be at the expense of the safety of those involved as well as the resources required to perform that testing. 
+
+"In 2016 a Tesla operating in self-driving mode crashed into an overturned white truck trailer on the highway, and another Tesla in 2018 slammed into a parked fire truck. In both situations, the car’s sensors failed to ‘see’ the objects ahead" [11]. This is a perfect example illustrating the inability to extensively test a vehicle's components without encountering safety limitations.
+
+"Additionally, there is a need for test commonality, whereby identical tests are run with different types of vehicles" and environmental conditions [11]. Reproducing exact conditions and actions for each run of a test is extremely difficult due to the variability and volatile nature of real-world testing [11].
+
+\subsection{Plug-and-play Testing of Hardware and Software Components}
+The resultant platform of combining the two aforementioned benches resolves the issues addressed with traditional testing methods. The multi-domain nature of the system allows users to test both software or hardware components. As the simulation entity powering the system is open source and has been designed with modularity in mind, all software aspects of a vehicle or autonomous vehicle may be modified, replaced, or added to the simulation code as needed. 
+
+While there are existing software packages which enable this sort of development and testing, these systems are either privately owned or proprietary. Most OEMs have their own systems in place which are inaccessible to the majority of the population. This makes the road vehicle/autonomous road vehicle development space highly contained. These restrictions are not present with the open-source software used in the simulation bench and may be explored further in the aforementioned paper by R. Hossain [10].
+
+The highly modifiable API exposed by the simulation entity can also be used to interface hardware to the software system, allowing for vehicle subsystems to undergo extensive testing in a controlled simulation environment. This enables users of the platform to curate more thorough test cases which may be executed in a repeatable and easily recordable manner. 
+
+In addition to this, the extensible API as a result of the simulation bench's open-source nature allows users to route particular simulation data to specified outputs as required by the hardware they wish to test. By extension, this means that elements such as LIDAR readings, vehicle speed, road conditions, and any other simulation data may be used as input to external hardware components in the HIL bench to perform testing in the reverse manner as well.
+
+Components can be validated much quicker and with more certainty as users will be able to easily 'plug in', simulate, run tests, and ensure that components are behaving as expected in real world scenarios in conditions, but in a contained environment. Parallelized computer simulations can achieve exponentially higher test coverage in terms of distance driven relative to real-world testing. Thus, the combined platform may be used as a thorough preliminary stage of verification before moving to real-world testing.
+
+
+\section{Multi-domain DevOps Pipeline}
+\subsection{Key Challenges in Current Automotive Software Development and Delivery}
+Software continues to play an ever-growing role in vehicle architecture. The average modern road vehicle contains hundreds of lines of code which are responsible for a large portion of the vehicle's functionality, from simple comfort features to mission critical engine management [12]. This use of software in vehicle architecture is only increasing and becoming more complex as autonomous and semi-autonomous features become more commonplace, demanding higher levels of reliability of the software being delivered [12].
+
+The automotive industry has been been reliant on development structures that adopt a waterfall approach, which enforces very a fixed development style [12]. This results in a prolonged development period, usually taking years to deliver a single product [12]. As software begins adopting more safety-critical roles in vehicle architecture, the development processes used in the construction of vehicle software needs to become more adaptable and allow for the detection of regression into erroneous code [12]. 
+
+The automotive industry currently "faces multiple challenges in terms of software development, testing, and deployment, while simultaneously adhering to strict safety and regulations" [12]. Adopting DevOps practices will allow for "faster time-to-market, continuous product quality improvement, increased productivity, higher reliability, happier customers, lower development costs, and faster experimentation of SW changes/new feature additions" [12].
+
+\subsection{Benefits of DevOps Implementation in a Multi-domain Platform}
+In addition to the aforementioned adaptability and agile delivery benefits, there are distinct advantages to having a DevOps pipeline on the multi-domain platform presented in this manuscript. 
+
+As mentioned in previous sections, the multi-domain configuration of the platform will allow for component testing to occur for both software aspects as well as hardware. Code components can be inserted into the simulation environment in order to ensure it's functional correctness, and the simulation environment can be used to test the inputs, outputs, and functionality of hardware components which have been interfaced to the software system. 
+
+With the adoption of a DevOps pipeline, testing may be automated for both the software and hardware components which have been 'plugged-in' to the system. An automated continuous integration and testing framework is in development and the details of the tools and technologies being used to construct it is outlined in the aforementioned paper by R. Hossain [10]. This will allow for users to develop extensive test suites which encompass both software and hardware aspects in an inclusive manner. 
+
+"As changes are made to the software or any new
+features are being pushed to the user’s vehicle/autonomous
+vehicle system, the framework will automatically run" the test cases [10]. "This can help avoid system regression, improve component integration and make development activities on the" platform more streamlined [10].
+
+Having a DevOps pipeline incorporating both the software bench and hardware bench will allow for testing automation in differing test contexts. Different variations of simulations and real-world scenarios may be used to test the software and hardware in the loop in an automated fashion, which would not be possible without a multi-domain DevOps pipeline. 
+
+The DevOps pipeline also brings forth benefits for improved regression testing in the multi-domain platform. Code changes or modifications in the hardware subsystems may be verified to confirm that the changes did not adversely affect existing capabilities. Tests may be designed to compare results from both software and hardware to make stronger and more extensive test criteria.
+
+
+\section{Anomaly Detection via Correlation}
+\subsection{Hello there}
+A capability which was previously not possible with each standalone bench is the ability to perform anomaly detection for each bench. While each separate bench was initially designed with the goal of providing means of streamlined testing and validation, there lacked a way to ensure that each bench was performing correctly. While this may be possible to do with curated test suites, it is not viable as the software and hardware components being run on each bench may be interchanged and modified frequently.
+
+In order to detect instances of either bench not functioning correctly, the opposing bench may be used to help perform anomaly detection. 
+
+Maybe use some challenges shown in source [12]
+
+
+\section{Conclusion}
+The dataset generation capabilities of the simulation bench presents a highly effective solution for reducing the time and resources required to perform autonomous vehicle verification and testing activities. 
+
+The current methods for autonomous vehicle testing suffer in key areas which result in a compromised development process. Having to test components of an autonomous vehicle system by deploying them on an actual vehicle results in great time and resource constraints to be enforced on the development cycle. Furthermore, this form of validation is limited by real-world factors and can result in sub-optimal testing to be performed. 
+
+The features and sample results of the real-time data recording and logging pipeline within the simulation bench effectively demonstrates the feasibility of utilizing such a platform as a first phase of testing before finally deploying software and hardware components to real-world vehicles. In addition to significantly streamlining the testing and verification process of autonomous vehicle development, many resource and time related constraints are mitigated by using this approach. 
 
 
 \section*{References}
