@@ -4,6 +4,7 @@
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
+\usepackage{xurl}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
@@ -31,7 +32,7 @@ There currently exists a need for a platform that provides users with the abilit
 \begin{keywords}
 Enter key words or phrases in alphabetical 
 order, separated by commas. For a list of suggested keywords, send a blank 
-e-mail to keywords@ieee.org or visit \underline
+e-mail to keywords@ieee.org or visit \url
 {http://www.ieee.org/organizations/pubs/ani\_prod/keywrd98.txt}
 \end{keywords}
 
@@ -457,13 +458,13 @@ The first event of interest in this run was observing how the autonomous driving
 \begin{figure}[!h]
   \centering
       \includegraphics[width=0.50\textwidth]{ss1.png}
-  \caption{Manually Driving Incorrect Direction Down a One-way Road (1)}
+  \caption{Manually Driving Incorrect Direction Down a One-way Road (a)}
 \end{figure} 
 
 \begin{figure}[!h]
   \centering
       \includegraphics[width=0.50\textwidth]{ss2.png}
-  \caption{Manually Driving Incorrect Direction Down a One-way Road (2)}
+  \caption{Manually Driving Incorrect Direction Down a One-way Road (b)}
 \end{figure} 
 
 As shown, upon enabling autopilot, the agent made a harsh right turn before coming to a sudden stop. These can be confirmed as the driving agent's inputs by reviewing the visualized data shown.
@@ -489,23 +490,23 @@ The driving algorithms powering the autonomous driving agent may be altered to n
 \begin{figure}[!h]
   \centering
       \includegraphics[width=0.50\textwidth]{ss3.png}
-  \caption{Uncontrolled Swerving from the Autonomous Driving Agent (1)}
+  \caption{Uncontrolled Swerving from the Autonomous Driving Agent (a)}
 \end{figure} 
 \begin{figure}[!h]
   \centering
       \includegraphics[width=0.50\textwidth]{ss4.png}
-  \caption{Uncontrolled Swerving from the Autonomous Driving Agent (2)}
+  \caption{Uncontrolled Swerving from the Autonomous Driving Agent (b)}
 \end{figure} 
 \pagebreak
 \begin{figure}[!h]
   \centering
       \includegraphics[width=0.50\textwidth]{ss5.png}
-  \caption{Uncontrolled Swerving from the Autonomous Driving Agent (3)}
+  \caption{Uncontrolled Swerving from the Autonomous Driving Agent (c)}
 \end{figure} 
 \begin{figure}[!h]
   \centering
       \includegraphics[width=0.50\textwidth]{ss6.png}
-  \caption{Uncontrolled Swerving from the Autonomous Driving Agent (4)}
+  \caption{Uncontrolled Swerving from the Autonomous Driving Agent (d)}
 \end{figure} 
 
 This behaviour can be cross referenced with the data collected during this run of the simulation. It must be noted that this swerving behaviour occurred around the 0:04:40 mark in simulation time, which is equivalent to approximately 120 seconds in the recording time. As shown in Figure 13, the 120 second mark (the red line between 100 and 150 seconds) is when the autopilot is enabled and begins making full left and right turns. As evident in Figure 13, the autonomous driving agent is struggling to keep the vehicle within the road markers on roads with wider lanes and higher speeds than previously tested. This is further reinforced by the graph of lane invasion sensor warnings shown on the next page:
@@ -529,12 +530,12 @@ Shown are a series of screenshots displaying the transition from manual control 
 \begin{figure}[h!]
   \centering
       \includegraphics[width=0.50\textwidth]{ss7.png}
-  \caption{Dangerous Driving Test (1)}
+  \caption{Dangerous Driving Test (a)}
 \end{figure} 
 \begin{figure}[h!]
   \centering
       \includegraphics[width=0.50\textwidth]{ss8.png}
-  \caption{Dangerous Driving Test (2)}
+  \caption{Dangerous Driving Test (b)}
 \end{figure} 
 
 \newpage
@@ -542,12 +543,12 @@ Shown are a series of screenshots displaying the transition from manual control 
 \begin{figure}[h!]
   \centering
       \includegraphics[width=0.50\textwidth]{ss9.png}
-  \caption{Dangerous Driving Test (3)}
+  \caption{Dangerous Driving Test (c)}
 \end{figure} 
 \begin{figure}[h!]
   \centering
       \includegraphics[width=0.50\textwidth]{ss10.png}
-  \caption{Dangerous Driving Test (4)}
+  \caption{Dangerous Driving Test (d)}
 \end{figure} 
 
 Evident from the captures shown, the vehicle exhibited a nearly identical behaviour to that of the first run, where upon being presented with a dangerous situation, the vehicle made a harsh right turn and attempted to come to a stop. This seems to be a trend in the autonomous driving agent's behaviour, despite the types of dangers being faced having inherently different levels of urgency. In the first run, the vehicle was heading in the incorrect direction on a one-way road, whereas in this run, the vehicle is heading towards a pedestrian at high speed.
@@ -640,6 +641,98 @@ Finally, the open-source nature of the system allows users to easily tailor and 
 In addition to the points mentioned, the proposed system also supports the development of emerging technologies such as smart infrastructure communications. However, the possible extents to what development is supported in this system is virtually endless, as continuous support is provided for the technologies that power the simulation bench and there is no barriers to what additions can be made to an open-source platform.
 
 The proposed simulation bench bridges a gap that has been left unfilled in the vehicle/autonomous vehicle development space by extending on existing technologies and providing a base for a solution that is an inexpensive, widely accessible, highly repeatable, extremely robust, largely supported and tremendously extendable platform to support the development of vehicle/autonomous vehicle systems.
+
+
+\begin{thebibliography}{00}
+
+\bibitem{} “Autonomous Vehicle Market (by application: Defense, Transportation; by level of automation: Level 1, level 2, level 3, level 4, level 5; by propulsion: Semi-autonomous, fully autonomous; by vehicle: Passenger Car, commercial vehicle) - global industry analysis, size, share, growth, trends, regional outlook, and forecast 2022 - 2030,” Precedence Research. [Online]. Available:
+\url{https://www.precedenceresearch.com/autonomous-vehicle-market}. [Accessed: 07-Jul-2022]. 
+
+\bibitem{} R.-T. Innovations, “Intelligent, distributed, Real Time Systems work together as one,” RTI. [Online]. Available:
+\url{https://www.rti.com/en/}. [Accessed: 07-Jul-2022]. 
+
+\bibitem{} “Advancing map-enhanced driver assistance systems leading to automated driving,” Adasis website. [Online]. Available:
+\url{https://adasis.org/}. [Accessed: 07-Jul-2022].
+
+\bibitem{} “Waymo Driver,” Waymo. [Online]. Available:
+\url{https://waymo.com/}. [Accessed: 07-Jul-2022]. 
+
+\bibitem{} J. Yoshida, “Tracking Autonomous Vehicle Software Platforms,” Embedded.com, 12-May-2020. [Online]. Available:
+\url{https://www.embedded.com/tracking-autonomous-vehicle-software-platforms/}. [Accessed: 07-Jul-2022].
+
+\bibitem{} P. Lienert, “Self-driving costs could drop 90 percent by 2025, Delphi CEO says,” Reuters, 04-Dec-2017. [Online]. Available:
+\url{https://www.reuters.com/article/us-autos-delphi-idUSKBN1DY2AC}. [Accessed: 07-Jul-2022].
+
+\bibitem{} A. Efrati, “Money pit: Self-driving cars' \$16 billion cash burn,” The Information, 21-Dec-2020. [Online]. Available:
+\url{https://www.theinformation.com/articles/money-pit-self-driving-cars-16-billion-cash-burn}. [Accessed: 07-Jul-2022]. 
+
+\bibitem{} R. Baldwin, “Self-driving-car research has cost \$16 billion. what do we have to show for it?,” Car and Driver, 29-Nov-2021. [Online]. Available:
+\url{https://www.caranddriver.com/news/a30857661/autonomous-car-self-driving-research-expensive/}. [Accessed: 07-Jul-2022]. 
+
+\bibitem{} “What is hardware-in-the-loop?,” NI. [Online]. Available:
+\url{https://www.ni.com/en-ca/innovations/white-papers/17/what-is-hardware-in-the-loop-.html#:~:text=Back\%20to\%20top-,What\%20Is\%20HIL\%3F,world\%20system\%20is\%20being\%20used}. [Accessed: 02-Aug-2022].
+
+\bibitem{} C. A. R. L. A. Team, “Carla: Open-source simulator for autonomous driving research,” CARLA Simulator. [Online]. Available:
+\url{https://carla.org/}. [Accessed: 07-Jul-2022]. 
+
+\bibitem{} J. Kaipada, A. Parameswaran, S. Patel, and G. Zakharov, Ontario Tech University, Oshawa, Ontario, rep., 2019. 
+
+\bibitem{} T. Akhtar, R. Amin, U. Malik, J. Singh, and L. Valenski, Ontario Tech University, Oshawa, Ontario, rep., 2022.
+
+\bibitem{} D. Curry, “Android Statistics (2022),” Business of Apps, 04-May-2022. [Online]. Available:
+\url{https://www.businessofapps.com/data/android-statistics/#:~:text=Android\%20is\%20the\%20most\%20popular,users\%20spanning\%20over\%20190\%20countries}. [Accessed: 07-Jul-2022]. 
+
+\bibitem{} “Operating system market share worldwide,” StatCounter Global Stats. [Online]. Available:
+\url{https://gs.statcounter.com/os-market-share}. [Accessed: 07-Jul-2022].
+
+\bibitem{} “Android Debug Bridge (ADB) ,” Android Developers. [Online]. Available:
+\url{https://developer.android.com/studio/command-line/adb}. [Accessed: 07-Jul-2022].
+
+\bibitem{} “Pure-Python-ADB,” PyPI. [Online]. Available:
+\url{https://pypi.org/project/pure-python-adb/}. [Accessed: 07-Jul-2022].
+
+\bibitem{} “Can bus tools,” CAN BUS tools - cantools 34.3.0 documentation. [Online]. Available:
+\url{https://cantools.readthedocs.io/en/latest/#about}. [Accessed: 07-Jul-2022]. 
+
+\bibitem{} Genivi, “CANdevStudio: Development Tool for Can Bus Simulation,” GitHub. [Online]. Available:
+\url{https://github.com/GENIVI/CANdevStudio}. [Accessed: 07-Jul-2022]. 
+
+\bibitem{} “Unittest - unit testing framework,” unittest - Unit testing framework - Python 3.10.5 documentation. [Online]. Available:
+\url{https://docs.python.org/3/library/unittest.html}. [Accessed: 07-Jul-2022].
+
+\bibitem{} “Jenkins: Build great things at any scale,” Jenkins. [Online]. Available:
+\url{https://www.jenkins.io/}. [Accessed: 07-Jul-2022]. 
+
+\bibitem{} SHWotever, “BMW E36 Cluster Setup · Simhub,” GitHub. [Online]. Available:
+\url{https://github.com/SHWotever/SimHub/wiki/BMW-E36-Cluster-Setup}. [Accessed: 07-Jul-2022]. 
+
+\bibitem{} “Maps SDK for Android overview,” Google Maps Platform. [Online]. Available:
+\url{https://developers.google.com/maps/documentation/android-sdk/overview}. [Accessed: 07-Jul-2022]. 
+
+\bibitem{} B. Kinniry, “More auto computers means more complicated, costly and longer repairs,” CEI Network, 08-Oct-2021. [Online]. Available:
+\url{https://ceinetwork.com/news-archive/auto-computers-means-complicated-costly-longer-repairs/}. [Accessed: 07-Jul-2022]. 
+
+\bibitem{} “Can bus,” Wikipedia, 29-Jun-2022. [Online]. Available:
+\url{https://en.wikipedia.org/wiki/CAN\_bus}. [Accessed: 07-Jul-2022]. 
+
+\bibitem{} S. Kundu and P. Liu, “Connected driverless cars are the key to a smarter, Safer City,” Social Innovation, 02-Aug-2021. [Online]. Available:
+\url{https://social-innovation.hitachi/en-us/think-ahead/transportation/autonomous-vehicles-and-smart-city/#:~:text=The\%20emergence\%20of\%20smart\%20cities,makes\%20driving\%20on\%20roads\%20safer}. [Accessed: 07-Jul-2022]. 
+
+\bibitem{} M. Bozdal, M. Samie, S. Aslam, and I. Jennions, “Evaluation of CAN bus security challenges,” Sensors (Basel, Switzerland), 21-Apr-2020. [Online]. Available:
+\url{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7219335/#:~:text=The\%20CAN\%20bus\%20has\%20a,and\%20fails\%20to\%20sustain\%20integrity}. [Accessed: 07-Jul-2022]. 
+
+\bibitem{} “Cyclic redundancy check,” Wikipedia, 25-Jun-2022. [Online]. Available:
+\url{https://en.wikipedia.org/wiki/Cyclic\_redundancy\_check#:~:text=CRCs\%20are\%20specifically\%20designed\%20to,against\%20intentional\%20alteration\%20of\%20data}. [Accessed: 07-Jul-2022]. 
+
+\bibitem{} “How many Joules will kill you?,” homex, 12-Jul-2021. [Online]. Available:
+\url{https://homex.com/ask/how-many-joules-will-kill-you}. [Accessed: 07-Aug-2022].
+
+\bibitem{} S. Krestinin, Hatchback car three quarter view. stock illustration. 2020.
+
+\bibitem{} “Roadrunner: Design 3D scenes for automated driving simulation,” MATLAB \& Simulink. [Online]. Available:
+\url{https://www.mathworks.com/products/roadrunner.html}. [Accessed: 07-Jul-2022]. 
+
+\end{thebibliography}
 
 
 \EOD
