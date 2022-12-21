@@ -116,7 +116,7 @@ import serial
 import struct
 
 #RIDWAN import ADB functions
-#import adblib
+import adblib
 
 #RIDWAN import agents for autonomous driving
 from agents.navigation.behavior_agent import BehaviorAgent  # pylint: disable=import-error
@@ -715,6 +715,7 @@ class DualControl(object):
                             self._control.gear = -1
                     #END
                     else:
+                        
                         #if its a 0 input, put in park, if 1 put in drive etc.
                         if event.button == 0:
                             print(park)
@@ -733,7 +734,9 @@ class DualControl(object):
                 #(REZWANA) if the input is a joystick, but it is NOT from the gear shifter, it is from the steering wheel kit
                 #the rest of these if statemenst are parsing inputs from the steering wheel kit
                 #all the different buttons etc.
+                
                 else:
+                    #print(event.button)
                     global indicator
                     #ADB_command_success = False #RIDWAN added: for testing adb commands
                     if event.button == 0:
@@ -776,22 +779,22 @@ class DualControl(object):
                         else:
                             bkup_cam = 0
                         world.restart()
-                    # elif event.button == 12:
-                    #     ADB_command_success = adblib.home()
-                    # elif event.button == 7:
-                    #     ADB_command_success = adblib.volume_up()
-                    # elif event.button == 11:
-                    #     ADB_command_success = adblib.volume_down()
-                    # elif event.button == 6:
-                    #     ADB_command_success = adblib.next()
-                    # elif event.button == 10:
-                    #     ADB_command_success = adblib.previous()
-                    # elif event.button == 8:
-                    #     ADB_command_success = adblib.back()
-                    # elif event.button == 9:
-                    #     ADB_command_success = adblib.recent_apps()
-                    # elif event.button == 4:
-                    #     adblib.launch_app('com.google.android.apps.maps')
+                    elif event.button == 12:
+                        ADB_command_success = adblib.home()
+                    elif event.button == 7:
+                        ADB_command_success = adblib.volume_up()
+                    elif event.button == 11:
+                        ADB_command_success = adblib.volume_down()
+                    elif event.button == 6:
+                        ADB_command_success = adblib.next()
+                    elif event.button == 10:
+                        ADB_command_success = adblib.previous()
+                    elif event.button == 8:
+                        ADB_command_success = adblib.back()
+                    elif event.button == 9:
+                        ADB_command_success = adblib.recent_apps()
+                    elif event.button == 4:
+                        adblib.launch_app('com.google.android.apps.maps')
 
                     # #RIDWAN added
                     # if testingFlag == 24:   #For testing ADB commands   

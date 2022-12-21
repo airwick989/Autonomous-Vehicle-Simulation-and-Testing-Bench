@@ -1,72 +1,77 @@
+import subprocess
 import time
 
-from ppadb.client import Client as AdbClient
-
 def connect():
-    client = AdbClient(host="127.0.0.1", port=5037) # Default is "127.0.0.1" and 5037
-
-    devices = client.devices()
-
-    if len(devices) == 0:
-        print('No devices')
-        quit()
-
-    device = devices[0]
-
-    print(f'Connected to device: {device}\nClient: {client}\n\n')
-
-    return device, client
+    #subprocess.call(["adb","connect","10.160.5.106"])
+    device = subprocess.Popen("adb shell", shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    return device
 
 def volume_up():
     global device
-    device.shell('input keyevent 24')
+    device.stdin.write(("input keyevent 24 \n").encode())
+    device.stdin.flush()
     return True
 
 def volume_down():
     global device
-    device.shell('input keyevent 25')
+    device.stdin.write(("input keyevent 25 \n").encode())
+    device.stdin.flush()
+    #device.shell('input keyevent 25')
     return True
 
 def play_pause():
     global device
-    device.shell('input keyevent 85')
+    device.stdin.write(("input keyevent 85 \n").encode())
+    device.stdin.flush()
+    #device.shell('input keyevent 85')
     return True
 
 def next():
     global device
-    device.shell('input keyevent 87')
+    device.stdin.write(("input keyevent 87 \n").encode())
+    device.stdin.flush()
+    #device.shell('input keyevent 87')
     return True
 
 def previous():
     global device
-    device.shell('input keyevent 88')
+    device.stdin.write(("input keyevent 88 \n").encode())
+    device.stdin.flush()
+    #device.shell('input keyevent 88')
     return True
 
 def back():
     global device
-    device.shell('input keyevent 4')
+    device.stdin.write(("input keyevent 4 \n").encode())
+    device.stdin.flush()
+    #device.shell('input keyevent 4')
     return True
 
 def recent_apps():
     global device
-    device.shell('input keyevent KEYCODE_APP_SWITCH')
+    device.stdin.write(("input keyevent KEYCODE_APP_SWITCH \n").encode())
+    device.stdin.flush()
+    #device.shell('input keyevent KEYCODE_APP_SWITCH')
     return True
 
 def launch_app(package_name):
     command = f'monkey -p {package_name} 1'
-    device.shell(command)
+    device.stdin.write((command+"\n").encode())
+    device.stdin.flush()
+    #device.shell(command)
 
 def home():
     global device
-    device.shell('input keyevent 3')
+    device.stdin.write(("input keyevent 3 \n").encode())
+    device.stdin.flush()
+#    device.shell('input keyevent 3')
     return True
 
 
 ########################################################################################################################################################################################
 
 
-device, client = connect()
-
+device = connect()
 #launch_app(package_name='com.soundcloud.android')   #package:com.android.chrome
 
 #adb shell pm list packages
