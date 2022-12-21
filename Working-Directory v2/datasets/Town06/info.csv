@@ -1,0 +1,11 @@
+Dataset_Name,Vehicle_Type,Traffic_Presence
+dataset1,compact,FALSE
+dataset2,compact,TRUE
+dataset3,sedan,FALSE
+dataset4,sedan,TRUE
+dataset5,sports,TRUE
+dataset6,sports,FALSE
+dataset7,SUV,FALSE
+dataset8,SUV,TRUE
+dataset9,EV,FALSE
+dataset10,EV,TRUE
