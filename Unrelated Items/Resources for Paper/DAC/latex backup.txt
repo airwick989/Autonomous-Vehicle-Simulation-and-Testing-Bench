@@ -1,0 +1,212 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Design and Development of a Digital Twin Platform for Multi-domain Simulation and Testing of Autonomous Road Vehicles}
+
+\author{\IEEEauthorblockN{1\textsuperscript{st} Ridwan Hossain}
+\IEEEauthorblockA{
+\textit{Department of Electrical, Computer}\\
+\textit{and Software Engineering.}\\ 
+\textit{Ontario Tech University} \\
+Oshawa, ON, Canada \\
+ridwan.hossain@ontariotechu.net}
+\and
+\IEEEauthorblockN{2\textsuperscript{nd} Daniel Cheema}
+\IEEEauthorblockA{
+\textit{Department of Automotive and }\\
+\textit{Surface Transportation.}\\ 
+\textit{National Research Council Canada} \\
+London, ON, Canada \\
+daniel.cheema@nrc-cnrc.gc.ca}
+\and
+\IEEEauthorblockN{3\textsuperscript{rd} Taufiq Rahman}
+\IEEEauthorblockA{
+\textit{Department of Automotive and }\\
+\textit{Surface Transportation.}\\ 
+\textit{National Research Council Canada} \\
+London, ON, Canada \\
+taufiq.rahman@nrc-cnrc.gc.ca}
+\and
+\IEEEauthorblockN{4\textsuperscript{th} Akramul Azim}
+\IEEEauthorblockA{
+\textit{Department of Electrical, Computer}\\
+\textit{and Software Engineering.}\\ 
+\textit{Ontario Tech University} \\
+Oshawa, ON, Canada \\
+akramul.azim@ontariotechu.net}
+}
+
+\maketitle
+
+\begin{abstract}
+There exists a need for a platform that allows users to perform meaningful simulation and testing for the components which compose autonomous vehicle systems whilst being accessible and widely supported. Presented is an open-source co-simulation and testing platform for autonomous vehicles. Constructed by combining an HIL bench and a software simulation entity, the major benefits of the platform will be the automation capabilities brought forth by DevOps pipelines focused around application development for vehicles, the integration and regression testing performed by interfacing vehicle hardware with simulation environments, and the opportunities for probing messages between the hardware and software components.
+\end{abstract}
+
+
+\section{Introduction}
+The autonomous vehicle space is a rapidly growing industry and has already demonstrated a strong presence on today's roads. "In 2020, there were around 35.02 million autonomous vehicles worldwide.
+In addition, that number showed an increase of about 3.62 million driverless cars from 2019, when that number was about 31.4 million" [1]. 
+
+As a result of this tremendous pace, the amount of resources being expended into autonomous vehicle research and testing has also increased significantly.  "As of 2020, at least \$16 Billion USD has been expended towards autonomous vehicle system testing
+across only 30 companies" [2]. In addition to the resources, a great deal of time is required in the process of developing a new autonomous vehicle and may take "about 16 years for them to be ready for the road" [3]. 
+
+The reasoning for such high development time and costs associated with AVs is partly due to Safety Integrity Level requirements. Safety Integrity Levels or SILs are "a measure of safety system performance, in terms of probability of failure on demand (PFD)" [4]. There are four levels of SIL: SIL 1, SIL 2, SIL 3, and SIL 4, where the "higher the associated safety level" denotes a "lower probability that a system will fail to perform properly" [4]. 
+
+An evolution of SILs are ASILs which stand for Automotive Safety Integrity Levels [5]. ASILs are denoted by letters a through D, where "ASIL A represents the lowest degree and ASIL D represents the highest degree of automotive hazard" (ASIL A is the safest level) [5]. Automotive Safety Integrity Levels are more stringent than normal SILs and consider safety factors in a more critical manner [5]. ASIL covers aspects such as possibility and severities of injury, controllability of the vehicle, frequency of exposures to hazards, and more [5].
+
+These rigorous automotive safety integrity levels become particularly restrictive to the development of autonomous vehicle systems, and rightly so. However, this means that much more development and testing time must be expended in order to ensure that autonomous vehicle components are road ready.
+
+Another contributor to the difficulty of autonomous vehicle development is the restriction that is being introduced to the existing OBD-II standard. OBD-II refers to the second generation of On-board Diagnostics systems which allows vehicle owners and technicians to access information pertaining to vehicle diagnostics and subsystem errors [6]. 
+
+OBD and OBD-II have remained as the standard protocols for retrieving vehicle diagnostic data across a vast majority of passenger vehicles, however, "OEMS are hoping to restrict OBD-II access" with newer vehicles moving forward [7]. While the on-board diagnostics system would be available while the vehicle is stationary, major OEMs plan to block the transfer of data on the OBD when the vehicle is driven [8]. This is a result of growing security concerns, particularly with the introduction of the fleet of heavily software-reliant road vehicles which use their on-board diagnostics for safety critical functions [8].
+
+The shift to a more restricted diagnostics system will make it significantly more difficult for third-party manufacturers of vehicle components that require the vehicle to be running. This also introduces barriers for start-up companies who do not have access to proprietary resources to perform meaningful testing and analysis on vehicle subsystems using current and forthcoming OBD protocols.
+
+Additionally, there are key automation features missing in the vehicle and autonomous vehicle development space. There currently exists few efficient DevOps frameworks for the development of software on vehicles due to the unique challenges regarding software delivery on such a system. Road vehicle software requires "complex testing matrices and deployment processes" in order to meet "strict safety, regulation and compliance rules" [9]. Furthermore, automation frameworks which do exist are all propriety and restricted to an OEM's development purposes.
+
+Evident from all the information presented, there is a need in the autonomous vehicle research and development space for an open-source platform to fulfill the requirements mentioned whilst also reducing the time required to perform autonomous vehicle development and testing activities.
+
+
+\section{The Platform Designed to Address the Issues}
+This paper will present a platform that has been designed in order to target the key issues regarding autonomous vehicle development. The platform will take the form of an open-source multi-domain simulation and testing platform for vehicles and autonomous vehicles. 
+
+The platform is currently in development and has been constructed by combining two major constituents, a hardware-in-the-loop bench and a software simulation and testing bench. Each half of the platform will be explored further in the following sections. 
+
+
+\section{Software Simulation and Testing Bench}
+One method to achieve more streamlined development and testing of autonomous vehicle systems is the utilization of a contained simulation environment. Using simulation tools would allow for increased testing to occur more rapidly, and would also mitigate a number of the resource constraints associated with autonomous vehicle development. 
+
+Such a system has been developed in the form of a scenario-based testing and simulation platform for autonomous vehicles. The construction and synopsis of this simulation bench has been thoroughly outlined and explored in a research paper titled "Design and Development of an Open-source Scenario-based Testing and Simulation Platform for Autonomous Road Vehicles" by R. Hossain [10]. The paper covers all aspects of the simulation bench from the architecture and topology to results collected from the system.
+
+To briefly overview, the simulation bench is a system that was designed to to fill a gap in the industry of autonomous vehicle development by providing a highly robust and streamlined software platform to support the development of autonomous vehicle driving software, using only widely supported and easily accessible open-source components [10]. The software powering this system has been developed from the ground up by a large community to support the development, training and validation of autonomous driving systems [10]. The primary benefits and features of the simulation bench will be summarized in the subsections below.
+
+\subsection{Accurate Simulation of Sensors, Vehicles, and Environments}
+The platform supports flexible specification of sensor suites such as LIDAR, depth sensors, RGB cameras, and many more [10]. Additionally, the platform realistically simulates all aspects of a vehicle and its environment such as vehicle telemetry, various environmental conditions, full control of all static and dynamic actors, fully simulated traffic networks, and much more [10].
+
+\subsection{Simulation of a Digital Twin}
+The system allows for rapid, repeatable, accurate, and nearly endless testing and simulation of many of the components that make up an autonomous vehicle system by allowing users to co-simulate a digital twin of a real world vehicle [10]. This enables users to gain valuable simulation and testing data whilst not being constrained by real-world factors [10].
+
+\subsection{Interfaces for Hardware-in-the-loop Extensions}
+The simulation bench also has existing interfaces which allow it to adopt a hardware-in-the-loop or HIL configuration. This allows for hardware components to be tested alongside the software components within the simulation environment [10]. This provides users of the system with the ability to connect various hardware peripherals to the bench and perform simulation activities in a contained environment in order to attain controlled testing and verification before being deployed for real-world testing [10].
+
+\subsection{Dataset Generation}
+The most critical aspect of the simulation bench is it's data recording and logging capabilities. The ability to collect and examine the telemetry collected from the simulation and testing activities performed on vehicle subsystems provides powerful insight [10]. The data may also be visualized using the automated data visualization pipeline which is built into the dataset generation framework in order to make the datasets more human-readable [10]. The information extracted from the collected datasets can be used to influence what modifications or development is required for various components of the autonomous vehicle system [10].
+
+
+\section{Hardware-in-the-loop Bench}
+The hardware-in-the-loop or HIL test bench developed at NRC-London of Canada is a physical representation/replication of almost the entire global electrical system of a production automotive platform.
+
+\subsection{Donor Vehicle Details}
+The vehicle on which the bench is based on is the 2018 Ford Edge Titanium. The 2018 Ford Edge Titanium is a medium sized SUV with SAE (Society of Automotive Engineers) level 2 capable ADAS (Advanced Driver Assistance System) features. e.g. parking assistance, lane keep assist and speed-dependent adaptive cruise control. On the standalone HIL bench, these features are partially or entirely disabled in their functionality due to the nature of the bench being a stationary object and therefore lacking input values of vehicle dynamics such as wheel speed, yaw rate, lateral and longitudinal acceleration.
+
+\subsection{Vehicle Subsystems}
+The bench is divided into subsystems in the form of a topological hierarchy, and interconnected with one another by means of electrical transmission media such as cables, wires and connectors carrying analog and digital signals. Furthermore, these electrical media also provide power to these subsystems. A subsystem can operate standalone or it can be dependent on a single or multiple subsystems to generate the desired electrical or mechanical output the module was designed for. A vast majority the vehicle subsystems are included within the HIL bench, including the instrument cluster control module, steering column control module, and obstacle detection modules, image processing modules just to name a few.
+
+\subsection{Brief Overview of CAN Bus Architecture}
+The HIL bench consists of four CAN (Control Area Network) bus subsystems which are all connected to a gateway module. The subsystems are High Speed CAN 1, High Speed CAN 2, High Speed CAN 3 and Medium Speed CAN-bus. Drivetrain and battery/energy management related ECUs (Engine Control Units) are connected to High Speed CAN 1, ADAS related ECUs to High Speed CAN 2, infotainment related ECUs to High Speed CAN 3, and body control related ECU’s are connected to the Medium Speed CAN-bus.
+
+The HIL bench allows users to operate various vehicle subsystem components in conjunction with other subsystems through the communication which is provisioned by the CAN bus architecture. Users can also freely probe and observe the messages and data being transmitted across the system for testing and development purposes.
+
+
+\section{Merging the Two Benches into a Multi-domain Simulation and Testing Platform}
+Combining the two separate benches into a single entity results in a complete platform which can be used to perform extensive, repeatable, and meaningful simulation and testing for the hardware and software components which compose vehicle/autonomous vehicle systems. The real-world hardware components of a production vehicle embedded in the HIL bench can be interfaced to the software simulation in order to supply input to a digital twin.
+
+The primary benefits introduced by merging the two pre-existing benches can be summarized into 3 major categories: modular plug-and-play capabilities, a multi-domain DevOps pipeline, and anomaly detection via dataset correlation. Each of these 3 topics will be further explored in following sections.
+
+
+\section{Modular Plug-and-play Capabilities}
+
+\subsection{Difficulties with Current Methods of Hardware Validation}
+One of the most prominent challenges in the testing of road vehicles and autonomous road vehicles is gathering enough data. "While real-world testing offers valuable feedback, there is the difficulty of scaling, where it is physically infeasible to run the millions of miles of tests required to gather enough data" [11]. 
+
+In order to ensure the functional correctness of a particular hardware component in a scenario where the entire vehicle is operational, the traditional means of real-world testing poses limitations. This is particularly due to resource constraints and safety risks. Take for example, a vehicle must be put in an unsafe situation where the driver and surrounding entities may be put at risk in order to meet sufficient testing of a certain subsystem, such as collision detection and mitigation systems. This sort of testing is difficult to do in a controlled manner and may be at the expense of the safety of those involved as well as the resources required to perform that testing. 
+
+"In 2016 a Tesla operating in self-driving mode crashed into an overturned white truck trailer on the highway, and another Tesla in 2018 slammed into a parked fire truck. In both situations, the car’s sensors failed to ‘see’ the objects ahead" [11]. This is a perfect example illustrating the inability to extensively test a vehicle's components without encountering safety limitations.
+
+"Additionally, there is a need for test commonality, whereby identical tests are run with different types of vehicles" and environmental conditions [11]. Reproducing exact conditions and actions for each run of a test is extremely difficult due to the variability and volatile nature of real-world testing [11].
+
+\subsection{Plug-and-play Testing of Hardware and Software Components}
+The resultant platform of combining the two aforementioned benches resolves the issues addressed with traditional testing methods. The multi-domain nature of the system allows users to test both software or hardware components either exclusively or in conjunction with one another. As the simulation entity powering the system is open source and has been designed with modularity in mind, all software aspects of a vehicle or autonomous vehicle may be modified, replaced, or added to the simulation code as needed. 
+
+While there are existing software packages which enable this sort of development and testing, these systems are either privately owned or proprietary. Most OEMs have their own systems in place which are inaccessible to the majority of the population. This makes the road vehicle/autonomous road vehicle development space highly contained. These restrictions are not present with the open-source software used in the simulation bench and may be explored further in the aforementioned paper by R. Hossain [10].
+
+The highly extensible API exposed by the simulation entity can also be used to interface hardware to the software system, allowing for vehicle subsystems to undergo extensive testing in a controlled simulation environment. This enables users of the platform to curate more thorough test cases which may be executed in a repeatable and easily recordable manner. 
+
+As a result of the simulation bench's open-source nature, the completely modifiable API allows users to route particular simulation data to specified outputs as required by the hardware they wish to test. By extension, this means that elements such as LIDAR readings, vehicle speed, road conditions, and any other simulation data may be used as input to external hardware components in the HIL bench to perform testing in the reverse manner as well.
+
+Components can be validated much quicker and with more certainty as users will be able to easily 'plug in', simulate, run tests, and ensure that components are behaving as expected in real world scenarios, but in a contained environment. Parallelized computer simulations can achieve exponentially higher test coverage in terms of distance driven relative to real-world testing. Thus, the combined platform may be used as a preliminary stage of verification before moving to real-world testing.
+
+
+\section{Multi-domain DevOps Pipeline}
+\subsection{Key Challenges in Current Automotive Software Development and Delivery}
+Software continues to play an ever-growing role in vehicle architecture. The average modern road vehicle contains hundreds of lines of code which are responsible for a large portion of the vehicle's functionality, from simple comfort features to mission critical engine management [12]. This use of software in vehicle architecture is only increasing and becoming more complex as autonomous and semi-autonomous features become more commonplace, demanding higher levels of reliability of the software being delivered [12].
+
+The automotive industry has been been reliant on development structures that adopt a waterfall approach, which enforces very a fixed development style [12]. This results in a prolonged development period, usually taking years to deliver a single product [12]. As software begins adopting more safety-critical roles in vehicle architecture, the development processes used in the construction of vehicle software needs to become more adaptable and allow for the detection of regression into erroneous code [12]. The automotive industry currently "faces multiple challenges in terms of software development, testing, and deployment, while simultaneously adhering to strict safety and regulations" [12].
+
+\pagebreak
+
+\subsection{Benefits of DevOps Implementation in a Multi-domain Platform}
+Adopting DevOps practices will allow for "faster time-to-market, continuous product quality improvement, increased productivity, higher reliability, happier customers, lower development costs, and faster experimentation of software changes and new feature additions" [12]. In addition to these adaptability and agile delivery benefits, there are distinct advantages to having a DevOps pipeline on the multi-domain platform presented in this manuscript. 
+
+As mentioned in previous sections, the multi-domain configuration of the platform will allow for component testing to occur for both software aspects as well as hardware. Code components can be inserted into the simulation environment in order to ensure it's functional correctness, and the simulation environment can be used to test the inputs, outputs, and functionality of hardware components which have been interfaced to the software system. 
+
+With the adoption of a DevOps pipeline, testing may be automated for both the software and hardware components which have been 'plugged-in' to the system. An automated continuous integration and testing framework is in development and the details of the tools and technologies being used to construct it is outlined in the aforementioned paper by R. Hossain [10]. This will allow for users to develop extensive test suites which encompass both software and hardware aspects in an inclusive manner. 
+
+"As changes are made to the software or any new
+features are being pushed to the user’s vehicle/autonomous
+vehicle system, the framework will automatically run" the test cases [10]. "This can help avoid system regression, improve component integration and make development activities on the" platform more streamlined [10].
+
+Having a DevOps pipeline incorporating both the software bench and hardware bench will allow for testing automation in differing test contexts. Different variations of simulations and real-world scenarios may be used to test the software and hardware in the loop in an automated fashion, which would not be possible without a multi-domain DevOps pipeline. 
+
+The DevOps pipeline also brings forth benefits for improved regression testing in the multi-domain platform. Code changes or modifications in the hardware subsystems may be verified to confirm that the changes did not adversely affect existing capabilities. Tests may be designed to compare results from both software and hardware to make stronger and more extensive test criteria.
+
+
+\section{Anomaly Detection via Dataset Correlation}
+\subsection{Inability to Validate Each Bench in Standalone Use}
+A capability which was previously not possible with each standalone bench is the ability to perform anomaly detection for each bench. While each separate bench was initially designed with the goal of providing means of streamlined testing and validation, there lacked a way to ensure that each bench was performing correctly. While this may be possible to do with curated test suites, it is not viable as the software and hardware components being run on each bench may be interchanged and modified frequently.
+
+\subsection{Cross-domain Anomaly Detection}
+In order to detect instances of either bench not functioning correctly, the opposing bench may be used to help perform anomaly detection. As large datasets will be generated constantly by both the software and hardware-centric ends of the platform, each bench can be tested for semantic interoperability to ensure that there are no unexpected deviations from an expected pattern exhibited by a dataset.
+
+By correlating the results collected from both benches, this form of cross-domain anomaly detection may occur, further helping to ensure the functional correctness of the components being integrated and developed. This can also help corroborate that the datasets being produced by both systems are equally valid.
+
+
+\section{Conclusion}
+The platform resulting from merging the simulation entity and HIL bench presents a highly effective solution for reducing the time and resources required to perform autonomous vehicle verification and testing activities. 
+
+The current methods for autonomous vehicle testing suffer in critical areas which result in a compromised development process. Having to test components of an autonomous vehicle system by deploying them on an actual vehicle results in great time and resource constraints to be enforced on the development cycle. Furthermore, this form of validation is limited by real-world factors and can result in sub-optimal testing to be performed. 
+
+In addition to the features and capabilities of the standalone software simulation bench outlined in the paper by R. Hossain [10], interfacing the HIL bench to the pre-existing system allows for key benefits to come to fruition. The benefits as outlined in this manuscript are distributed across 3 overarching categories. 
+
+The first is the ability to interface hardware components to the software entity  to be able to more thoroughly test, integrate, and simulate them in a controlled environment. The second is the automation capabilities brought forth by a multi-domain DevOps pipeline to enhance the integration and regression testing which can be performed as a result of interfacing vehicle hardware components with realistic simulation environments. The final major benefit brought forth by combining the benches into a single platform is how the amalgamation of these systems can be used to help detect possible anomalies in the software or hardware in either one of the benches.
+
+The features and open areas for extension in this system effectively demonstrates the feasibility of utilizing such a platform as a first phase of testing before finally deploying software and hardware components to real-world vehicles. In addition to significantly streamlining the testing and verification process of autonomous vehicle development, many resource and time related constraints are mitigated by utilizing such an approach. 
+
+
+\begin{thebibliography}{00}
+\bibitem{b1} D. Milenkovic, ``24 self-driving car statistics \& facts,'' Carsurance, 26-Jul-2022. [Online].
+\bibitem{b2} A. Efrati, “Money pit: Self-driving cars' \$16 billion cash burn,” The Information, 21-Dec-2020. [Online].
+\bibitem{b3} Hyperdrive, “The State of the Self-Driving Car Race 2020,” Bloomberg.com, 15-May-2020. [Online].
+\bibitem{b4} “What Safety Integrity Level (SIL) means and how to calculate IT - spotlight on safety: MSA corporate blog,” Spotlight on Safety | MSA Corporate Blog, 06-Aug-2020. [Online].
+\bibitem{b5} “What is ASIL (Automotive Safety Integrity Level)? – overview: Synopsys automotive,” Synopsys. [Online].
+\bibitem{b6} V. Barreto, “What is OBDII? History of on-board diagnostics,” Geotab, 25-Nov-2020. [Online].
+\bibitem{b7} “Is it the end of OBD-II? If so, what comes next?” Automotive Industries Association of Canada, Ottawa. 
+\bibitem{b8} “OBD: The battle for control over car data has just started,” PTOLEMUS Consulting Group, 06-Oct-2017. [Online]. 
+\bibitem{b9} P. Belagatti, “The Scene of DevOps in the Automotive Industry,” DevOps Zone, 02-Jul-2020. [Online].
+\bibitem{b10} R. Hossain, ``Design and Development of an Open-source Scenario-based Testing and Simulation Platform for Autonomous Road Vehicles,'' unpublished.
+\bibitem{b11} “Challenges in Autonomous Vehicle Testing and Validation,” TITAN TLM, 27-Oct-2020. [Online].
+\bibitem{b12} “Accelerated Automotive Product Development using DevOps,” Telematics Wire, 15-Apr-2022. [Online].
+\end{thebibliography}
+
+
+\end{document}
