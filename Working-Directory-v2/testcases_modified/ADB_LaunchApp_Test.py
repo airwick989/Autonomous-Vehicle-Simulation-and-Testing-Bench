@@ -4,10 +4,10 @@ from subprocess import check_output
 
 packageName_Maps = 'com.google.android.apps.maps'
 
-sys.path.insert(1,'/home/rtemsoft/Desktop/CARLA-Simulation-Bench/Working-Directory')
+sys.path.insert(1,'/home/rtemsoft/Desktop/CARLA-Simulation-Bench/Working-Directory-v2')
 testingFlag = 25
 
-import testbed as client
+import testbed_modified as client
 
 def convert(string):
     string = string.replace("b", '')

@@ -7,7 +7,7 @@ f=open("fileUploaded.txt","r")
 packageName = f.read()
 print(packageName)
 
-sys.path.insert(1,'/home/rtemsoft/Desktop/CARLA-Simulation-Bench/Working-Directory')
+sys.path.insert(1,'/home/rtemsoft/Desktop/CARLA-Simulation-Bench/Working-Directory-v2')
 import adblib
 
 installed = str(adblib.device.shell('adb shell am start -n '+packageName+'/'+packageName+'.MainActivity'))

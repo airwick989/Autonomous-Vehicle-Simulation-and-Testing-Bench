@@ -1,10 +1,10 @@
 import sys
 import unittest
 
-sys.path.insert(1,'/home/rtemsoft/Desktop/CARLA-Simulation-Bench/Working-Directory')
+sys.path.insert(1,'/home/rtemsoft/Desktop/CARLA-Simulation-Bench/Working-Directory-v2')
 testingFlag = 24
 
-import testbed as client
+import testbed_modified as client
 class TestADBCommand(unittest.TestCase):
     def setUp(self):
         self.longMessage=False

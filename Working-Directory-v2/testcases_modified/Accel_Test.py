@@ -1,15 +1,15 @@
 import sys
 import unittest
 
-sys.path.insert(1,'/home/rtemsoft/Desktop/CARLA-Simulation-Bench/Working-Directory')
+sys.path.insert(1,'/home/rtemsoft/Desktop/CARLA-Simulation-Bench/Working-Directory-v2')
 
 import testbed_modified as client
 class TestSteeringWheelKit(unittest.TestCase):
     def setUp(self):
         self.longMessage=False
     def test_acceleration_input(self):
-        client.main(3)
-        self.assertLess(client.get_speed(client.global_world, 0),0,"FAILURE! Reverse not working as intended!")
+        client.main(1)
+        self.assertGreater(client.get_speed(client.global_world, 0),1,msg="FAILURE! Acceleration is not working as intended!")
     def test_destroy(self):
         if (client.global_world and client.global_world.recording_enabled):
             client.global_client.stop_recorder()
@@ -18,5 +18,3 @@ class TestSteeringWheelKit(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-
