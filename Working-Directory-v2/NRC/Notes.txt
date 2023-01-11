@@ -1,0 +1,5 @@
+They sent fresh data or uninterrupted data (they can send data that includes a can attack as well) 
+
+In Linux there's a library called socket can, using socket can you can create a virtual can 
+network on your computer, and then you can read the messages hosting the messages using accurate 
+time deltas of the can messages that they sent, you can google it and it should be pretty easy
