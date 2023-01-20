@@ -6,3 +6,8 @@ time deltas of the can messages that they sent, you can google it and it should 
 
 https://sgframework.readthedocs.io/en/latest/cantutorial.html
 canplayer vcan0=can0 -v -I candump-2022-12-14_100719.log
+
+---
+
+Useful resource for unsupervised anomaly detection:
+https://towardsdatascience.com/unsupervised-anomaly-detection-in-python-f2e61be17c2b
