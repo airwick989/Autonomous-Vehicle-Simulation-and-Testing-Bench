@@ -15,7 +15,10 @@ df_train = pd.DataFrame(df_train, columns=['data'])
 df_unseen = data[-UNSEEN_DATA_SIZE:]
 df_unseen = pd.DataFrame(df_unseen, columns=['data'])
 
-anom = setup(data= df_train, silent=True)
-anom_model = create_model(model = 'iforest')
-results = assign_model(anom_model)
-save_model(model = anom_model, model_name='anomaly_detection_model')
+print(df_train)
+print(df_unseen)
+
+# anom = setup(data= df_train, silent=True)
+# anom_model = create_model(model = 'iforest')
+# results = assign_model(anom_model)
+# save_model(model = anom_model, model_name='anomaly_detection_model')

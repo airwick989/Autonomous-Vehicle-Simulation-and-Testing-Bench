@@ -1,0 +1,3 @@
+#!d:\desktop\github\autonomous-vehicle-simulation-and-testing-bench\working-directory-v2\nrc\venv\env\scripts\python.exe
+from numba.pycc import main
+main()
