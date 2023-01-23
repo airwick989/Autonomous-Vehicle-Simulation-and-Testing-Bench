@@ -39,19 +39,27 @@ anom_timestamps = []
 for index in anom_samples.index.values.tolist():
     anom_timestamps.append(timestamps[index])
 anom_samples['Timestamps'] = anom_timestamps
-anom_uniq_count = anom_samples['data'].drop_duplicates().count()
+anom_samples = anom_samples.drop('Anomaly', axis=1)
+anom_uniq = anom_samples['data'].drop_duplicates()
+anom_uniq_count = anom_uniq.count()
 anom_dup_count = anom_count - anom_uniq_count
 anom_dup_percentage = round((anom_dup_count/anom_count)*100, 2)
 
-with open(f'{results_path}message_anomaly_results.txt', 'w+') as f:
+str_anom_uniq = "\n"
+for anom in anom_uniq:
+    str_anom_uniq = str_anom_uniq + str(anom) + "\n"
+
+with open(f'{results_path}message_anomaly_statistics.txt', 'w+') as f:
     f.write(
         f'''Anomalous Percentage: {anom_percentage}% 
         \n{anom_count}/{UNSEEN_DATA_SIZE} messages were predicted to be anomalous.
         \n{anom_dup_count} or {anom_dup_percentage}% of the anomalous messages were duplicates, meaning there were only {anom_uniq_count} unique anomalies.
         \nFactoring in duplicates, that means {anom_uniq_count} or {(anom_uniq_count/UNSEEN_DATA_SIZE)*100}% of the messages were unique and anomalous.
+        \nUnique Anomalies Found:{str_anom_uniq}
     ''')
 
 ####
 
 #Save predictions to csv
 predicitons.to_csv(f'{results_path}message_anomaly_predictions.csv', encoding='utf-8')
+anom_samples.to_csv(f'{results_path}message_anomalies.csv', encoding='utf-8')

@@ -5,4 +5,11 @@ Anomalous Percentage: 4.71%
 467 or 99.15% of the anomalous messages were duplicates, meaning there were only 4 unique anomalies.
         
 Factoring in duplicates, that means 4 or 0.04% of the messages were unique and anomalous.
+        
+Unique Anomalies Found:
+076#BE807FFFFFFFFFF2
+2AC#3000000000000000
+43E#0037100000000000
+430#CD00073488002401
+
     
