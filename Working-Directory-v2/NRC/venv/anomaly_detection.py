@@ -1,4 +1,4 @@
-from pycaret.anomaly import *
+from pycaret.anomaly import setup, create_model, assign_model, save_model, load_model, predict_model
 import pandas as pd
 
 UNSEEN_DATA_SIZE = 10000

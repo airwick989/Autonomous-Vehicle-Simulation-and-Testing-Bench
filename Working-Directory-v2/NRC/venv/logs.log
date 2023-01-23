@@ -138,3 +138,5 @@
     random_state=1762, verbose=0)]],
          verbose=False)
 2023-01-20 21:31:19,680:INFO:save_model() successfully completed......................................
+2023-01-23 13:45:59,834:INFO:Initializing load_model()
+2023-01-23 13:45:59,854:INFO:load_model(model_name=anomaly_detection_model, platform=None, authentication=None, verbose=True)

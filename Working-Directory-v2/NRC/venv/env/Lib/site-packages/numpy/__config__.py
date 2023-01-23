@@ -58,6 +58,7 @@ def show():
 
     Examples
     --------
+    >>> import numpy as np
     >>> np.show_config()
     blas_opt_info:
         language = c
