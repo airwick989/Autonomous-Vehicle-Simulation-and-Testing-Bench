@@ -22,3 +22,5 @@ df_unseen = pd.DataFrame(df_unseen, columns=['data'])
 # anom_model = create_model(model = 'iforest')
 # results = assign_model(anom_model)
 # save_model(model = anom_model, model_name='anomaly_detection_model')
+
+anom_model = load_model('anomaly_detection_model')
