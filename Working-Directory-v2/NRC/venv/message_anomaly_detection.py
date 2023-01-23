@@ -24,3 +24,10 @@ df_unseen = pd.DataFrame(df_unseen, columns=['data'])
 # save_model(model = anom_model, model_name='anomaly_detection_model')
 
 anom_model = load_model('anomaly_detection_model')
+predicitons = predict_model(model=anom_model, data=df_unseen)
+results = predicitons['Anomaly'].value_counts()
+non_anom_count = results[0]
+anom_count = results[1]
+anom_percentage = round((anom_count/non_anom_count)*100, 2)
+print(f'\nAnomalous Percentage: {anom_percentage}% \n{anom_count}/{UNSEEN_DATA_SIZE} messages were predicted to be anomalous.')
+predicitons.to_csv('../Files/Results/message_anomaly_predictions.csv', index=False, encoding='utf-8')
