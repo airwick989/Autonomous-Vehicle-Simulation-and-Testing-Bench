@@ -11,3 +11,7 @@ canplayer vcan0=can0 -v -I candump-2022-12-14_100719.log
 
 Useful resource for unsupervised anomaly detection:
 https://towardsdatascience.com/unsupervised-anomaly-detection-in-python-f2e61be17c2b
+
+The Anomaly column is binary where 1 indicates that the record is anomalous and 0 indicates 
+that it is normal. The Anomaly_Score column gives the raw score for the record, where negative 
+indicates that the record is normal.

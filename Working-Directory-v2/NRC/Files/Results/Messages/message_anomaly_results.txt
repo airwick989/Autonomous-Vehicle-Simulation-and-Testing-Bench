@@ -1,0 +1,8 @@
+Anomalous Percentage: 4.71% 
+        
+471/10000 messages were predicted to be anomalous.
+        
+467 or 99.15% of the anomalous messages were duplicates, meaning there were only 4 unique anomalies.
+        
+Factoring in duplicates, that means 4 or 0.04% of the messages were unique and anomalous.
+    
