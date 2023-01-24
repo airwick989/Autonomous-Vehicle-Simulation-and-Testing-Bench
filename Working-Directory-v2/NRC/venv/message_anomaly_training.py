@@ -8,7 +8,6 @@ data = []
 with open('../Files/candump-2022-12-14_100719.log', 'r') as f:
     for line in f:
         line = line.split(" ")
-        timestamp = line[0]
         line = line[2]
         line = line.strip("\n")
         data.append(line)
