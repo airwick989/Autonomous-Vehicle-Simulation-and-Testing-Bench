@@ -2239,3 +2239,459 @@
                  IForest(behaviour='new', bootstrap=False, contamination=0.05,
     max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
     random_state=6860, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:01:35,943:INFO:Initializing load_model()
+2023-01-24 17:01:35,943:INFO:load_model(model_name=anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:01:36,024:INFO:Initializing predict_model()
+2023-01-24 17:01:36,024:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=1762, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:01:47,706:INFO:Initializing load_model()
+2023-01-24 17:01:47,706:INFO:load_model(model_name=interval_anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:01:47,766:INFO:Initializing predict_model()
+2023-01-24 17:01:47,766:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=6860, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:07:46,868:INFO:Initializing load_model()
+2023-01-24 17:07:46,868:INFO:load_model(model_name=anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:07:46,931:INFO:Initializing predict_model()
+2023-01-24 17:07:46,931:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=1762, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:11:41,067:INFO:Initializing load_model()
+2023-01-24 17:11:41,067:INFO:load_model(model_name=anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:11:41,140:INFO:Initializing predict_model()
+2023-01-24 17:11:41,140:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=1762, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:11:53,406:INFO:Initializing load_model()
+2023-01-24 17:11:53,406:INFO:load_model(model_name=interval_anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:11:53,466:INFO:Initializing predict_model()
+2023-01-24 17:11:53,466:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=6860, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:13:14,002:INFO:Initializing load_model()
+2023-01-24 17:13:14,002:INFO:load_model(model_name=anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:13:14,075:INFO:Initializing predict_model()
+2023-01-24 17:13:14,075:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=1762, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:13:25,871:INFO:Initializing load_model()
+2023-01-24 17:13:25,871:INFO:load_model(model_name=interval_anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:13:25,929:INFO:Initializing predict_model()
+2023-01-24 17:13:25,929:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=6860, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:14:39,006:INFO:Initializing load_model()
+2023-01-24 17:14:39,006:INFO:load_model(model_name=anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:14:39,074:INFO:Initializing predict_model()
+2023-01-24 17:14:39,074:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=1762, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:14:50,613:INFO:Initializing load_model()
+2023-01-24 17:14:50,613:INFO:load_model(model_name=interval_anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:14:50,675:INFO:Initializing predict_model()
+2023-01-24 17:14:50,685:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=6860, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:15:32,527:INFO:Initializing load_model()
+2023-01-24 17:15:32,527:INFO:load_model(model_name=anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:15:32,599:INFO:Initializing predict_model()
+2023-01-24 17:15:32,599:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=1762, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:15:44,266:INFO:Initializing load_model()
+2023-01-24 17:15:44,266:INFO:load_model(model_name=interval_anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:15:44,322:INFO:Initializing predict_model()
+2023-01-24 17:15:44,322:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=6860, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:17:14,718:INFO:Initializing load_model()
+2023-01-24 17:17:14,718:INFO:load_model(model_name=anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:17:14,803:INFO:Initializing predict_model()
+2023-01-24 17:17:14,803:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=1762, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:17:26,540:INFO:Initializing load_model()
+2023-01-24 17:17:26,540:INFO:load_model(model_name=interval_anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:17:26,597:INFO:Initializing predict_model()
+2023-01-24 17:17:26,597:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=6860, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:19:53,359:INFO:Initializing load_model()
+2023-01-24 17:19:53,359:INFO:load_model(model_name=anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:19:53,435:INFO:Initializing predict_model()
+2023-01-24 17:19:53,435:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=1762, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:20:04,987:INFO:Initializing load_model()
+2023-01-24 17:20:04,987:INFO:load_model(model_name=interval_anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:20:05,041:INFO:Initializing predict_model()
+2023-01-24 17:20:05,041:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=6860, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:26:26,912:INFO:Initializing load_model()
+2023-01-24 17:26:26,912:INFO:load_model(model_name=anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:26:26,984:INFO:Initializing predict_model()
+2023-01-24 17:26:26,984:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=1762, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:26:38,754:INFO:Initializing load_model()
+2023-01-24 17:26:38,754:INFO:load_model(model_name=interval_anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:26:38,814:INFO:Initializing predict_model()
+2023-01-24 17:26:38,814:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=6860, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:27:06,390:INFO:Initializing load_model()
+2023-01-24 17:27:06,390:INFO:load_model(model_name=anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:27:06,452:INFO:Initializing predict_model()
+2023-01-24 17:27:06,462:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=1762, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)
+2023-01-24 17:27:18,009:INFO:Initializing load_model()
+2023-01-24 17:27:18,009:INFO:load_model(model_name=interval_anomaly_detection_model, platform=None, authentication=None, verbose=True)
+2023-01-24 17:27:18,066:INFO:Initializing predict_model()
+2023-01-24 17:27:18,066:INFO:predict_model(estimator=Pipeline(steps=[('dtypes',
+                 DataTypes_Auto_infer(display_types=False,
+                                      ml_usecase='regression',
+                                      target='UNSUPERVISED_DUMMY_TARGET')),
+                ('imputer',
+                 Simple_Imputer(categorical_strategy='most frequent',
+                                fill_value_categorical=None,
+                                fill_value_numerical=None,
+                                numeric_strategy='mean',
+                                target_variable=None)),
+                ('new_levels1',
+                 New_Catagorical_Levels_in_TestData(replaceme...
+                ('dummy', Dummify(target='UNSUPERVISED_DUMMY_TARGET')),
+                ('fix_perfect', 'passthrough'),
+                ('clean_names', Clean_Colum_Names()),
+                ('feature_select', 'passthrough'), ('fix_multi', 'passthrough'),
+                ('dfs', 'passthrough'), ('pca', 'passthrough'),
+                ['trained_model',
+                 IForest(behaviour='new', bootstrap=False, contamination=0.05,
+    max_features=1.0, max_samples='auto', n_estimators=100, n_jobs=-1,
+    random_state=6860, verbose=0)]]), ml_usecase=MLUsecase.ANOMALY)

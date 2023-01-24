@@ -69,7 +69,7 @@ anom_samples.to_csv(f'{messages_results_path}message_anomalies.csv', encoding='u
 message_predictions = predicitons
 message_anom_samples = anom_samples
 
-print("CAN bus message data processed")
+print("CAN bus message data processed\n")
 
 
 #INTERVALS###################################################################################################################################################################
@@ -126,13 +126,25 @@ anom_samples.to_csv(f'{intervals_results_path}interval_anomalies.csv', encoding=
 interval_predictions = predicitons
 interval_anom_samples = anom_samples
 
-print("CAN bus message intervals processed\n\n\n\n\n\n")
+print("CAN bus message intervals processed\n")
 
 
 #BOTH########################################################################################################################################################################
 
 
-print(message_predictions.head())
-print(message_anom_samples.head())
-print(interval_predictions.head())
-print(interval_anom_samples.head())
+# #Gives both dataframes a commonly named column to join on
+# message_anom_samples = message_anom_samples.rename(columns={"Timestamps": "timestamps"})
+
+# #join both dataframes by common timestamps, because that will ensure they are the exact same sample
+# both_anom_samples = pd.merge(message_anom_samples, interval_anom_samples, on="timestamps")
+
+# print(f'anomalous messages:{len(message_anom_samples.index)}')
+# print(f'anomalous intervals:{len(interval_anom_samples.index)}')
+# print(f'anomalous both:{len(both_anom_samples.index)}')
+
+# #Just double checking that there actually is zero overlap in the data
+# common = False
+# for item in message_anom_samples['Timestamps']:
+#     if item in interval_anom_samples['timestamps'].values:
+#         common = True
+# print(common)
