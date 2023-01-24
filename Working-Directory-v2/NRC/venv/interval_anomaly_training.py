@@ -31,8 +31,8 @@ df_train = pd.DataFrame(df_train, columns=['intervals'])
 
 ####
 
-# #Training and saving the model
-# anom = setup(data= df_train, silent=True)
-# anom_model = create_model(model = 'iforest')
-# results = assign_model(anom_model)
-# save_model(model = anom_model, model_name='interval_anomaly_detection_model')
+#Training and saving the model
+anom = setup(data= df_train, silent=True)
+anom_model = create_model(model = 'iforest')
+results = assign_model(anom_model)
+save_model(model = anom_model, model_name='interval_anomaly_detection_model')
