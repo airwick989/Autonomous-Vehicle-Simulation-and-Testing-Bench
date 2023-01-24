@@ -1,0 +1,10 @@
+Anomalous Percentage: 4.24% 
+        
+424/10000 messages were predicted to be anomalous.
+        
+The mean value of an anomalous time interval: 0.005813936579902217
+        
+The smallest anomalous time interval is: 0.004559040069580078 (Message: 213#FFFF087F2F07FF50, Timestamp: 1671030743.796396)
+        
+The largest anomalous time interval is: 0.008845090866088867 (Message: 167#008000000001E300, Timestamp: 1671030750.091151)
+    
