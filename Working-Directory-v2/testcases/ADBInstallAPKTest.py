@@ -1,22 +1,29 @@
 import sys
-import getopt
 import subprocess
 import unittest
 
-sys.path.insert(1,'/home/rtemsoft/Desktop/CARLA-Simulation-Bench/Working-Directory')
-import adblib
+sys.path.insert(1,'/home/rtemsoft/Desktop/CARLA-Simulation-Bench/Working-Directory-v2/testcases')
 
-f=open("fileUploaded.txt","r")
-packageName = f.read()
-print(packageName)
-installed = adblib.device.shell('pm list packages com.example.musicplayer')
-print (installed)
-class TestADB(unittest.TestCase):
+packageName = "com.example.jultrautomaintenance"
+
+cmd = f"adb shell 'pm list packages {packageName}'"
+
+#Check is packageName is in the list of installed packages
+proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+
+o, e = proc.communicate()
+# print('Output: ' + o.decode('ascii'))
+# print('Error: '  + e.decode('ascii'))
+# print('code: ' + str(proc.returncode))
+output = o.decode('ascii')
+#print(output)
+
+class TestAPKinstall(unittest.TestCase):
     def setUp(self):
         self.longMessage=False
     def test_installation(self):
         isInstalled = False
-        if(packageName in installed):
+        if(packageName in output):
             print("APK installed Successfully")
             isInstalled=True
         else:

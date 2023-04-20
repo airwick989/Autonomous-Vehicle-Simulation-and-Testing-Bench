@@ -1,26 +1,32 @@
+import sys
+import subprocess
 import unittest
 
-from subprocess import check_output, CalledProcessError
-try:
-    adb_ouput = check_output(["adb", "devices"])
-except CalledProcessError as e:
-    print(f"error: {e.returncode}")
+sys.path.insert(1,'/home/rtemsoft/Desktop/CARLA-Simulation-Bench/Working-Directory-v2/testcases')
 
-connection = str(adb_ouput)
-connectionStripped = connection.replace("\\t","+")
-class TestADB(unittest.TestCase):
+cmd = f"adb devices"
+
+#list the connected adb devices
+proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+
+o, e = proc.communicate()
+output = o.decode('ascii')
+print(output)
+
+#check if there is a device with the following prefix in the ip address
+ip_prefix = "10.160."
+
+class TestADBconnection(unittest.TestCase):
     def setUp(self):
         self.longMessage=False
-    def test_creation_of_connection(self):
-        connectionCreated = False
-        if("SGWOOFVOO7NJRO7H+device" in str(connectionStripped)):
-            print("ADB connection established!")
-            connectionCreated = True
-        elif("SGWOOFVOO7NJRO7H+offline" in str(connectionStripped)):
-            connectionCreated = False
+    def test_connection(self):
+        isConnected = False
+        if(ip_prefix in output):
+            print("ADB Connection is Established Successfully")
+            isConnected=True
         else:
-            connectionCreated = False
-        self.assertTrue(connectionCreated,msg="FAILURE! ADB connection could not be established!")
+            isConnected=False
+        self.assertTrue(isConnected,msg="FAILURE! ADB connection was NOT established!")
 
 if __name__ == '__main__':
     unittest.main()
