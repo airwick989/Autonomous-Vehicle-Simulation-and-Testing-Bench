@@ -28,6 +28,8 @@ resource_usage = resource_usage.split()
 cpuUsage = float(resource_usage[8])
 memUsage = float(resource_usage[9])
 
+print(f"CPU utilization: {cpuUsage} \nMemory utilization: {memUsage} \n")
+
 class TestResourceUsage(unittest.TestCase):
     def setUp(self):
         self.longMessage=False
